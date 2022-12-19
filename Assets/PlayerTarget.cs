@@ -20,6 +20,10 @@ public class PlayerTarget : MonoBehaviour
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hitInfo, 100.0f, layerMask))
         {
             this.transform.position = hitInfo.point;
+        } else
+        {
+            // No raycast hit, setting target far away.
+            this.transform.position = cameraTransform.position + cameraTransform.forward * 1000.0f;
         }
             
     }

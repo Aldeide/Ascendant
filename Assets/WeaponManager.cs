@@ -23,7 +23,7 @@ public class WeaponManager : MonoBehaviour
         // A weapon is equipped. Instantiating the weapon and computing some values.
         weaponModel = Instantiate(currentWeapon.weaponModel, transform.Find("First-Person").transform.Find("Head Location").transform);
         lastFired = 0;
-        fireDelay = currentWeapon.fireRate / 60.0f;
+        fireDelay = 60.0f / currentWeapon.fireRate;
         muzzleTransform = weaponModel.transform.Find("Muzzle").transform;
     }
 
