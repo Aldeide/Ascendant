@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using UnityEngine.InputSystem;
 
 public class WeaponManager : MonoBehaviour
@@ -12,7 +13,7 @@ public class WeaponManager : MonoBehaviour
     public float lastFired = 0;
     public float fireDelay = 100;
     public Transform muzzleTransform;
-
+    public GameObject effect;
     void Start()
     {
         if (currentWeapon == null)
@@ -25,6 +26,11 @@ public class WeaponManager : MonoBehaviour
         lastFired = 0;
         fireDelay = 60.0f / currentWeapon.fireRate;
         muzzleTransform = weaponModel.transform.Find("Muzzle").transform;
+
+        // Instantiating VFX.
+        effect = Instantiate(currentWeapon.muzzleEffect, muzzleTransform);
+        
+        effect.GetComponent<VisualEffect>().Stop();
     }
 
     // Update is called once per frame
@@ -43,12 +49,13 @@ public class WeaponManager : MonoBehaviour
         {
             var projectile = Instantiate(currentWeapon.projectile, muzzleTransform.position, muzzleTransform.rotation);
             lastFired = fireDelay;
+            effect.GetComponent<VisualEffect>().Play();
+
         }
     }
 
     public void OnFire(InputAction.CallbackContext context)
     {
         isFiring = context.ReadValue<float>();
-        Debug.Log(isFiring);
     }
 }
