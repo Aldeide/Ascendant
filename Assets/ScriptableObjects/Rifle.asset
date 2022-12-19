@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eda0f87803e76d449b56015da230d818, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  weaponModel: {fileID: 919132149155446097, guid: efb0aa5438d692a4690bec86bad83037,
+  weaponModel: {fileID: 5907903814951587041, guid: 2efbf175ac5fdbb45acab4c951145785,
     type: 3}
   projectile: {fileID: 5372747782267137694, guid: 4bd4e0949cac8d444b79a0424a09b7d2,
     type: 3}

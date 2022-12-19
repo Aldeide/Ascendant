@@ -12,6 +12,11 @@ public class Weapon : ScriptableObject
     [Header("Weapon Characteristics")]
     [Tooltip("The size of the weapon's clip")]
     public int clipSize;
-    [Tooltip("The weaponb's fire rate per minute")]
+    [Tooltip("The weapon's fire rate per minute")]
     public int fireRate;
+
+    public Transform GetMuzzleTransform()
+    {
+        return weaponModel.transform.Find("Muzzle").transform;
+    }
 }

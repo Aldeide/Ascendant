@@ -49,12 +49,10 @@ public class PlayerMovementController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         this.movementInput = context.ReadValue<Vector2>();
-        Debug.Log(movementInput);
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
         this.lookInput = context.ReadValue<Vector2>();
-        Debug.Log(lookInput);
     }
 }
