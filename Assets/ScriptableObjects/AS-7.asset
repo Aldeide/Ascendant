@@ -21,3 +21,43 @@ MonoBehaviour:
   weaponName: AS-7
   clipSize: 30
   fireRate: 450
+  aimingDownSightsPosition: {x: -0.002, y: -0.12, z: 0.12}
+  aimingDownSightsRotation: {x: 0, y: 0, z: 0}
+  hipFirePosition: {x: 0.145, y: -0.185, z: 0.353}
+  hipFireRotation: {x: -90, y: 145, z: 33.8}
+  adsDelay: 0.17
+  crouchPosition: {x: -0.1, y: -0.25, z: 0.315}
+  crouchRotation: {x: -32, y: 266, z: -69.4}
+  sprintPosition: {x: -0.2, y: -0.27, z: 0.36}
+  sprintRotation: {x: -90, y: 119, z: -1.2}
+  fireAudio: {fileID: 8300000, guid: b0f7e60bcef3a54488c40afb8ed413e3, type: 3}
+  aimDownSightsAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  translationSwayFactor: 100
+  maxTranslationSway: 0.05
+  translationSwaySmoothingFactor: 2
+  rotationSwayFactor: 10
+  maxRotationSway: 2.5
+  rotationSwaySmoothingFactor: 10

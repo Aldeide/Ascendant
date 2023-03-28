@@ -17,6 +17,6 @@ MonoBehaviour:
   projectileTrail: {fileID: 0}
   projectileImpact: {fileID: 2467202235412098089, guid: 05eb6fb7e3bb3ce4581226150b118327,
     type: 3}
-  speed: 1
+  speed: 100
   projectileName: Default Projectile
   dropCoefficient: 0
