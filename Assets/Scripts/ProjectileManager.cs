@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.VFX;
 public class ProjectileManager : MonoBehaviour
 {
     public float speed = 40.0f;
@@ -9,15 +9,18 @@ public class ProjectileManager : MonoBehaviour
     private float currentLife = 0.0f;
     private float previousDelta = 0.0f;
     private Vector3 impactPoint;
-
+    public LayerMask layerMask;
     private Vector3 origin = new Vector3();
     float potentialDistance = 0.0f;
     private Vector3 potentialHit = new Vector3();
+
+    public VisualEffect impactEffect;
+    private bool collided = false;
     void Start()
     {
         origin = transform.position;
-
-
+        impactEffect = GetComponentInChildren<VisualEffect>();
+        impactEffect.Stop();
         // origin - potentialhit.
     }
 
@@ -30,14 +33,17 @@ public class ProjectileManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        
+        if (collided)
+        {
+            return;
+        }
         
         // Check for future collisions.
         RaycastHit hit;
         Ray ray = new Ray(transform.position, transform.forward);
 
 
-        Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Everything"), QueryTriggerInteraction.Ignore);
+        Physics.Raycast(ray, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore);
         if (hit.collider == null)
         {
             transform.position += speed * Time.deltaTime * transform.forward;
@@ -48,6 +54,16 @@ public class ProjectileManager : MonoBehaviour
         {
             return;
         }
+        impactPoint = hit.point;
+        if (impactEffect != null && !collided)
+        {
+            this.transform.position = impactPoint;
+            impactEffect.transform.position = impactPoint;
+            
+            impactEffect.Play();
+        }
+        collided = true;
+        /*
 
         if (hit.distance * hit.distance > (speed * Time.deltaTime * transform.forward).sqrMagnitude)
         {
@@ -61,10 +77,18 @@ public class ProjectileManager : MonoBehaviour
             if ((hit.point - origin).magnitude > potentialDistance)
             {
                 impactPoint = potentialHit;
+                if (impactEffect != null && !collided)
+                {
+                    impactEffect.transform.position = impactPoint;
+                    impactEffect.Play();
+                }
+                collided = true;
+
             }
             transform.position = impactPoint;
             //Destroy(this.gameObject);
         }
+        */
     }
 
     private void OnDrawGizmos()
