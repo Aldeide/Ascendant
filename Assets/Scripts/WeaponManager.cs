@@ -69,6 +69,7 @@ public class WeaponManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (playerMovementController.isSprinting && stance != 1)
         {
             weaponModel.transform.localPosition = currentWeapon.sprintPosition;
@@ -92,6 +93,7 @@ public class WeaponManager : MonoBehaviour
 
 
         AimingDownSights();
+        */
         if (lastFired > 0)
         {
             lastFired -= Time.deltaTime;
@@ -104,8 +106,8 @@ public class WeaponManager : MonoBehaviour
         if (isFiring > 0 && lastFired <= 0)
         {
             // Handling camera movement for recoil (produces actual recoil) and weapon visual recoil (purely visual).
-            cameraRecoil.RecoilFire();
-            WeaponRecoil();
+            //cameraRecoil.RecoilFire();
+            //WeaponRecoil();
 
             // Instantiating a projectile that moves towards the target.
             var projectile = Instantiate(currentWeapon.projectile, muzzleTransform.position, Quaternion.LookRotation(target.transform.position - muzzleTransform.position, Vector3.up));
