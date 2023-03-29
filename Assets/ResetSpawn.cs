@@ -19,7 +19,6 @@ public class ResetSpawn : MonoBehaviour
     public void OnReset(InputAction.CallbackContext context)
     {
         player.GetComponent<CharacterController>().enabled = false;
-        Debug.Log("Respawning");
         player.transform.position = this.transform.position;
         player.GetComponent<CharacterController>().enabled = true;
 
