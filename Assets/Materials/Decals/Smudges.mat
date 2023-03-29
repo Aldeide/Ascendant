@@ -169,12 +169,12 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
-    - _DecalBlend: 0.1079
+    - _DecalBlend: 0.1563
     - _DecalColorMask0: 0
     - _DecalColorMask1: 0
     - _DecalColorMask2: 3
     - _DecalColorMask3: 0
-    - _DecalMaskMapBlueScale: 1
+    - _DecalMaskMapBlueScale: 0.4868
     - _DecalMeshBiasType: 0
     - _DecalMeshDepthBias: 0
     - _DecalMeshViewBias: 0
