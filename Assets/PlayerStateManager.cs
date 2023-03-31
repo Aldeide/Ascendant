@@ -3,22 +3,77 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum PlayerMovementState
+{
+    Idle,
+    Running,
+    Sprinting
+}
+
+public enum PlayerStanceState
+{
+    Upright,
+    Crouched,
+    Aiming
+}
+
+
 [RequireComponent(typeof(Animator))]
 public class PlayerStateManager : MonoBehaviour
 {
     public Vector2 movementInput = new Vector2();
     public Vector2 lookInput = new Vector2();
+    public float sprintInput = 0f;
+    public float crouchInput = 0f;
+    public float aimInput = 0f;
 
     private Animator animator;
     private PlayerMovementController movementController;
+
+    public PlayerStanceState stanceState;
+    public PlayerMovementState movementState;
+
     void Start()
     {
         animator = GetComponent<Animator>();
         movementController = GetComponent<PlayerMovementController>();
+
+        stanceState = PlayerStanceState.Upright;
+        movementState = PlayerMovementState.Idle;
     }
 
     void Update()
     {
+        // Movement state update.
+        if (movementInput.sqrMagnitude > 0)
+        {
+            movementState = PlayerMovementState.Running;
+            if (sprintInput > 0)
+            {
+                movementState = PlayerMovementState.Sprinting;
+            }
+        } else
+        {
+            movementState = PlayerMovementState.Idle;
+        }
+
+        // Stance state update.
+        if (crouchInput > 0)
+        {
+            stanceState = PlayerStanceState.Crouched;
+        } 
+
+        // Aiming overrides crouching.
+        if (aimInput > 0)
+        {
+            stanceState = PlayerStanceState.Aiming;
+        } else
+        {
+            stanceState = PlayerStanceState.Upright;
+        }
+
+
+
         /*
         Vector3 heading = movementController.transform.forward;
         Vector2 direction = new Vector2(0, 0);
@@ -102,5 +157,20 @@ public class PlayerStateManager : MonoBehaviour
     public void OnLookCallback(InputAction.CallbackContext context)
     {
         lookInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnSprintCallback(InputAction.CallbackContext context)
+    {
+        sprintInput = context.ReadValue<float>();
+    }
+
+    public void OnCrouchCallback(InputAction.CallbackContext context)
+    {
+        crouchInput = context.ReadValue<float>();
+    }
+
+    public void OnAimCallback(InputAction.CallbackContext context)
+    {
+        aimInput = context.ReadValue<float>();
     }
 }

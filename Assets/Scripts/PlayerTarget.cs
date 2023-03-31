@@ -39,7 +39,6 @@ public class PlayerTarget : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray.origin, ray.direction, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore))
             {
-                Debug.Log("hit");
                 this.transform.position = hit.point;
             }
         }

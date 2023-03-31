@@ -15,7 +15,6 @@ public class CullLevel : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.Log(transform.position.y);
         if (player.transform.position.y + 5.0f < transform.position.y && isEnabled)
         {
             foreach(var item in this.GetComponentsInChildren<Renderer>())
