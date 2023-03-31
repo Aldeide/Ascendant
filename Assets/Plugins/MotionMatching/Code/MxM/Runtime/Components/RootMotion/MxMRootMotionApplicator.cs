@@ -22,6 +22,9 @@ namespace MxM
     {
         [SerializeField]
         private GenericControllerWrapper m_charController;
+        
+        [SerializeField] 
+        private float m_moveScale = 1f;
 
         [SerializeField]
         private bool m_enableGravity = false;
@@ -29,15 +32,17 @@ namespace MxM
         [SerializeField]
         private bool m_rotationOnly = false;
 
-        [SerializeField] private Vector3 m_axisLock = Vector3.one;
-
+        [SerializeField] 
+        private Vector3 m_axisLock = Vector3.one;
+        
         private Transform m_rootTransform;
 
-        public bool EnableGravity { get => m_enableGravity; set => m_enableGravity = value; } 
+        public float SpeedScale  { get => m_moveScale; set => m_moveScale = value;}
+        public bool EnableGravity { get => m_enableGravity; set => m_enableGravity = value; }
         public bool RotationOnly { get => m_rotationOnly; set => m_rotationOnly = value; }
         public Transform RootTransform { get => m_rootTransform; set => m_rootTransform = value; }
         public GenericControllerWrapper ControllerWrapper { get => m_charController; set => m_charController = value; }
-        
+
         //===========================================================================================
         /**
         *  @brief Monobehaviour awake function. Ensures all references are setup before updating
@@ -107,7 +112,7 @@ namespace MxM
                         moveDelta.y = Physics.gravity.y * a_deltaTime * a_deltaTime;
                     }
 
-                    m_rootTransform.Translate(moveDelta, Space.World);
+                    m_rootTransform.Translate(moveDelta * m_moveScale, Space.World);
                     m_rootTransform.rotation *= a_rootRotDelta * a_warpRot;
 
                 }
@@ -120,7 +125,7 @@ namespace MxM
                             Physics.gravity.y * a_deltaTime) * a_deltaTime;
                     }
 
-                    m_charController.MoveAndRotate(moveDelta, a_rootRotDelta * a_warpRot);
+                    m_charController.MoveAndRotate(moveDelta * m_moveScale, a_rootRotDelta * a_warpRot);
                 }
             }
         }
@@ -241,5 +246,55 @@ namespace MxM
                 m_rootTransform.SetPositionAndRotation(a_position, a_rotation);
             }
         }
+        
+        //===========================================================================================
+        /**
+        *  @brief Translates the character via a passed delta
+        *  
+        *  @param [Vector3] a_delta - the delta to translate the character by
+        *         
+        *********************************************************************************************/
+        public void Translate(Vector3 a_delta)
+        {
+            if (m_charController != null && m_charController.enabled)
+            {
+                m_charController.Move(a_delta);
+            }
+            else
+            {
+                m_rootTransform.Translate(a_delta);
+            }
+        }
+
+        //===========================================================================================
+        /**
+        *  @brief Rotates the character via a given axis and angle
+        *  
+        *  @param [Vector3] a_axis - the axis around which the rotation takes place
+        *  @param [float] a_angle - the angle of rotation around that axis to apply.
+        *         
+        *********************************************************************************************/
+        public void Rotate(Vector3 a_axis, float a_angle)
+        {
+            if (m_charController != null && m_charController.enabled)
+            {
+                m_charController.Rotate(Quaternion.AngleAxis(a_angle, a_axis));
+            }
+            else
+            {
+                m_rootTransform.Rotate(a_axis, a_angle);
+            }
+        }
+        
+        //===========================================================================================
+        /**
+        *  @brief 
+        *         
+        *********************************************************************************************/
+        public void FinalizeRootMotion()
+        {
+            
+        }
+        
     }//End of class: MxMRootMotionApplicator
 }//End of namespace: MxM

@@ -109,6 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpDownLow_Roll_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 3d17581f1b8559944aab2c0f0f659079, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -190,6 +191,7 @@ MonoBehaviour:
     m_clipLength: 3.7000003
     m_tagPositions:
     - {x: 1.506774, y: 1.9637716}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -249,6 +251,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -264,6 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunSlide_ToRight_2_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 2694b2c9b32c7904aa4b7f7f220fe1d9, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -333,6 +337,7 @@ MonoBehaviour:
     m_clipLength: 2.5666666
     m_tagPositions: []
   UserBoolTracks: []
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -392,6 +397,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -407,6 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: _209_Run_JumpDownLow_Run_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 349336b087c253e409be206336ce19f1, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -429,7 +436,7 @@ MonoBehaviour:
     FollowThrough: 0.13866663
     Recovery: 0.25866663
     Contacts:
-    - Position: {x: 0.03080019, y: -0.99126977, z: 3.2536795}
+    - Position: {x: 0.03080019, y: -1.012191, z: 3.2536795}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -488,6 +495,7 @@ MonoBehaviour:
     m_clipLength: 1.7333336
     m_tagPositions:
     - {x: 0.54666567, y: 1.0200002}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -547,6 +555,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -562,6 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_3_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 764dfeb26c96f104faf97f8c64edad16, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -587,7 +597,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: 0, y: 0.8747882, z: 6.361664}
       RotationY: 0
-    - Position: {x: -0.14400828, y: -0.019273724, z: 8.208344}
+    - Position: {x: -0.14400828, y: -0.03, z: 8.208344}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -647,7 +657,8 @@ MonoBehaviour:
     m_trackName: DisableCollision
     m_clipLength: 2.666667
     m_tagPositions:
-    - {x: 0.9113385, y: 1.6860108}
+    - {x: 0.9113385, y: 1.6406767}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -707,6 +718,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -722,6 +734,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpDownLow_Roll_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 97e15ecd72c48fe488fd7bfbaf0a84bd, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -803,6 +816,7 @@ MonoBehaviour:
     m_clipLength: 3.7000003
     m_tagPositions:
     - {x: 1.506774, y: 1.9637716}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -862,6 +876,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -877,6 +892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpDownHigh_Roll_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 3019e98dd24dccb42847eb06ba72b066, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -958,6 +974,7 @@ MonoBehaviour:
     m_clipLength: 3.6
     m_tagPositions:
     - {x: 1.1073456, y: 1.6503184}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1017,6 +1034,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1032,6 +1050,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: JogJump_ToLeft_1_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 6d64d895b5c4ff943b77b77e5b352dbd, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -1057,7 +1076,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: -0.2729447, y: 0.9606989, z: 3.7117004}
       RotationY: 0
-    - Position: {x: 0.1640755, y: 0.012320831, z: 4.1055655}
+    - Position: {x: 0.1640755, y: -0.015, z: 4.1055655}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -1118,6 +1137,7 @@ MonoBehaviour:
     m_clipLength: 3.1000004
     m_tagPositions:
     - {x: 0.68288976, y: 1.68502}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1177,6 +1197,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1192,6 +1213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpUpHigh_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: d96afd48d430f5c4aa95476abac653a1, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -1276,6 +1298,7 @@ MonoBehaviour:
     m_clipLength: 4.3
     m_tagPositions:
     - {x: 0.8172872, y: 2.6912696}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1335,6 +1358,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1350,6 +1374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_3_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 99e32eb55562b324ba57a57001ba2e3c, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -1375,7 +1400,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: 0, y: 0.8686459, z: 6.3882823}
       RotationY: 0
-    - Position: {x: 0.03382314, y: -0.02234989, z: 8.21142}
+    - Position: {x: 0.03382314, y: -0.03, z: 8.21142}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -1430,12 +1455,13 @@ MonoBehaviour:
     m_trackName: DisableCollision
     m_clipLength: 2.666667
     m_tagPositions:
-    - {x: 0.8746674, y: 1.6941857}
+    - {x: 0.8746674, y: 1.6408515}
   - m_trackId: 1
     m_trackName: DisableGravity
     m_clipLength: 2.666667
     m_tagPositions:
     - {x: 0.981333, y: 1.7880034}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1495,6 +1521,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1510,6 +1537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: JogJump_ToLeft_1_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: cfac1e057f36b5944a7bc69605e96e24, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -1535,7 +1563,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: 0.2729447, y: 0.9301403, z: 3.6780958}
       RotationY: 0
-    - Position: {x: -0.16407551, y: 0.0082484335, z: 4.0974207}
+    - Position: {x: -0.16407551, y: -0.015, z: 4.0974207}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -1596,6 +1624,7 @@ MonoBehaviour:
     m_clipLength: 3.1000004
     m_tagPositions:
     - {x: 0.7006101, y: 1.5947087}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1655,6 +1684,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1670,6 +1700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_1_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 494c666ff2a0e2943b50b6d15cf25a45, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -1695,7 +1726,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: 0.14763802, y: 0.7794408, z: 5.7337923}
       RotationY: 0
-    - Position: {x: 0.06008547, y: -0.029530574, z: 7.0655007}
+    - Position: {x: 0.06008547, y: -0.055, z: 7.0655007}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -1756,6 +1787,7 @@ MonoBehaviour:
     m_clipLength: 2.3666668
     m_tagPositions:
     - {x: 0.5893335, y: 1.444003}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1815,6 +1847,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1830,6 +1863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunSlide_ToRight_1_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 56cea226eb8975442bb9bc30b732d8ac, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -1899,6 +1933,7 @@ MonoBehaviour:
     m_clipLength: 2.166667
     m_tagPositions: []
   UserBoolTracks: []
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -1958,6 +1993,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -1981,6 +2017,7 @@ MonoBehaviour:
   MinLoops: 1
   MaxLoops: 1
   Traits: []
+  RuntimePlaybackSpeed: 1
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
 --- !u!114 &114499277956586170
@@ -1995,6 +2032,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpUpHigh_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 7f01480fc6671a940bbd99c200740577, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -2078,6 +2116,7 @@ MonoBehaviour:
     m_clipLength: 4.3
     m_tagPositions:
     - {x: 0.8172872, y: 2.6517875}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -2137,6 +2176,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -2152,6 +2192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpDownHigh_Roll_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 917765bcebdbf7b4dbc10a94a7bb76dd, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -2233,6 +2274,7 @@ MonoBehaviour:
     m_clipLength: 3.6
     m_tagPositions:
     - {x: 1.1073456, y: 1.6866795}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -2292,6 +2334,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -2307,6 +2350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpUpMedium_2Hands_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: ed93358691a860b449bd416df7e12940, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -2390,6 +2434,7 @@ MonoBehaviour:
     m_clipLength: 3.8999996
     m_tagPositions:
     - {x: 1.0633721, y: 1.9941885}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -2449,6 +2494,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -2464,6 +2510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_4_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 78290f9451d9ade48beea49dd607cff9, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -2489,7 +2536,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: 0.15212727, y: 0.89341325, z: 4.9013987}
       RotationY: 0
-    - Position: {x: -0.11406647, y: 0, z: 6.281042}
+    - Position: {x: -0.11406647, y: -0.015, z: 6.281042}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -2549,7 +2596,8 @@ MonoBehaviour:
     m_trackName: DisableCollision
     m_clipLength: 2.066667
     m_tagPositions:
-    - {x: 0.50666744, y: 1.2926704}
+    - {x: 0.50666744, y: 1.2526697}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -2609,6 +2657,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -2624,6 +2673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_4_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 03eabef70bda65341b4e9c7de07a937a, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -2649,7 +2699,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: -0.1521273, y: 0.88979846, z: 4.8912745}
       RotationY: 0
-    - Position: {x: 0.1140665, y: 0.007725197, z: 6.239845}
+    - Position: {x: 0.1140665, y: -0.015, z: 6.239845}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -2709,7 +2759,8 @@ MonoBehaviour:
     m_trackName: DisableCollision
     m_clipLength: 2.066667
     m_tagPositions:
-    - {x: 0.50666744, y: 1.3133382}
+    - {x: 0.50666744, y: 1.2706709}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -2769,6 +2820,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -2784,6 +2836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_2_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 7c8aee7c7a83b3841a1e8b7054b3f8a8, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -2865,6 +2918,7 @@ MonoBehaviour:
     m_clipLength: 2.833333
     m_tagPositions:
     - {x: 0.82666725, y: 1.188001}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -2924,6 +2978,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -2939,6 +2994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_2_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 23c67ff874dd5914a89c4ab8cbb21940, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -3020,6 +3076,7 @@ MonoBehaviour:
     m_clipLength: 2.833333
     m_tagPositions:
     - {x: 0.82666725, y: 1.226003}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -3079,6 +3136,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -3094,6 +3152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: JogJump_ToLeft_2_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 1d61d94197b6ee346a4fa09df20dc185, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -3119,7 +3178,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: 0.028777272, y: 0.80133545, z: 4.5421543}
       RotationY: 0
-    - Position: {x: -0.06428133, y: -0.091612756, z: 5.5053678}
+    - Position: {x: -0.06428133, y: -0.1, z: 5.5053678}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -3176,12 +3235,13 @@ MonoBehaviour:
     m_trackName: DisableCollision
     m_clipLength: 3.5
     m_tagPositions:
-    - {x: 0.7701374, y: 1.7593031}
+    - {x: 0.7701374, y: 1.6805992}
   - m_trackId: 1
     m_trackName: DisableGravity
     m_clipLength: 3.5
     m_tagPositions:
     - {x: 0.76794714, y: 1.8469414}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -3241,6 +3301,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -3256,6 +3317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: JogJump_ToLeft_2_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 7f169a9576e454f4487f0000ee34b46b, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -3281,7 +3343,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: -0.02877727, y: 0.8176843, z: 4.496013}
       RotationY: 0
-    - Position: {x: 0.06428133, y: -0.060868293, z: 5.505217}
+    - Position: {x: 0.06428133, y: -0.07, z: 5.505217}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -3342,6 +3404,7 @@ MonoBehaviour:
     m_clipLength: 3.5
     m_tagPositions:
     - {x: 0.8021407, y: 1.7668393}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -3401,6 +3464,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -3416,6 +3480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: _209_Run_JumpDownLow_Run_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: c2f7256b2808f5e47b22dbb091c6fa81, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -3438,7 +3503,7 @@ MonoBehaviour:
     FollowThrough: 0.13866663
     Recovery: 0.25866663
     Contacts:
-    - Position: {x: -0.030800194, y: -0.99126977, z: 3.2536795}
+    - Position: {x: -0.030800194, y: -1.0121907, z: 3.2536795}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -3497,6 +3562,7 @@ MonoBehaviour:
     m_clipLength: 1.7333336
     m_tagPositions:
     - {x: 0.52799857, y: 1.0339988}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -3556,6 +3622,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -3571,6 +3638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: RunJump_ToLeft_1_Mirror_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 5b2a4003b72d2ad438889fc142e94928, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -3596,7 +3664,7 @@ MonoBehaviour:
     Contacts:
     - Position: {x: -0.45038092, y: 0.81087434, z: 5.7454243}
       RotationY: 0
-    - Position: {x: -0.06008547, y: 0.007382136, z: 7.083957}
+    - Position: {x: -0.06008547, y: -0.02, z: 7.083957}
       RotationY: 0
   LeftFootStepTrack:
     m_trackId: 0
@@ -3657,6 +3725,7 @@ MonoBehaviour:
     m_clipLength: 2.3666668
     m_tagPositions:
     - {x: 0.5760002, y: 1.5586681}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -3716,6 +3785,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
@@ -3731,6 +3801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e0c90096ff9a54bb00ca4e068031a7, type: 3}
   m_Name: Run_JumpUpMedium_2Hands_Run_comp
   m_EditorClassIdentifier: 
+  CompositeName: 
   PrimaryClip: {fileID: 7400000, guid: 8bb183b2c8b322f4fb72c55bdf28459c, type: 2}
   BeforeClips: []
   AfterClips: []
@@ -3814,6 +3885,7 @@ MonoBehaviour:
     m_clipLength: 3.8999996
     m_tagPositions:
     - {x: 1.0633721, y: 1.9941885}
+  RuntimePlaybackSpeed: 1
   UseSpeedMods: 0
   MotionModifier:
     MotionSections:
@@ -3873,6 +3945,7 @@ MonoBehaviour:
     m_clipLength: 0
     m_tagPositions: []
   GeneratedUserBoolTracks: []
+  Curves: []
   m_targetPreProcessData: {fileID: 0}
   m_targetAnimModule: {fileID: 11400000}
   m_targetPrefab: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}

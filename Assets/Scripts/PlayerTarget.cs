@@ -7,23 +7,43 @@ public class PlayerTarget : MonoBehaviour
     public LayerMask layerMask;
     public GameObject player;
 
+    public bool thirdPerson = true;
+
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
+        if (thirdPerson)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        Plane plane = new Plane(new Vector3(0, 1, 0), player.transform.position);
+        if (!thirdPerson)
+        {
+            Plane plane = new Plane(new Vector3(0, 1, 0), player.transform.position);
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float enter = 0;
-        plane.Raycast(ray, out enter);
-        Vector3 hit = ray.GetPoint(enter);
-        hit.y += 1.5f;
-        this.transform.position = hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float enter = 0;
+            plane.Raycast(ray, out enter);
+            Vector3 hit = ray.GetPoint(enter);
+            hit.y += 1.5f;
+            this.transform.position = hit;
+            return;
+        } else
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore))
+            {
+                Debug.Log("hit");
+                this.transform.position = hit.point;
+            }
+        }
+        
 
     }
 

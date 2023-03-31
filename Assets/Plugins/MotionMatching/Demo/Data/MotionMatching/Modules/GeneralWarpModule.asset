@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AngularErrorWarpType: 1
   AngularErrorWarpMethod: 0
-  WarpRate: 60
+  WarpRate: 180
   DistanceThreshold: 1
-  AngleRange: {x: 0.5, y: 90}
+  AngleRange: {x: 0.5, y: 180}
   LongErrorWarpType: 0
   LongWarpSpeedRange: {x: 0.9, y: 1.2}

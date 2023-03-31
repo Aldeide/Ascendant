@@ -10,7 +10,7 @@ namespace MxMGameplay
             Debug.Log("Pose Id: "+ a_poseChangeData.PoseId.ToString() + " Speed Mod: " 
                       + a_poseChangeData.SpeedMod.ToString() + " Time Offset: " + a_poseChangeData.TimeOffset.ToString());
         }
-
+        
         private MxMAnimator m_mxmAnimator;
         //private MxMBlendSpaceLayers m_blendSpaceLayers;
         private MxMTrajectoryGenerator m_trajectoryGenerator;
@@ -109,7 +109,7 @@ namespace MxMGameplay
 
             m_lastPosition = position;
         }
-
+        
         private void UpdateGeneral()
         {
             if(Input.GetKeyDown(KeyCode.K))

@@ -57,6 +57,7 @@ namespace MxMEditor
         private SerializedProperty m_spFavourTagMethod;
         private SerializedProperty m_spPastTrajectoryMode;
         private SerializedProperty m_spApplyHumanoidFootIK;
+        private SerializedProperty m_spApplyPlayableIK;
         private SerializedProperty m_spMinFootstepInterval;
         
         private SerializedProperty m_spAngularErrorWarpRate;
@@ -81,6 +82,8 @@ namespace MxMEditor
         
         private SerializedProperty m_spOnSetupCompleteCallback;
         private SerializedProperty m_spOnIdleTriggeredCallback;
+        private SerializedProperty m_spOnIdleEndCallback;
+        private SerializedProperty m_spOnRequiredTagsChangedCallback;
         private SerializedProperty m_spOnLeftFootStepStartCallback;
         private SerializedProperty m_spOnRightFootStepStartCallback;
         private SerializedProperty m_spOnEventCompleteCallback;
@@ -145,6 +148,7 @@ namespace MxMEditor
             m_spFavourTagMethod = serializedObject.FindProperty("m_favourTagMethod");
             m_spPastTrajectoryMode = serializedObject.FindProperty("m_pastTrajectoryMode");
             m_spApplyHumanoidFootIK = serializedObject.FindProperty("m_applyHumanoidFootIK");
+            m_spApplyPlayableIK = serializedObject.FindProperty("m_applyPlayableIK");
             m_spMinFootstepInterval = serializedObject.FindProperty("m_minFootstepInterval");
             
             m_spAngularErrorWarpRate = serializedObject.FindProperty("m_angularErrorWarpRate");
@@ -165,6 +169,8 @@ namespace MxMEditor
             
             m_spOnSetupCompleteCallback = serializedObject.FindProperty("m_onSetupComplete");
             m_spOnIdleTriggeredCallback = serializedObject.FindProperty("m_onIdleTriggered");
+            m_spOnIdleEndCallback = serializedObject.FindProperty("m_onIdleEnd");
+            m_spOnRequiredTagsChangedCallback = serializedObject.FindProperty("m_onRequireTagsChanged");
             m_spOnLeftFootStepStartCallback = serializedObject.FindProperty("m_onLeftFootStepStart");
             m_spOnRightFootStepStartCallback = serializedObject.FindProperty("m_onRightFootStepStart");
             m_spOnEventCompleteCallback = serializedObject.FindProperty("m_onEventComplete");
@@ -745,6 +751,10 @@ namespace MxMEditor
                 m_spApplyHumanoidFootIK.boolValue = EditorGUILayout.Toggle(new GUIContent("Apply Humanoid Foot IK",
                     "Turns on/off Unity's humanoid foot IK for runtime fixing the feet on a humanoid pose."), m_spApplyHumanoidFootIK.boolValue);
 
+                m_spApplyPlayableIK.boolValue = EditorGUILayout.Toggle(
+                    new GUIContent("Apply Playable IK", "Turns on/off playable IK for this clip"),
+                    m_spApplyPlayableIK.boolValue);
+
                 m_spMinFootstepInterval.floatValue = EditorGUILayout.FloatField(new GUIContent("Min Footstep Interval",
                         "The minimum time interval between footstep triggers of the same foot."),
                     m_spMinFootstepInterval.floatValue);
@@ -756,7 +766,7 @@ namespace MxMEditor
                 }
 
                 GUILayout.Space(5f);
-                curHeight += 18f * 17f + 5f;
+                curHeight += 18f * 18f + 5f;
             }
 
             curHeight += 30f;
@@ -1034,6 +1044,8 @@ namespace MxMEditor
             {
                 EditorGUILayout.PropertyField(m_spOnSetupCompleteCallback);
                 EditorGUILayout.PropertyField(m_spOnIdleTriggeredCallback);
+                EditorGUILayout.PropertyField(m_spOnIdleEndCallback);
+                EditorGUILayout.PropertyField(m_spOnRequiredTagsChangedCallback);
                 EditorGUILayout.PropertyField(m_spOnLeftFootStepStartCallback);
                 EditorGUILayout.PropertyField(m_spOnRightFootStepStartCallback);
                 EditorGUILayout.PropertyField(m_spOnEventCompleteCallback);

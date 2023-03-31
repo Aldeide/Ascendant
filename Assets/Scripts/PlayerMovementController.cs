@@ -7,6 +7,12 @@ public class PlayerMovementController : MonoBehaviour
 {
     public LayerMask layerMask;
 
+    public bool thirdPersonController = true;
+
+    public GameObject followTarget;
+
+    public float rotationPower = 0.25f;
+
 
     // Inputs variables.
     private Vector2 movementInput = new Vector2();
@@ -54,74 +60,159 @@ public class PlayerMovementController : MonoBehaviour
         currentSpeed = 0f;
         //Cursor.lockState = CursorLockMode.Locked;
         characterController = GetComponent<CharacterController>();
+        followTarget = GameObject.Find("FollowTarget");
     }
 
     // Update is called once per frame
     void Update()
     {
-        isGrounded = IsGrounded();
-        GetSlideDirection();
-        ComputeSpeed();
-
-        forward = Camera.main.transform.forward;
-        right = Camera.main.transform.right;
-        forward.y = 0f;
-        right.y = 0f;
-
-        right = new Vector3(-1, 0, -1);
-        forward = new Vector3(1, 0, -1);
-        float lol = GetSlopeValue();
-
-        if (crouchInput <= 0)
+        
+        if (!thirdPersonController)
         {
-            isSliding = false;
-        }
+            isGrounded = IsGrounded();
+            GetSlideDirection();
+            ComputeSpeed();
+            forward = Camera.main.transform.forward;
+            right = Camera.main.transform.right;
+            forward.y = 0f;
+            right.y = 0f;
 
-        if (crouchInput > 0)
-        {
-            characterController.height = 1.2f;
-        }
-        else
-        {
-            characterController.height = 2.0f;
-        }
-        if (currentSpeed > 3.0f && crouchInput > 0)
-        {
-            isSliding = true;
-            // Slide.
-            //direction = (Vector3.Dot(GetSlideDirection(), right) / 10.0f * right + forward).normalized * currentSpeed * Time.deltaTime;
-            //characterController.Move(forward.normalized * currentSpeed * Time.deltaTime);
-        }
+            right = new Vector3(-1, 0, -1);
+            forward = new Vector3(1, 0, -1);
+            float lol = GetSlopeValue();
 
-        // Translate.
+            if (crouchInput <= 0)
+            {
+                isSliding = false;
+            }
+
+            if (crouchInput > 0)
+            {
+                characterController.height = 1.2f;
+            }
+            else
+            {
+                characterController.height = 2.0f;
+            }
+            if (currentSpeed > 3.0f && crouchInput > 0)
+            {
+                isSliding = true;
+                // Slide.
+                //direction = (Vector3.Dot(GetSlideDirection(), right) / 10.0f * right + forward).normalized * currentSpeed * Time.deltaTime;
+                //characterController.Move(forward.normalized * currentSpeed * Time.deltaTime);
+            }
+
+            // Translate.
 
 
-        // If the character looks directly down or up, movement will be nil, taking the player's transform as the forward direction instead.
-        if (Mathf.Abs(forward.magnitude) <= 0.01f)
-        {
-            //forward = transform.forward;
-            //right = transform.right;
-        }
+            // If the character looks directly down or up, movement will be nil, taking the player's transform as the forward direction instead.
+            if (Mathf.Abs(forward.magnitude) <= 0.01f)
+            {
+                //forward = transform.forward;
+                //right = transform.right;
+            }
 
-        if (!isSliding)
-        {
-            localDirection = (right.normalized * movementInput.x + forward.normalized * movementInput.y).normalized;
-        }
+            if (!isSliding)
+            {
+                localDirection = (right.normalized * movementInput.x + forward.normalized * movementInput.y).normalized;
+            }
 
             direction.x = localDirection.x * currentSpeed * Time.deltaTime;
             direction.z = localDirection.z * currentSpeed * Time.deltaTime;
 
 
-        // Applying gravity.
-        Gravity();
+            // Applying gravity.
+            Gravity();
 
-        //this.transform.position += forward.normalized * Time.deltaTime * movementInput.y * playerSpeed;
-        //this.transform.position += right.normalized * Time.deltaTime * movementInput.x * playerSpeed;
+            // Rotate.
+            Rotate();
 
-        // Rotate.
-        Rotate();
+            characterController.Move(direction);
+            return;
+        } else
+        {
+            if (movementInput.magnitude > 0)
+            {
+                ComputeSpeed();
+                forward = Camera.main.transform.forward;
+                forward.y = 0f;
+                forward.Normalize();
+                right = Camera.main.transform.right;
+                right.y = 0f;
+                right.Normalize();
 
-        characterController.Move(direction);
+                direction = forward * movementInput.y + right * movementInput.x;
+
+
+
+                // direction.y = this.transform.position.y;
+
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg; // + cam.transform.eulerAngles.y;
+                                                                                           //transform.rotation = Quaternion.Euler(0, targetAngle, 0);
+                var currentAngle = this.transform.rotation.eulerAngles.y;
+                var currentAngleVelocity = 0f;
+                currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.14f);
+                ////transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                Vector3 rotatedMovement = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
+                //controller.Move(rotatedMovement * speed * Time.deltaTime);
+
+
+                //Debug.Log(direction);
+
+                // Applying gravity.
+                Gravity();
+                //characterController.Move(direction * Time.deltaTime * currentSpeed);
+                //direction.y = 0;
+                // Character rotation.
+                Vector3 planarMovement = direction;
+                planarMovement.y = 0;
+                Vector3 lookAtDirection = this.transform.position + planarMovement;
+                lookAtDirection.y = this.transform.position.y;
+                //lookAtDirection.Normalize();
+
+                //Vector3 current = Vector3.MoveTowards(transform.position + this.transform.forward, transform.position + direction, Time.deltaTime * 1000.0f);
+
+                //this.transform.forward = current;
+
+
+                Debug.DrawLine(transform.position, transform.position + forward, Color.red);
+                Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
+                Debug.DrawLine(transform.position, transform.position + planarMovement, Color.blue);
+                //Quaternion desiredRotation = Quaternion.LookRotation(this.transform.position + direction);
+
+                //transform.LookAt(lookAtDirection);
+
+                //transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * 10.0f);
+
+                //transform.rotation = Quaternion.RotateTowards(transform.rotation, desiredRotation, Time.deltaTime * 1.0f);
+
+
+                //transform.LookAt(lookAtDirection);
+            }
+
+
+
+        }
+
+        followTarget.transform.rotation *= Quaternion.AngleAxis(lookInput.x * rotationPower, Vector3.up);
+        followTarget.transform.rotation *= Quaternion.AngleAxis(lookInput.y * rotationPower, -1.0f * Vector3.right);
+
+        
+        
+        // Vertical Camera Rotation
+        var angles = followTarget.transform.localEulerAngles;
+        angles.z = 0;
+        var angle = followTarget.transform.localEulerAngles.x;
+
+        if (angle > 180 && angle < 340)
+        {
+            angles.x = 340;
+        }
+        else if (angle < 180 && angle > 40)
+        {
+            angles.x = 40;
+        }
+        followTarget.transform.localEulerAngles = angles;
     }
 
     private void ComputeSpeed()
@@ -212,7 +303,7 @@ public class PlayerMovementController : MonoBehaviour
             verticalVelocity = -0.2f;
         } else
         {
-            verticalVelocity += -0.81f * Time.deltaTime;
+            verticalVelocity += -5 * 0.81f * Time.deltaTime;
         }
         direction.y = verticalVelocity;
     }
@@ -284,6 +375,7 @@ public class PlayerMovementController : MonoBehaviour
         //Debug.Log(distanceSum / numHits);
         return distanceSum / numHits;
     }
+
 
     #region Input Callbacks.
     public void OnMove(InputAction.CallbackContext context)

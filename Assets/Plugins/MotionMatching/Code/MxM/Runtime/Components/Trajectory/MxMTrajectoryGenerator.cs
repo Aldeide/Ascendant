@@ -14,9 +14,9 @@ using Unity.Collections;
 using UnityEngine.AI;
 using Unity.Jobs;
 
- #if UNITY_2019_1_OR_NEWER && ENABLE_INPUT_SYSTEM      
- using UnityEngine.InputSystem;
- #endif
+// #if UNITY_2019_1_OR_NEWER && ENABLE_INPUT_SYSTEM      
+// using UnityEngine.InputSystem;
+// #endif
 
 namespace MxM
 {
@@ -183,7 +183,7 @@ namespace MxM
         {
             if(p_animator.updateMode == AnimatorUpdateMode.AnimatePhysics)
             {
-                UpdatePastTrajectory();
+                UpdatePastTrajectory(Time.fixedDeltaTime);
             }
         }
 
@@ -199,7 +199,7 @@ namespace MxM
         {
             if (p_animator.updateMode != AnimatorUpdateMode.AnimatePhysics)
             {
-                UpdatePastTrajectory();
+                UpdatePastTrajectory(Time.deltaTime);
             }
         }
 
@@ -251,7 +251,7 @@ namespace MxM
         *  MxMAnimator.
         *         
         *********************************************************************************************/
-        protected override void UpdatePrediction()
+        protected override void UpdatePrediction(float a_deltaTime)
         {
             if (p_trajPositions.Length == 0 || p_trajFacingAngles.Length == 0)
                 return;
@@ -320,8 +320,8 @@ namespace MxM
                 NewTrajectoryPositions = m_newTrajPositions,
                 DesiredLinearDisplacement = desiredLinearDisplacement,
                 DesiredOrientation = desiredOrientation,
-                MoveRate = m_posBias * m_posBiasMultiplier * m_simulationSpeedScale * Time.deltaTime,
-                TurnRate = m_dirBias * m_dirBiasMultiplier * m_simulationSpeedScale * Time.deltaTime
+                MoveRate = m_posBias * m_posBiasMultiplier * m_simulationSpeedScale * a_deltaTime,
+                TurnRate = m_dirBias * m_dirBiasMultiplier * m_simulationSpeedScale * a_deltaTime
             };
 
             p_trajectoryGenerateJobHandle = trajectoryGenerateJob.Schedule();
@@ -716,6 +716,8 @@ namespace MxM
         {
             if (a_trajGenModule == null)
                 return;
+
+            m_trajectoryGeneratorModule = a_trajGenModule;
             
             m_maxSpeed = a_trajGenModule.MaxSpeed;
             m_posBias = a_trajGenModule.PosBias;
@@ -729,9 +731,7 @@ namespace MxM
             m_applyRootSpeedToNavAgent = a_trajGenModule.ApplyRootSpeedToNavAgent;
             m_faceDirectionOnIdle = a_trajGenModule.FaceDirectionOnIdle;
             m_scaleAdjustment = a_trajGenModule.ScaleAdjustment;
-            m_camTransform = a_trajGenModule.CamTransform;
             m_mxmInputProfile = a_trajGenModule.InputProfile;
-            
         }
         
         //===========================================================================================
@@ -742,13 +742,13 @@ namespace MxM
         * @param [InputAction.CallbackContext] a_input - the input data from the input system
         *         
         *********************************************************************************************/
- #if UNITY_2019_1_OR_NEWER && ENABLE_INPUT_SYSTEM
-         public void OnMoveInputCallback(InputAction.CallbackContext a_input)
-         {
-             Vector2 input = a_input.ReadValue<Vector2>();
-             InputVector = new Vector3(input.x, 0f, input.y);
-         }
- #endif
+// #if UNITY_2019_1_OR_NEWER && ENABLE_INPUT_SYSTEM
+//         public void OnMoveInputCallback(InputAction.CallbackContext a_input)
+//         {
+//             Vector2 input = a_input.ReadValue<Vector2>();
+//             InputVector = new Vector3(input.x, 0f, input.y);
+//         }
+// #endif
 
     }//End of class: MxMTrajectoryGenerator
 }//End of namespace: MxM

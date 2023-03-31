@@ -543,6 +543,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -554,6 +555,7 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1046,6 +1048,7 @@ GameObject:
   - component: {fileID: 4574965035840962223}
   - component: {fileID: 4574965035262623154}
   - component: {fileID: 4574965035185818538}
+  - component: {fileID: 1851683747}
   m_Layer: 9
   m_Name: Robot Kyle_MOCAP_Balanced
   m_TagString: Untagged
@@ -1103,9 +1106,9 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.1
+  m_SkinWidth: 0.2
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.095, z: 0}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!114 &1441259490102284308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1126,8 +1129,13 @@ MonoBehaviour:
   m_posBias: 9
   m_dirBias: 9
   m_trajectoryMode: 0
+  m_controlMode: 0
   m_customInput: 0
   m_resetDirectionOnOnInput: 1
+  m_stoppingDistance: 1
+  m_applyRootSpeedToNavAgent: 1
+  m_faceDirectionOnIdle: 0
+  m_scaleAdjustment: 1
   m_camTransform: {fileID: 0}
   m_mxmInputProfile: {fileID: 11400000, guid: e6185d4d8606f4149afac0695745b768, type: 2}
   m_trajectoryGeneratorModule: {fileID: 0}
@@ -1207,6 +1215,7 @@ MonoBehaviour:
   m_nextPoseToleranceDist: 0.25
   m_nextPoseToleranceAngle: 2
   m_blendOutEarly: 0
+  m_tagBlendMethod: 0
   m_overrideWarpSettings: {fileID: 11400000, guid: 869b543752d72dd4dae9ca5739e21bef,
     type: 2}
   m_angularWarpType: 1
@@ -1224,10 +1233,11 @@ MonoBehaviour:
   p_DIYPlayableGraph: 0
   p_manualInitialize: 0
   m_autoCreateAnimatorController: 0
+  m_minFootstepInterval: 0.2
   m_generalFoldout: 0
   m_animDataFoldout: 0
   m_optionsFoldout: 0
-  m_warpingFoldout: 1
+  m_warpingFoldout: 0
   m_debugFoldout: 0
   m_callbackFoldout: 0
   m_onSetupComplete:
@@ -1269,6 +1279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_slideDefinition: {fileID: 11400000, guid: b347c3d927daaca47907ee7af431678e, type: 2}
   m_jumpDefinition: {fileID: 11400000, guid: 8716752c67cf94f408038de4e2cfa289, type: 2}
+  m_danceDefinition: {fileID: 0}
   m_generalLocomotion: {fileID: 11400000, guid: e6185d4d8606f4149afac0695745b768,
     type: 2}
   m_strafeLocomotion: {fileID: 11400000, guid: 5ac17047f0001cf48b86c260abbb2d83, type: 2}
@@ -1321,6 +1332,29 @@ MonoBehaviour:
   m_favourMultiplier: 0.6
   m_runSpeedTagName: Run
   m_sprintSpeedTagName: Sprint
+--- !u!114 &1851683747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441259490102284309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b6510a4c04ab24588f8dbd844d95af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_blendTime: 0.5
+  m_turnInPlaceProfiles:
+  - EventName: TIP90
+    TriggerRange: {x: 45, y: 90}
+    Warp: 1
+  - EventName: TIP135
+    TriggerRange: {x: 89, y: 141}
+    Warp: 1
+  - EventName: TIP180
+    TriggerRange: {x: 140, y: 225}
+    Warp: 1
 --- !u!1 &1441259490102568749
 GameObject:
   m_ObjectHideFlags: 0

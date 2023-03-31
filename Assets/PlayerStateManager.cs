@@ -19,6 +19,7 @@ public class PlayerStateManager : MonoBehaviour
 
     void Update()
     {
+        /*
         Vector3 heading = movementController.transform.forward;
         Vector2 direction = new Vector2(0, 0);
 
@@ -72,6 +73,15 @@ public class PlayerStateManager : MonoBehaviour
         {
             animator.SetFloat("MovementX", animationDirection.x, 0.2f, 1.6f);
             animator.SetFloat("MovementY", animationDirection.y, 0.2f, 1.6f);
+            animator.SetBool("isRunning", true);
+        } else
+        {
+            animator.SetBool("isRunning", false);
+        }
+        */
+        if (movementInput.sqrMagnitude > 0)
+        {
+            animator.SetFloat("MovementY", 1.0f, 0.2f, 1.6f);
             animator.SetBool("isRunning", true);
         } else
         {

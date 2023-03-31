@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Animations;
+using UnityEngine.Events;
 
 namespace MxM
 {
@@ -37,6 +38,9 @@ namespace MxM
 
         [SerializeField]
         private int m_maxActiveEvents = 4;
+        
+        [SerializeField]
+        private bool m_isAdditive;
 
         private AnimationLayerMixerPlayable m_layerMixer;
         private MxMLayer m_baseLayer;
@@ -46,8 +50,15 @@ namespace MxM
         private int m_layerId = 2;
         
         private int m_currentEventSlotId = -1;
-        
         public int CurrentEventId { get; private set; }
+        
+         //[System.Serializable] public class UnityEvent_EEventState : UnityEvent<EEventState> { };    //Custom Unity event for passing current EEventState during events
+        // [System.Serializable] public class UnityEvent_Int : UnityEvent<int> { };                    //Custom Unity event for passing an integer
+        
+         [Header("Callbacks")]
+         [SerializeField] private UnityEvent m_onEventComplete = new UnityEvent();                   //Unity event called when an Event (MxM Action Event) is completed
+        // [SerializeField] private UnityEvent_EEventState m_onEventStateChanged = new UnityEvent_EEventState();   //Unity event called when an Event (MxM Action Event) state is changed. The event state will be passed
+        // [SerializeField] private UnityEvent_Int m_onEventContactReached = new UnityEvent_Int();  
         
         public EEventState CurrentEventState 
         { 
@@ -86,6 +97,12 @@ namespace MxM
             } 
         }
 
+        public MxMLayer BaseLayer
+        {
+            get => m_baseLayer;
+        }
+        
+
         public bool IsEnabled { get { return enabled; } }
         public bool DoUpdatePhase1 { get { return false; } }
         public bool DoUpdatePhase2 { get { return true; } }
@@ -106,7 +123,7 @@ namespace MxM
 
             m_layerMixer = AnimationLayerMixerPlayable.Create(m_mxmAnimator.MxMPlayableGraph, m_maxActiveEvents);
 
-            m_layerId = m_mxmAnimator.AddLayer((Playable)m_layerMixer, 0f, false, null);
+            m_layerId = m_mxmAnimator.AddLayer((Playable)m_layerMixer, 0f, m_isAdditive, null);
             m_baseLayer = m_mxmAnimator.GetLayer(m_layerId);
             m_mxmAnimator.SetLayerWeight(m_layerId, 0f);
 
@@ -145,6 +162,8 @@ namespace MxM
                     m_layerMixer.DisconnectInput(i);
                     eventLayer.ClipPlayable.Destroy();
                     eventLayer.LayerStatus = EEventLayerStatus.Inactive;
+
+                    m_onEventComplete.Invoke();
                     
                     if(i == m_currentEventSlotId)
                     {
@@ -186,6 +205,7 @@ namespace MxM
         }
 
         public void Terminate() { }
+
         public void UpdatePhase1() { }
         
         public void UpdatePost() { }
@@ -320,7 +340,7 @@ namespace MxM
             newEventLayer.Weight = 0f;
 
             m_layerMixer.ConnectInput(slotId, newEventLayer.ClipPlayable, 0);
-            m_layerMixer.SetLayerAdditive((uint)slotId, false);
+            m_layerMixer.SetLayerAdditive((uint)slotId, m_isAdditive);
             m_layerMixer.SetInputWeight(slotId, 0.001f);
             m_layerMixer.SetLayerMaskFromAvatarMask((uint)slotId, a_eventMask);
 
@@ -476,6 +496,7 @@ namespace MxM
             newEventLayer.Weight = 0f;
             
             m_layerMixer.ConnectInput(slotId, newEventLayer.ClipPlayable, 0);
+            m_layerMixer.SetLayerAdditive((uint)slotId, m_isAdditive);
             m_layerMixer.SetInputWeight(slotId, 0.001f);
             m_layerMixer.SetLayerMaskFromAvatarMask((uint)slotId, a_eventMask);
 

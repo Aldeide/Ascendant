@@ -22,8 +22,10 @@ MonoBehaviour:
   MatchPose: 1
   MatchTrajectory: 1
   MatchRequireTags: 0
+  FavourTagMethod: 0
   PostEventTrajectoryMode: 3
   MatchTiming: 0
+  ExactTimeMatch: 0
   TimingWeight: 0
   TimingWarpType: 0
   MatchPosition: 1
@@ -36,4 +38,6 @@ MonoBehaviour:
   MatchRotation: 0
   RotationWeight: 0
   RotationWarpType: 2
-  m_targetAnimData: {fileID: 11400000, guid: 044ac0aabce61324da379ce23b6f26a2, type: 2}
+  m_targetEventNamingModule: {fileID: 11400000, guid: 1e3c70b0e11d14d4c9eaa577f4c3fa44,
+    type: 2}
+  m_targetAnimData: {fileID: 0}

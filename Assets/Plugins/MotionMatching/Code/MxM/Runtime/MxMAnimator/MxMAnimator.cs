@@ -64,6 +64,7 @@ namespace MxM
         [SerializeField] private ETransitionMethod m_transitionMethod = ETransitionMethod.Blend;        //The method of blending to use to transition between animations
         [SerializeField] private EPastTrajectoryMode m_pastTrajectoryMode = EPastTrajectoryMode.ActualHistory; //The method for obtaining past trajectory points
         [SerializeField] private bool m_applyHumanoidFootIK = true;          //If false, humanoid foot Ik retargetting will be turned off
+        [SerializeField] private bool m_applyPlayableIK = true;              //If true playable IK will be applied to this clip.
         [SerializeField] private EFavourTagMethod m_favourTagMethod = EFavourTagMethod.Exclusive; //The method for handling favour tags, do they need to match exactly? partially? or does each matching tag contribute to the favour?
         [SerializeField] private bool m_applyTrajectoryBlending = false;     //If true the desired trajectory will be blended with the current animation with a linear falloff over prediction time                                 
         [SerializeField] private float m_trajectoryBlendingWeight = 0.5f;    //A weighting for 'Trajectory Blending'. Keep between 0-1. Impacts how strong the trajectory blending is.
@@ -102,6 +103,8 @@ namespace MxM
 
         //Footstep Tracking
         [SerializeField] private float m_minFootstepInterval = 0.2f; //The minimum time interval allowable between triggered footsteps
+        [SerializeField] private int m_cachedLastLeftFootstepId = 0; //Optimization for footstep tracking to cull already checked tags
+        [SerializeField] private int m_cachedLastRightFootstepId = 0; //Optimization for footstep tracking to cull already checked tags
         
         
         //MxM Extensions
@@ -122,6 +125,7 @@ namespace MxM
         [System.Serializable] public class UnityEvent_EEventState : UnityEvent<EEventState> { };    //Custom Unity event for passing current EEventState during events
         [System.Serializable] public class UnityEvent_Int : UnityEvent<int> { };                    //Custom Unity event for passing an integer
         [System.Serializable] public class UnityEvent_FootStepData : UnityEvent<FootStepData> { };  //Custom Unity event for passing FootStepData
+        [System.Serializable] public class UnityEvent_Tag : UnityEvent<ETags> { };                  //Custom Unity event for passing required tags
         
         
         [System.Serializable]
@@ -143,7 +147,9 @@ namespace MxM
 
         [SerializeField] private UnityEvent m_onSetupComplete = new UnityEvent();                   //Unity event called when setup of the motion matching playable graph and settings is complete
         [SerializeField] private UnityEvent m_onIdleTriggered = new UnityEvent();                   //Unity event called when the idle state is triggered
+        [SerializeField] private UnityEvent m_onIdleEnd = new UnityEvent();                         //Unity event called when the idle state is exited
         [SerializeField] private UnityEvent m_onEventComplete = new UnityEvent();                   //Unity event called when an Event (MxM Action Event) is completed
+        [SerializeField] private UnityEvent_Tag m_onRequireTagsChanged = new UnityEvent_Tag();          //Unity event called when required tags are changed.
         [SerializeField] private UnityEvent_EEventState m_onEventStateChanged = new UnityEvent_EEventState();   //Unity event called when an Event (MxM Action Event) state is changed. The event state will be passed
         [SerializeField] private UnityEvent_Int m_onEventContactReached = new UnityEvent_Int();         //Unity event called whenever a contact has been reached in an event (MxM Action Event). The id of the contact will be passed
         [SerializeField] private UnityEvent_FootStepData m_onLeftFootStepStart = new UnityEvent_FootStepData();  //Unity event called when a left footstep is triggered. Footstep data will be passed
@@ -152,7 +158,9 @@ namespace MxM
 
         public UnityEvent OnSetupComplete { get { return m_onSetupComplete; } } //Can be used to setup OnSetupComplete callbacks during runtime
         public UnityEvent OnIdleTriggered { get { return m_onIdleTriggered; } } //Can be used to setup OnIdleTriggered callbacks during runtime
+        public UnityEvent OnIdleEnd { get { return m_onIdleEnd; } } //Can be used to setup OnIdleEnd callbacks during runtime
         public UnityEvent OnEventComplete { get { return m_onEventComplete; } } //Can be used to setup OnEventComplete callbacks during runtime
+        public UnityEvent_Tag OnRequireTagsChanged { get {return m_onRequireTagsChanged; } } //Can be used to setup OnRequireTagsChanged callbacks during runtime
         public UnityEvent_EEventState OnEventStateChanged { get { return m_onEventStateChanged; } } // Can be used to setup OnEventStateChanged callbacks during runtime
         public UnityEvent_Int OnEventContactReached { get { return m_onEventContactReached; } } //Can be used to setup OnEventContactReached callbacks during runtime
         public UnityEvent_FootStepData OnLeftFootStepStart { get { return m_onLeftFootStepStart; } } //Can be used to setup OnLeftFootStepStart callbacks during runtime
@@ -240,7 +248,18 @@ namespace MxM
         public float LatErrorWarpAngle { get; private set; }
         public float AngularErrorWarpRate { get { return m_angularErrorWarpRate; } set { m_angularErrorWarpRate = value; } }
         public float AngularErrorWarpThreshold { get { return m_angularErrorWarpThreshold; } set { m_angularErrorWarpThreshold = value; } }
-        public AvatarMask AnimatorControllerMask { get { return m_animatorControllerMask; } set { m_animatorControllerMask = value; } }
+
+        public AvatarMask AnimatorControllerMask
+        {
+            get { return m_animatorControllerMask; }
+            set
+            {
+                m_animatorControllerMask = value;
+                
+                if(m_animControllerLayer > 0)
+                    m_animationLayerMixer.SetLayerMaskFromAvatarMask((uint)m_animControllerLayer, m_animatorControllerMask);
+            }
+        }
         public float DesiredPlaybackSpeed { get; set; }
         public float UserPlaybackSpeedMultiplier { get; set; }
         public float PlaybackSpeedSmoothRate { get { return m_playbackSpeedSmoothRate; } set { m_playbackSpeedSmoothRate = value; } }
@@ -637,6 +656,7 @@ namespace MxM
                                 m_animationRoot.SetPositionAndRotation(m_animationRoot.position 
                                     + deltaPos + warp, p_animator.rootRotation * warpRot); //Revert to transform if there is no IMxMRootMotion attached
                             }
+                            
                         }
                         break;
                     case EMxMRootMotion.RootMotionApplicator_AngularErrorWarpingOnly:
@@ -676,6 +696,8 @@ namespace MxM
                 
                 m_animationRoot.rotation *= warpRot; //Even with root motion off, angular error warping needs to be applied to the transform if it is on.
             }
+
+            m_rootMotion?.FinalizeRootMotion();
         }
 
         //============================================================================================
@@ -949,6 +971,7 @@ namespace MxM
 
                     var clipPlayable = AnimationClipPlayable.Create(MxMPlayableGraph, clip);
                     clipPlayable.SetApplyFootIK(m_applyHumanoidFootIK);
+                    clipPlayable.SetApplyPlayableIK(m_applyPlayableIK);
 
                     m_animationMixer.ConnectInput(i, clipPlayable, 0);
                     m_animationMixer.SetInputWeight(i, 0f);
@@ -977,6 +1000,7 @@ namespace MxM
 
                 var clipPlayable = AnimationClipPlayable.Create(MxMPlayableGraph, clip);
                 clipPlayable.SetApplyFootIK(m_applyHumanoidFootIK);
+                clipPlayable.SetApplyPlayableIK(m_applyPlayableIK);
 
                 startState.TargetPlayable = clipPlayable;
 
@@ -1077,6 +1101,7 @@ namespace MxM
 
             var clipPlayable = AnimationClipPlayable.Create(MxMPlayableGraph, clip);
             clipPlayable.SetApplyFootIK(m_applyHumanoidFootIK);
+            clipPlayable.SetApplyPlayableIK(m_applyPlayableIK);
 
             startState.TargetPlayable = clipPlayable;
 
@@ -1375,12 +1400,12 @@ namespace MxM
         {
             if(!m_enforcePoseSearch && m_nextPoseToleranceTest)
             {
-                ref PoseData nextPose = ref CurrentAnimData.Poses[m_chosenPose.NextPoseId]; //Potential out of range here?
+                ref PoseData nextPose = ref CurrentAnimData.Poses[CurrentInterpolatedPose.NextPoseId]; //Potential out of range here?
 
                 if ((nextPose.Tags & ETags.DoNotUse) != ETags.DoNotUse)
                 {
                     //If the next pose from the current animation is close enough, skip the search
-                    if (CloseEnoughTest(ref nextPose))
+                    if (NextPoseToleranceTest(ref nextPose))
                     {
                         m_timeSinceMotionUpdate = 0f;
                         return;
@@ -1545,20 +1570,67 @@ namespace MxM
 
             if (m_dominantBlendChannel != highestBlendChannel)
             {
-                //if (m_chosenPose.AnimType == EMxMAnimtype.BlendSpace)
-                //    m_blendSpacePosition = CurrentAnimData.BlendSpaces[m_chosenPose.AnimId].Positions[0];
-                //else
-                //    m_blendSpacePosition = Vector2.zero;
+                //First Check if the current dominant blend channel is 'inside' a footstep (i.e. grounded)
+                int leftGrounded = -1; 
+                int rightGrounded = -1;
+                if (m_dominantPose.TracksId > -1)
+                {
+                    FootstepTagTrackData leftSteps = CurrentAnimData.LeftFootSteps[m_dominantPose.TracksId];
+                    FootstepTagTrackData rightSteps = CurrentAnimData.RightFootSteps[m_dominantPose.TracksId];
+
+                    ref MxMPlayableState oldDominantState = ref m_animationStates[m_dominantBlendChannel];
+
+                    leftGrounded = leftSteps.IsGrounded(oldDominantState.Time, ref m_cachedLastLeftFootstepId);
+                    rightGrounded = rightSteps.IsGrounded(oldDominantState.Time, ref m_cachedLastRightFootstepId);
+                }
+                m_cachedLastLeftFootstepId = 0;
+                m_cachedLastRightFootstepId = 0;
 
                 m_animationStates[m_dominantBlendChannel].BlendStatus = EBlendStatus.Decaying;
                 m_dominantBlendChannel = highestBlendChannel;
 
+                //Update the new dominant state
                 ref MxMPlayableState playableState = ref m_animationStates[m_dominantBlendChannel];
 
                 playableState.BlendStatus = EBlendStatus.Dominant;
 
                 int dominantPoseId = playableState.StartPoseId;
                 m_dominantPose = CurrentAnimData.Poses[dominantPoseId];
+                
+                //Check if a footstep tag was perhaps missed in the transition?
+                if (m_dominantPose.TracksId > -1)
+                {
+                    float time = playableState.Time;
+                    if (leftGrounded != -1 && m_timeSinceLastLeftFootstep >= m_minFootstepInterval)
+                    {
+                        FootstepTagTrackData leftSteps = CurrentAnimData.LeftFootSteps[m_dominantPose.TracksId];
+                        int footStepId = leftSteps.IsGrounded(playableState.Time, ref m_cachedLastLeftFootstepId);
+                            
+                        // int footStepId =  leftSteps.GetStepStart(new Vector2(Mathf.Max(0f, time - m_matchBlendTime),
+                        //     time), ref m_cachedLastLeftFootstepId);
+
+                        if (footStepId > -1)
+                        {
+                            m_onLeftFootStepStart.Invoke(leftSteps.FootSteps[footStepId]);
+                            m_timeSinceLastLeftFootstep = 0f;
+                        }
+                    }
+
+                    if (rightGrounded != -1 && m_timeSinceLastLeftFootstep >= m_minFootstepInterval)
+                    {
+                        FootstepTagTrackData rightSteps = CurrentAnimData.RightFootSteps[m_dominantPose.TracksId];
+                        int footStepId = rightSteps.IsGrounded(playableState.Time, ref m_cachedLastRightFootstepId);
+                            
+                        // int footStepId = rightSteps.GetStepStart(new Vector2(Mathf.Max(0f, time - m_matchBlendTime),
+                        //     time), ref m_cachedLastRightFootstepId);
+
+                        if (footStepId > -1)
+                        {
+                            m_onRightFootStepStart.Invoke(rightSteps.FootSteps[footStepId]);
+                            m_timeSinceLastRightFootstep = 0f;
+                        }
+                    }
+                }
             }
 
             //This guarantees that there is some animation to play
@@ -1568,7 +1640,9 @@ namespace MxM
             float blendNormalizeFactor = 1f / totalBlendPower;
 
             for (int i = 0; i < m_animationStates.Length; ++i)
+            {
                 m_animationMixer.SetInputWeight(i, m_animationStates[i].Weight * blendNormalizeFactor);
+            }
         }
 
         //============================================================================================
@@ -2034,7 +2108,7 @@ namespace MxM
         *  @param [ref PoseData] a_nextPose - reference to the pose data for the next pose
         *         
         *********************************************************************************************/
-        private bool CloseEnoughTest(ref PoseData a_nextPose)
+        private bool NextPoseToleranceTest(ref PoseData a_nextPose)
         {
             //We already know that the next pose data will have good pose transition so we only
             //need to test trajectory (closeness). Additionally there is no need to test past trajectory
@@ -2054,7 +2128,7 @@ namespace MxM
 
                     float sqrDistance = Vector3.SqrMagnitude(a_nextPose.Trajectory[i].Position - m_desiredGoal[i].Position);
 
-                    if(sqrDistance > relativeTolerance_Pos * relativeTolerance_Pos)
+                    if(Mathf.Abs(sqrDistance) > relativeTolerance_Pos * relativeTolerance_Pos)
                     {
                         return false;
                     }
@@ -2067,7 +2141,6 @@ namespace MxM
                     }
                 }                
             }
-
             return true;
         }
 
@@ -2226,6 +2299,7 @@ namespace MxM
             ref MxMPlayableState playableState = ref m_animationStates[0];
             var clipPlayable = AnimationClipPlayable.Create(MxMPlayableGraph, clip);
             clipPlayable.SetApplyFootIK(m_applyHumanoidFootIK);
+            clipPlayable.SetApplyPlayableIK(m_applyPlayableIK);
 
             playableState.TargetPlayable = clipPlayable;
 

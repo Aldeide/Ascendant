@@ -15,27 +15,27 @@ MonoBehaviour:
   m_targetAnimData: {fileID: 11400000, guid: 44aad25f13ae3f5449f303814fa1e4bb, type: 2}
   m_calibrationSets:
   - CalibrationName: General
-    PoseTrajectoryRatio: 0.725
-    PoseVelocityWeight: 2
+    PoseTrajectoryRatio: 0.857
+    PoseVelocityWeight: 10
     PoseAspectMultiplier: 1
     PoseResultantVelocityMultiplier: 0.15
     TrajPosMultiplier: 10
     TrajFAngleMultiplier: 0.1
     JointPositionWeights:
+    - 10
+    - 10
     - 3
     - 3
     - 3
-    - 1.5
-    - 1.5
     JointVelocityWeights:
     - 1
     - 1
     - 1
-    - 0.5
-    - 0.5
+    - 1
+    - 1
   - CalibrationName: Sprint
-    PoseTrajectoryRatio: 0.675
-    PoseVelocityWeight: 2.5
+    PoseTrajectoryRatio: 0.7
+    PoseVelocityWeight: 4.5
     PoseAspectMultiplier: 1
     PoseResultantVelocityMultiplier: 0.2
     TrajPosMultiplier: 10
@@ -44,17 +44,17 @@ MonoBehaviour:
     - 3
     - 3
     - 3
-    - 1.5
-    - 1.5
+    - 3
+    - 3
     JointVelocityWeights:
     - 1
     - 1
     - 1
-    - 0.5
-    - 0.5
+    - 1
+    - 1
   - CalibrationName: Strafe
     PoseTrajectoryRatio: 0.7
-    PoseVelocityWeight: 2
+    PoseVelocityWeight: 4.5
     PoseAspectMultiplier: 1
     PoseResultantVelocityMultiplier: 0.2
     TrajPosMultiplier: 12

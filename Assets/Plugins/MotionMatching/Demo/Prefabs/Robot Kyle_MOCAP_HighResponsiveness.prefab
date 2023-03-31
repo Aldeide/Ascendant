@@ -636,6 +636,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -647,6 +648,7 @@ SkinnedMeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1354,9 +1356,9 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.1
+  m_SkinWidth: 0.2
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1.095, z: 0}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!114 &3538411969227499891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1372,14 +1374,21 @@ MonoBehaviour:
   p_recordingFrequency: 0
   p_sampleRate: 20
   p_flattenTrajectory: 1
+  m_simulationSpeedScale: 1
   m_maxSpeed: 4.3
   m_posBias: 12
   m_dirBias: 12
   m_trajectoryMode: 0
+  m_controlMode: 0
   m_customInput: 0
   m_resetDirectionOnOnInput: 1
+  m_stoppingDistance: 1
+  m_applyRootSpeedToNavAgent: 1
+  m_faceDirectionOnIdle: 0
+  m_scaleAdjustment: 1
   m_camTransform: {fileID: 0}
   m_mxmInputProfile: {fileID: 11400000, guid: e6185d4d8606f4149afac0695745b768, type: 2}
+  m_trajectoryGeneratorModule: {fileID: 0}
 --- !u!114 &1902521646202177474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1433,6 +1442,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 44aad25f13ae3f5449f303814fa1e4bb, type: 2}
   m_calibrationOverride: {fileID: 11400000, guid: 43f804b264503de4fa1c114f08a673a5,
     type: 2}
+  m_doNotSearch: 0
   m_debugGoal: 1
   m_debugChosenTrajectory: 1
   m_debugPoses: 0
@@ -1455,6 +1465,7 @@ MonoBehaviour:
   m_nextPoseToleranceDist: 0.25
   m_nextPoseToleranceAngle: 2
   m_blendOutEarly: 0
+  m_tagBlendMethod: 0
   m_overrideWarpSettings: {fileID: 11400000, guid: 869b543752d72dd4dae9ca5739e21bef,
     type: 2}
   m_angularWarpType: 1
@@ -1470,7 +1481,9 @@ MonoBehaviour:
   m_maxMixCount: 15
   m_primaryBlendChannel: 0
   p_DIYPlayableGraph: 0
+  p_manualInitialize: 0
   m_autoCreateAnimatorController: 0
+  m_minFootstepInterval: 0.2
   m_generalFoldout: 1
   m_animDataFoldout: 1
   m_optionsFoldout: 1
@@ -1498,6 +1511,10 @@ MonoBehaviour:
   m_onRightFootStepStart:
     m_PersistentCalls:
       m_Calls: []
+  m_onPoseChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_enableIdle: 1
 --- !u!114 &1902521646202177480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1512,6 +1529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_slideDefinition: {fileID: 11400000, guid: b347c3d927daaca47907ee7af431678e, type: 2}
   m_jumpDefinition: {fileID: 11400000, guid: 8716752c67cf94f408038de4e2cfa289, type: 2}
+  m_danceDefinition: {fileID: 0}
   m_generalLocomotion: {fileID: 11400000, guid: 4c71d5ce9667ed146a2532d83a029373,
     type: 2}
   m_strafeLocomotion: {fileID: 0}

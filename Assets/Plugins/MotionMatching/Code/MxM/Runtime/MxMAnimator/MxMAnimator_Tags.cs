@@ -47,6 +47,9 @@ namespace MxM
             if(RequiredTags != m_desireRequiredTags)
             {
                 RequiredTags = m_desireRequiredTags;
+                
+                OnRequireTagsChanged.Invoke(RequiredTags);
+                
                 FetchNativeAnimData();
                 CheckIdleSuitability();
             }
@@ -75,18 +78,21 @@ namespace MxM
             float animTime = m_dominantPose.Time + dominantPlayableState.Age;
             AnimationClip clip = CurrentAnimData.Clips[m_dominantPose.PrimaryClipId];
             
+            if (clip.isLooping && animTime > clip.length)
+            {
+                m_cachedLastLeftFootstepId = 0;
+                m_cachedLastRightFootstepId = 0;
+                animTime = (animTime % clip.length) * clip.length;
+            }
+            
             Vector2 range = new Vector2(animTime - (p_currentDeltaTime * m_playbackSpeed), animTime);
             
-            if (clip.isLooping && animTime > clip.length)
-                animTime = (animTime % clip.length) * clip.length;
-
-
             //Trigger Left Footstep?
             if (m_timeSinceLastLeftFootstep >= m_minFootstepInterval)
             {
                 var leftFootStepTrack = CurrentAnimData.LeftFootSteps[trackId];
 
-                int stepId = leftFootStepTrack.GetStepStart(range);
+                int stepId = leftFootStepTrack.GetStepStart(range, ref m_cachedLastLeftFootstepId);
 
                 if (stepId > -1)
                 {
@@ -101,7 +107,7 @@ namespace MxM
 
                 var rightFootStepTrack = CurrentAnimData.RightFootSteps[trackId];
 
-                int stepId = rightFootStepTrack.GetStepStart(range);
+                int stepId = rightFootStepTrack.GetStepStart(range, ref m_cachedLastRightFootstepId);
 
                 if (stepId > -1)
                 {
