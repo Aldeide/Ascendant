@@ -18,21 +18,25 @@ public class CullGroup : MonoBehaviour
 
     public void Cull()
     {
+        /*
         CullObject[] children = GetComponentsInChildren<CullObject>();
 
         foreach(CullObject child in children)
         {
             child.Hide();
         }
+        */
     }
 
     public void UnCull()
     {
+        /*
         CullObject[] children = GetComponentsInChildren<CullObject>();
 
         foreach (CullObject child in children)
         {
             child.Show();
         }
+        */
     }
 }
