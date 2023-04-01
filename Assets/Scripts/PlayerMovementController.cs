@@ -12,7 +12,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public GameObject followTarget;
 
-    public float rotationPower = 0.0001f;
+    public float rotationPower = 0.01f;
 
     // Inputs variables.
     private Vector2 movementInput = new Vector2();
@@ -88,9 +88,9 @@ public class PlayerMovementController : MonoBehaviour
         {
             Debug.Log(Vector3.Angle(transform.forward, direction));
             Debug.Log("Direction Switch!");
-            stateManager.Plant180();
+            //TODO: animate 180 degrees turns.
         }
-        currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.07f);
+        currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
 
         // Performing the player rotation.
         if (movementInput.sqrMagnitude > 0)
@@ -224,7 +224,7 @@ public class PlayerMovementController : MonoBehaviour
         direction.y = verticalVelocity;
     }
 
-    private bool IsGrounded() => characterController.isGrounded;
+    public bool IsGrounded() => characterController.isGrounded;
 
     private Vector3 GetSlideDirection()
     {

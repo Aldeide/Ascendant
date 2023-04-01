@@ -41,6 +41,7 @@ public class PlayerStateManager : MonoBehaviour
     public float crouchInput = 0f;
     public float aimInput = 0f;
     public float fireInput = 0f;
+    public float jumpInput = 0f;
 
     private Animator animator;
     private PlayerMovementController movementController;
@@ -119,18 +120,30 @@ public class PlayerStateManager : MonoBehaviour
             animator.SetFloat("MovementY", 1.0f, 0.1f, 0.5f);
             animator.SetFloat("MovementX", 0.0f, 0.1f, 0.5f);
             animator.SetBool("isRunning", true);
-            return;
         }
         if (movementInput.sqrMagnitude > 0 && (stanceState == PlayerStanceState.Aiming || firingState == PlayerFiringState.Firing))
         {
             animator.SetFloat("MovementX", movementInput.x, 0.1f, 0.5f);
             animator.SetFloat("MovementY", movementInput.y, 0.1f, 0.5f);
             animator.SetBool("isRunning", true);
-            return;
         }
         if (movementInput.sqrMagnitude < 0.01)
         {
             animator.SetBool("isRunning", false);
+        }
+        // Jumping is handled inside the callback function.
+        
+        // Falling
+        if (!movementController.IsGrounded())
+        {
+            animator.SetBool("IsFalling", true);
+            //animator.SetBool("IsJumping", false);
+            animator.SetBool("IsGrounded", false);
+        }
+        if (movementController.IsGrounded())
+        {
+            animator.SetBool("IsFalling", false);
+            animator.SetBool("IsGrounded", true);
         }
     }
 
@@ -157,9 +170,17 @@ public class PlayerStateManager : MonoBehaviour
     }
     public void OnJumpCallback(InputAction.CallbackContext context)
     {
-        if (!context.started) return;
-        if (!movementController.isGrounded) return;
-        // TODO.
+        //if (!context.started) return;
+        //if (!movementController.IsGrounded()) return;
+        jumpInput = context.ReadValue<float>();
+        if (context.ReadValue<float>() > 0 && movementController.IsGrounded())
+        {
+            animator.SetBool("IsJumping", true);
+            animator.SetBool("IsGrounded", false);
+        } else
+        {
+            animator.SetBool("IsJumping", false);
+        }
     }
     public void OnFireCallBack(InputAction.CallbackContext context)
     {
