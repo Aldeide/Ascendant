@@ -16062,7 +16062,7 @@ MonoBehaviour:
   CameraDistance: 2
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   IgnoreTag: 
   CameraRadius: 0.2
   DampingIntoCollision: 0
@@ -20500,7 +20500,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638703568}
   m_LocalRotation: {x: -0, y: 0.98205507, z: -0, w: 0.18859453}
-  m_LocalPosition: {x: -4.2959633, y: 0.38, z: -4.8291864}
+  m_LocalPosition: {x: -2.1518898, y: 0.013421297, z: -8.044096}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -20674,7 +20674,7 @@ MonoBehaviour:
   CameraDistance: 2.86
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   IgnoreTag: 
   CameraRadius: 0.2
   DampingIntoCollision: 0
@@ -26179,7 +26179,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861138720}
   m_LocalRotation: {x: -0, y: 0.98205507, z: -0, w: 0.18859453}
-  m_LocalPosition: {x: -2.8519099, y: 0.030000001, z: -7.2354517}
+  m_LocalPosition: {x: -2.16422, y: 0.0069899373, z: -8.173061}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38234,7 +38234,7 @@ CharacterController:
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.01
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1258912249
@@ -38370,7 +38370,7 @@ MonoBehaviour:
         bendGoal: {fileID: 0}
         direction: {x: 1, y: 0, z: 0}
         rotationOffset: {x: 0, y: 0, z: 0, w: 0}
-        weight: 0.117
+        weight: 0
         defaultLocalDirection: {x: 0, y: 0, z: 0}
         defaultChildDirection: {x: 0, y: 0, z: 0}
     - pin: 0
@@ -38746,6 +38746,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c66af2bf135947849a4a3dd656abaeed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateManager: {fileID: 0}
+  aimIK: {fileID: 0}
 --- !u!114 &1258912252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39509,7 +39511,7 @@ MonoBehaviour:
   CameraDistance: 1.05
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   IgnoreTag: 
   CameraRadius: 0.2
   DampingIntoCollision: 0
@@ -40720,7 +40722,7 @@ Camera:
     height: 1
   near clip plane: 0.001
   far clip plane: 1000
-  field of view: 70
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -40746,7 +40748,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308953143}
   m_LocalRotation: {x: -0, y: 0.98205507, z: -0, w: 0.18859453}
-  m_LocalPosition: {x: -3.9774017, y: 0.38, z: -5.62801}
+  m_LocalPosition: {x: -2.16422, y: 0.0069899373, z: -8.173061}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -42614,6 +42616,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c66af2bf135947849a4a3dd656abaeed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateManager: {fileID: 0}
+  aimIK: {fileID: 0}
 --- !u!143 &1354421132
 CharacterController:
   m_ObjectHideFlags: 0
@@ -61574,7 +61578,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083094628}
   m_LocalRotation: {x: -0, y: 0.98205507, z: -0, w: 0.18859453}
-  m_LocalPosition: {x: -3.9774017, y: 0.38, z: -5.62801}
+  m_LocalPosition: {x: -2.1549833, y: 0.014169097, z: -8.040749}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -27,6 +27,7 @@ public class CullObject : MonoBehaviour
 
     public void Cull()
     {
+        /*
         if (GetComponent<Renderer>().enabled == false)
         {
             return;
@@ -45,11 +46,13 @@ public class CullObject : MonoBehaviour
                 return;
             }
             GetComponent<Renderer>().enabled = false;
-        }        
+        }   
+        */
     }
 
     public void UnCull()
     {
+        /*
         if (GetComponent<Renderer>().enabled == true)
         {
             return;
@@ -64,20 +67,23 @@ public class CullObject : MonoBehaviour
         {
             GetComponent<Renderer>().enabled = true;
         }
+        */
     }
 
     public void Hide()
     {
+        /*
         if (doNotCull)
         {
             return;
         }
         GetComponent<Renderer>().enabled = false;
+        */
     }
 
     public void Show()
     {
-        GetComponent<Renderer>().enabled = true;
+        //GetComponent<Renderer>().enabled = true;
     }
 
 }

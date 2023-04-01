@@ -90,7 +90,7 @@ public class PlayerMovementController : MonoBehaviour
             Debug.Log("Direction Switch!");
             stateManager.Plant180();
         }
-        currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.05f);
+        currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.07f);
 
         // Performing the player rotation.
         if (movementInput.sqrMagnitude > 0)
@@ -129,7 +129,6 @@ public class PlayerMovementController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, currentAngle, 0);
             */
         }
-
 
         // Applying gravity.
         Gravity();
