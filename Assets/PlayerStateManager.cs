@@ -53,6 +53,8 @@ public class PlayerStateManager : MonoBehaviour
     public float timeSinceLastFired;
     public float firingTimeStanceDelay = 1.2f;
 
+    public LayerMask layerMask;
+
     void Start()
     {
         // Fetch required components.
@@ -134,7 +136,7 @@ public class PlayerStateManager : MonoBehaviour
         // Jumping is handled inside the callback function.
         
         // Falling
-        if (!movementController.IsGrounded())
+        if (!movementController.IsGrounded() && FallHeight() > 0.4f)
         {
             animator.SetBool("IsFalling", true);
             //animator.SetBool("IsJumping", false);
@@ -191,6 +193,18 @@ public class PlayerStateManager : MonoBehaviour
     public void Plant180()
     {
         // TODO: implement animation plants.
+    }
+
+    // Raycasts
+    public float FallHeight()
+    {
+        Ray ray = new Ray(transform.position, -1.0f * transform.up);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100.0f, layerMask, QueryTriggerInteraction.Ignore)) {
+            Debug.Log(hit.distance);
+            return hit.distance;
+        }
+        return 0;
     }
 
 }
