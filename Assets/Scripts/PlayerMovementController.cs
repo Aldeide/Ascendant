@@ -93,7 +93,7 @@ public class PlayerMovementController : MonoBehaviour
         // Performing the player rotation.
         if (movementInput.sqrMagnitude > 0)
         {
-            if (stateManager.stanceState != PlayerStanceState.Aiming)
+            if (stateManager.stanceState != PlayerStanceState.Aiming && stateManager.firingState != PlayerFiringState.Firing)
             {
                 transform.rotation = Quaternion.Euler(0, currentAngle, 0);
             }
@@ -109,7 +109,7 @@ public class PlayerMovementController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, currentAngle, 0);
                 */
             }
-        } else if (stateManager.stanceState == PlayerStanceState.Aiming)
+        } else if (stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
         {
             Vector3 lookAtTest = this.transform.position + forward;
             lookAtTest.y = this.transform.position.y;

@@ -24,6 +24,12 @@ public enum PlayerGroundedState
     Falling
 }
 
+public enum PlayerFiringState
+{
+    NotFiring,
+    Firing
+}
+
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(PlayerMovementController))]
@@ -34,12 +40,17 @@ public class PlayerStateManager : MonoBehaviour
     public float sprintInput = 0f;
     public float crouchInput = 0f;
     public float aimInput = 0f;
+    public float fireInput = 0f;
 
     private Animator animator;
     private PlayerMovementController movementController;
 
     public PlayerStanceState stanceState;
     public PlayerMovementState movementState;
+    public PlayerFiringState firingState;
+
+    public float timeSinceLastFired;
+    public float firingTimeStanceDelay = 1.2f;
 
     void Start()
     {
@@ -88,18 +99,32 @@ public class PlayerStateManager : MonoBehaviour
 
         }
 
-        // Animator updates.
-        if (movementInput.sqrMagnitude > 0 && stanceState != PlayerStanceState.Aiming)
+        // Firing
+        if (fireInput > 0)
         {
-            animator.SetFloat("MovementY", 1.0f, 0.1f, 1.6f);
-            animator.SetFloat("MovementX", 0.0f, 0.1f, 1.6f);
+            // TODO: maintaining the fire button but not being able to fire (e.g. reloading) should not reset
+            // the timer.
+            firingState = PlayerFiringState.Firing;
+            timeSinceLastFired = 0;
+        }
+        timeSinceLastFired += Time.deltaTime;
+        if (timeSinceLastFired > firingTimeStanceDelay)
+        {
+            firingState = PlayerFiringState.NotFiring;
+        }
+
+        // Animator updates.
+        if (movementInput.sqrMagnitude > 0 && stanceState != PlayerStanceState.Aiming && firingState != PlayerFiringState.Firing)
+        {
+            animator.SetFloat("MovementY", 1.0f, 0.1f, 0.5f);
+            animator.SetFloat("MovementX", 0.0f, 0.1f, 0.5f);
             animator.SetBool("isRunning", true);
             return;
         }
-        if (movementInput.sqrMagnitude > 0 && stanceState == PlayerStanceState.Aiming)
+        if (movementInput.sqrMagnitude > 0 && (stanceState == PlayerStanceState.Aiming || firingState == PlayerFiringState.Firing))
         {
-            animator.SetFloat("MovementX", movementInput.x, 0.1f, 1.6f);
-            animator.SetFloat("MovementY", movementInput.y, 0.1f, 1.6f);
+            animator.SetFloat("MovementX", movementInput.x, 0.1f, 0.5f);
+            animator.SetFloat("MovementY", movementInput.y, 0.1f, 0.5f);
             animator.SetBool("isRunning", true);
             return;
         }
@@ -136,6 +161,10 @@ public class PlayerStateManager : MonoBehaviour
         if (!context.started) return;
         if (!movementController.isGrounded) return;
         // TODO.
+    }
+    public void OnFireCallBack(InputAction.CallbackContext context)
+    {
+        fireInput = context.ReadValue<float>();
     }
 
 }

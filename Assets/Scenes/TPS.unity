@@ -38763,8 +38763,12 @@ MonoBehaviour:
   sprintInput: 0
   crouchInput: 0
   aimInput: 0
+  fireInput: 0
   stanceState: 0
   movementState: 0
+  firingState: 0
+  timeSinceLastFired: 0
+  firingTimeStanceDelay: 1.2
 --- !u!95 &1258912253
 Animator:
   serializedVersion: 4
@@ -38910,6 +38914,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1258912254}
         m_TargetAssemblyTypeName: WeaponManager, Assembly-CSharp
         m_MethodName: OnFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1258912252}
+        m_TargetAssemblyTypeName: PlayerStateManager, Assembly-CSharp
+        m_MethodName: OnFireCallBack
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -42083,8 +42099,12 @@ MonoBehaviour:
   sprintInput: 0
   crouchInput: 0
   aimInput: 0
+  fireInput: 0
   stanceState: 0
   movementState: 0
+  firingState: 0
+  timeSinceLastFired: 0
+  firingTimeStanceDelay: 2
 --- !u!114 &1354421129
 MonoBehaviour:
   m_ObjectHideFlags: 0
