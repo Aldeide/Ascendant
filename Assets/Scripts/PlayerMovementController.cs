@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovementController : MonoBehaviour
 {
     public LayerMask layerMask;
@@ -27,11 +28,6 @@ public class PlayerMovementController : MonoBehaviour
 
     // Character controller.
     CharacterController characterController;
-
-    // Cameras.
-    public GameObject defaultCamera;
-    public GameObject aimCamera;
-    public GameObject sprintCamera;
 
 
     private Vector3 forward = new Vector3();
@@ -81,78 +77,59 @@ public class PlayerMovementController : MonoBehaviour
         right = Camera.main.transform.right;
         right.y = 0f;
         right.Normalize();
-        if (movementInput.magnitude > 0)
+
+        direction = forward * movementInput.y + right * movementInput.x;
+
+        float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        var currentAngle = this.transform.rotation.eulerAngles.y;
+        var currentAngleVelocity = 0f;
+
+        if (Mathf.DeltaAngle(currentAngle, targetAngle) > 160)
         {
-            
+            Debug.Log("Direction Switch!");
+        }
+        currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.05f);
 
-            direction = forward * movementInput.y + right * movementInput.x;
-
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            var currentAngle = this.transform.rotation.eulerAngles.y;
-            var currentAngleVelocity = 0f;
-
-            if (Mathf.DeltaAngle(currentAngle, targetAngle) > 160)
-            {
-                Debug.Log("Direction Switch!");
-            }
-            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.05f);
-
-            // Performing the rotation.
+        // Performing the rotation.
+        if (movementInput.sqrMagnitude > 0)
+        {
             if (stateManager.stanceState != PlayerStanceState.Aiming)
             {
                 transform.rotation = Quaternion.Euler(0, currentAngle, 0);
-            } else
+            }
+            else
             {
                 targetAngle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
                 currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
                 transform.rotation = Quaternion.Euler(0, currentAngle, 0);
             }
-            
-
-            //Debug.Log(direction);
-
-            // Applying gravity.
-            Gravity();
-
-            // Perfoming the movement.
-            characterController.Move(direction * Time.deltaTime * currentSpeed);
-
-            // Debug lines.
-
-            Debug.DrawLine(transform.position, transform.position + forward, Color.red);
-            Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
-
         }
+
+
+        // Applying gravity.
+        Gravity();
+
+        // Applying speed and perfoming the movement.
+        direction.x *= currentSpeed;
+        direction.z *= currentSpeed;
+        direction.y *= 6.0f;
+        characterController.Move(direction * Time.deltaTime);
+
+        // Debug lines.
+        Debug.DrawLine(transform.position, transform.position + forward, Color.red);
+        Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
+        Debug.DrawLine(transform.position, transform.position + direction, Color.blue);
+
 
         if (stateManager.stanceState == PlayerStanceState.Aiming)
         {
-            var currentAngle = this.transform.rotation.eulerAngles.y;
-            var targetAngle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-            var currentAngleVelocity = 0f;
-            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.02f);
-            transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+            var currentAngle2 = this.transform.rotation.eulerAngles.y;
+            var targetAngle2 = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+            currentAngle2 = Mathf.SmoothDampAngle(currentAngle2, targetAngle2, ref currentAngleVelocity, 0.02f);
+            transform.rotation = Quaternion.Euler(0, currentAngle2, 0);
         }
 
-        // Horizontal Camera Rotation.
-        followTarget.transform.rotation *= Quaternion.AngleAxis(lookInput.x * rotationPower, Vector3.up);
-        followTarget.transform.rotation *= Quaternion.AngleAxis(lookInput.y * rotationPower, -1.0f * Vector3.right);
-
-
-
-        // Vertical Camera Rotation
-        var angles = followTarget.transform.localEulerAngles;
-        angles.z = 0;
-        var angle = followTarget.transform.localEulerAngles.x;
-
-        if (angle > 180 && angle < 320)
-        {
-            angles.x = 320;
-        }
-        else if (angle < 180 && angle > 60)
-        {
-            angles.x = 60;
-        }
-        followTarget.transform.localEulerAngles = angles;
+        CameraRotation();
     }
 
     private void ComputeSpeed()
@@ -161,26 +138,9 @@ public class PlayerMovementController : MonoBehaviour
         {
             currentSpeed = 0;
         }
-        if (isSliding)
-        {
-            float slope = GetSlopeValue();
-            if (slope > 25)
-            {
-                currentSpeed += 7.0f * Time.deltaTime;
-            } else
-            {
-                currentSpeed -= 2.8f * Time.deltaTime;
-                if (currentSpeed < maxCrouchingSpeed)
-                {
-                    currentSpeed = maxCrouchingSpeed;
-                    isSliding = false;
-                }
-            }
-            return;
-        }
         if (movementInput.magnitude == 0)
         {
-            currentSpeed = 0;
+            currentSpeed = 2.0f;
             isSprinting = false;
         }
         if (crouchInput > 0 && !isSliding && IsGrounded() && currentSpeed < 3.0f)
@@ -233,7 +193,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Jump()
     {
-        verticalVelocity += 0.4f;
+        Debug.Log("Jump!");
+        verticalVelocity += 2.2f;
     }
 
     private void Gravity()
@@ -243,7 +204,7 @@ public class PlayerMovementController : MonoBehaviour
             verticalVelocity = -0.2f;
         } else
         {
-            verticalVelocity += -5 * 0.81f * Time.deltaTime;
+            verticalVelocity += -10 * 0.81f * Time.deltaTime;
         }
         direction.y = verticalVelocity;
     }
@@ -311,6 +272,28 @@ public class PlayerMovementController : MonoBehaviour
 
         }
         return distanceSum / numHits;
+    }
+
+    private void CameraRotation()
+    {
+        // Horizontal Camera Rotation.
+        followTarget.transform.rotation *= Quaternion.AngleAxis(lookInput.x * rotationPower, Vector3.up);
+        followTarget.transform.rotation *= Quaternion.AngleAxis(lookInput.y * rotationPower, -1.0f * Vector3.right);
+
+        // Vertical Camera Rotation
+        var angles = followTarget.transform.localEulerAngles;
+        angles.z = 0;
+        var angle = followTarget.transform.localEulerAngles.x;
+
+        if (angle > 180 && angle < 320)
+        {
+            angles.x = 320;
+        }
+        else if (angle < 180 && angle > 60)
+        {
+            angles.x = 60;
+        }
+        followTarget.transform.localEulerAngles = angles;
     }
 
 

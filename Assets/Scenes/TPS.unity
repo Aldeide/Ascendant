@@ -39079,6 +39079,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1258912252}
+        m_TargetAssemblyTypeName: PlayerMovementController, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 80081844-8e61-40da-a411-d9acc9026336
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
@@ -39168,9 +39180,6 @@ MonoBehaviour:
   isSprinting: 0
   isSliding: 0
   isGrounded: 0
-  defaultCamera: {fileID: 0}
-  aimCamera: {fileID: 0}
-  sprintCamera: {fileID: 0}
   head: {fileID: 1585798456}
   weapon: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
@@ -41851,9 +41860,6 @@ MonoBehaviour:
   isSprinting: 0
   isSliding: 0
   isGrounded: 0
-  defaultCamera: {fileID: 0}
-  aimCamera: {fileID: 0}
-  sprintCamera: {fileID: 0}
   head: {fileID: 1567810032}
   weapon: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
