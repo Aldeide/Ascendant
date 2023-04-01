@@ -11,7 +11,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public GameObject followTarget;
 
-    public float rotationPower = 0.25f;
+    public float rotationPower = 0.0001f;
 
     // Inputs variables.
     private Vector2 movementInput = new Vector2();
