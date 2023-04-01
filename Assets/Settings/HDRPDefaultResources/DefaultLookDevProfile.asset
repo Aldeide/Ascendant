@@ -1,5 +1,66 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8924352043039318407
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec08c789f09cebf47b9dfa879f470851, type: 3}
+  m_Name: HDRPOutline
+  m_EditorClassIdentifier: 
+  active: 1
+  <displayName>k__BackingField: 
+  m_IsInitialized: 0
+  typeName: 
+  mode:
+    m_OverrideState: 1
+    m_Value: 2
+  width:
+    m_OverrideState: 1
+    m_Value: 1
+  fillAmount:
+    m_OverrideState: 1
+    m_Value: 0
+  patternTexture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  patternFillAmount:
+    m_OverrideState: 0
+    m_Value: 0.2
+  patternTile:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1}
+  iterations:
+    m_OverrideState: 1
+    m_Value: 3
+  blurRadius:
+    m_OverrideState: 0
+    m_Value: 1
+  blurIterations:
+    m_OverrideState: 0
+    m_Value: 1
+  overglow:
+    m_OverrideState: 0
+    m_Value: 1
+  softnessEnabled:
+    m_OverrideState: 0
+    m_Value: 0
+  softness:
+    m_OverrideState: 0
+    m_Value: 0.5
+  singlePassInstanced:
+    m_OverrideState: 1
+    m_Value: 1
+  depthCopyMaterial: {fileID: 0}
+  blurMaterial: {fileID: 0}
+  maskApplierMaterial: {fileID: 0}
+  outlinePostProcessMaterial: {fileID: 0}
+  currentCameraIsSinglePassInstanced: 0
 --- !u!114 &-7256609750662588956
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -113,6 +174,9 @@ MonoBehaviour:
   m_PhysicallyBased:
     m_OverrideState: 0
     m_Value: 0
+  m_LimitManualRangeNearBlur:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &-2980659426749047291
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -159,6 +223,27 @@ MonoBehaviour:
   accumulationFactor:
     m_OverrideState: 0
     m_Value: 0.75
+  biasFactor:
+    m_OverrideState: 0
+    m_Value: 0.5
+  speedRejectionParam:
+    m_OverrideState: 0
+    m_Value: 0.5
+  speedRejectionScalerFactor:
+    m_OverrideState: 0
+    m_Value: 0.2
+  speedSmoothReject:
+    m_OverrideState: 0
+    m_Value: 0
+  speedSurfaceOnly:
+    m_OverrideState: 0
+    m_Value: 1
+  speedTargetOnly:
+    m_OverrideState: 0
+    m_Value: 1
+  enableWorldSpeedRejection:
+    m_OverrideState: 0
+    m_Value: 0
   m_RayMaxIterations:
     m_OverrideState: 0
     m_Value: 32
@@ -407,7 +492,6 @@ MonoBehaviour:
   - {fileID: -36414969593838154}
   - {fileID: -2115670081204253724}
   - {fileID: -6584849662188257082}
-  - {fileID: -2317468873610630591}
 --- !u!114 &1880163708194025631
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -453,6 +537,9 @@ MonoBehaviour:
     m_Value:
       serializedVersion: 2
       m_Bits: 4294967295
+  specularOcclusion:
+    m_OverrideState: 0
+    m_Value: 0.5
   occluderMotionRejection:
     m_OverrideState: 0
     m_Value: 1
@@ -541,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56b145d2b9ee1ac4f846968484e7485a, type: 3}
   m_Name: ContactShadows
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 0
     m_Value: 1
@@ -690,6 +777,9 @@ MonoBehaviour:
   mode:
     m_OverrideState: 1
     m_Value: 2
+  useFullACES:
+    m_OverrideState: 0
+    m_Value: 0
   toeStrength:
     m_OverrideState: 0
     m_Value: 0
@@ -714,3 +804,30 @@ MonoBehaviour:
   lutContribution:
     m_OverrideState: 0
     m_Value: 1
+  neutralHDRRangeReductionMode:
+    m_OverrideState: 0
+    m_Value: 2
+  acesPreset:
+    m_OverrideState: 0
+    m_Value: 3
+  fallbackMode:
+    m_OverrideState: 0
+    m_Value: 1
+  hueShiftAmount:
+    m_OverrideState: 0
+    m_Value: 0
+  detectPaperWhite:
+    m_OverrideState: 0
+    m_Value: 0
+  paperWhite:
+    m_OverrideState: 0
+    m_Value: 300
+  detectBrightnessLimits:
+    m_OverrideState: 0
+    m_Value: 1
+  minNits:
+    m_OverrideState: 0
+    m_Value: 0.005
+  maxNits:
+    m_OverrideState: 0
+    m_Value: 1000
