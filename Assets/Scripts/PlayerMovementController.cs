@@ -81,7 +81,7 @@ public class PlayerMovementController : MonoBehaviour
         direction = forward * movementInput.y + right * movementInput.x;
 
         float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-        var currentAngle = this.transform.rotation.eulerAngles.y;
+        var currentAngle = transform.rotation.eulerAngles.y;
         var currentAngleVelocity = 0f;
 
         if (Mathf.DeltaAngle(currentAngle, targetAngle) > 160)
@@ -90,7 +90,7 @@ public class PlayerMovementController : MonoBehaviour
         }
         currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.05f);
 
-        // Performing the rotation.
+        // Performing the player rotation.
         if (movementInput.sqrMagnitude > 0)
         {
             if (stateManager.stanceState != PlayerStanceState.Aiming)
@@ -99,10 +99,33 @@ public class PlayerMovementController : MonoBehaviour
             }
             else
             {
+                Vector3 lookAtTest = this.transform.position + forward;
+                lookAtTest.y = this.transform.position.y;
+
+                this.transform.LookAt(lookAtTest);
+                /*
                 targetAngle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
                 currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
                 transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                */
             }
+        } else if (stateManager.stanceState == PlayerStanceState.Aiming)
+        {
+            Vector3 lookAtTest = this.transform.position + forward;
+            lookAtTest.y = this.transform.position.y;
+
+            this.transform.LookAt(lookAtTest);
+            /*
+            var targetAngle2 = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
+            
+            if (targetAngle2 < 0)
+            {
+                targetAngle2 = 360 + targetAngle2;
+            }
+            Debug.Log(targetAngle2);
+            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle2, ref currentAngleVelocity, 0.02f);
+            transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+            */
         }
 
 
@@ -119,15 +142,6 @@ public class PlayerMovementController : MonoBehaviour
         Debug.DrawLine(transform.position, transform.position + forward, Color.red);
         Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
         Debug.DrawLine(transform.position, transform.position + direction, Color.blue);
-
-
-        if (stateManager.stanceState == PlayerStanceState.Aiming)
-        {
-            var currentAngle2 = this.transform.rotation.eulerAngles.y;
-            var targetAngle2 = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-            currentAngle2 = Mathf.SmoothDampAngle(currentAngle2, targetAngle2, ref currentAngleVelocity, 0.02f);
-            transform.rotation = Quaternion.Euler(0, currentAngle2, 0);
-        }
 
         CameraRotation();
     }
