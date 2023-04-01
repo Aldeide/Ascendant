@@ -119,14 +119,14 @@ public class PlayerStateManager : MonoBehaviour
         // Animator updates.
         if (movementInput.sqrMagnitude > 0 && stanceState != PlayerStanceState.Aiming && firingState != PlayerFiringState.Firing)
         {
-            animator.SetFloat("MovementY", 1.0f, 0.1f, 0.5f);
-            animator.SetFloat("MovementX", 0.0f, 0.1f, 0.5f);
+            animator.SetFloat("MovementY", 1.0f, 10.1f, 3.5f);
+            animator.SetFloat("MovementX", 0.0f, 10.1f, 3.5f);
             animator.SetBool("isRunning", true);
         }
         if (movementInput.sqrMagnitude > 0 && (stanceState == PlayerStanceState.Aiming || firingState == PlayerFiringState.Firing))
         {
-            animator.SetFloat("MovementX", movementInput.x, 0.1f, 0.5f);
-            animator.SetFloat("MovementY", movementInput.y, 0.1f, 0.5f);
+            animator.SetFloat("MovementX", movementInput.x, 10.1f, 3.5f);
+            animator.SetFloat("MovementY", movementInput.y, 10.1f, 3.5f);
             animator.SetBool("isRunning", true);
         }
         if (movementInput.sqrMagnitude < 0.01)

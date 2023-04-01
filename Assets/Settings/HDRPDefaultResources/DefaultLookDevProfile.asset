@@ -209,6 +209,28 @@ MonoBehaviour:
   m_RayMaxIterationsRT:
     m_OverrideState: 0
     m_Value: 48
+--- !u!114 &-2317468873610630591
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cc1abe69a463fa4ba36b8a777cb6ecc, type: 3}
+  m_Name: Sobel
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 0
+    m_Value: 1
+  outlineColor:
+    m_OverrideState: 0
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  outlineThickness:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!114 &-2115670081204253724
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -385,6 +407,7 @@ MonoBehaviour:
   - {fileID: -36414969593838154}
   - {fileID: -2115670081204253724}
   - {fileID: -6584849662188257082}
+  - {fileID: -2317468873610630591}
 --- !u!114 &1880163708194025631
 MonoBehaviour:
   m_ObjectHideFlags: 3
