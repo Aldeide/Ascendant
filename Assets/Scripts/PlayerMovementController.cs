@@ -84,9 +84,11 @@ public class PlayerMovementController : MonoBehaviour
         var currentAngle = transform.rotation.eulerAngles.y;
         var currentAngleVelocity = 0f;
 
-        if (Mathf.DeltaAngle(currentAngle, targetAngle) > 160)
+        if (Vector3.Angle(transform.forward, direction) > 160)
         {
+            Debug.Log(Vector3.Angle(transform.forward, direction));
             Debug.Log("Direction Switch!");
+            stateManager.Plant180();
         }
         currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.05f);
 

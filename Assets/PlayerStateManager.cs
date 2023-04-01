@@ -128,30 +128,29 @@ public class PlayerStateManager : MonoBehaviour
             animator.SetBool("isRunning", true);
             return;
         }
-        animator.SetBool("isRunning", false);
+        if (movementInput.sqrMagnitude < 0.01)
+        {
+            animator.SetBool("isRunning", false);
+        }
     }
 
-
+    // Callbacks.
     public void OnMoveCallback(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
     }
-
     public void OnLookCallback(InputAction.CallbackContext context)
     {
         lookInput = context.ReadValue<Vector2>();
     }
-
     public void OnSprintCallback(InputAction.CallbackContext context)
     {
         sprintInput = context.ReadValue<float>();
     }
-
     public void OnCrouchCallback(InputAction.CallbackContext context)
     {
         crouchInput = context.ReadValue<float>();
     }
-
     public void OnAimCallback(InputAction.CallbackContext context)
     {
         aimInput = context.ReadValue<float>();
@@ -165,6 +164,12 @@ public class PlayerStateManager : MonoBehaviour
     public void OnFireCallBack(InputAction.CallbackContext context)
     {
         fireInput = context.ReadValue<float>();
+    }
+
+    // Plants.
+    public void Plant180()
+    {
+        // TODO: implement animation plants.
     }
 
 }
