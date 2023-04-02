@@ -20,7 +20,6 @@ public class IKManager : MonoBehaviour
 
     void Update()
     {
-        // TODO: make transition smooth.
         if ((stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
             && aimIK.enabled == false && HasSufficientDistance())
         {

@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: HDRPOutline
   m_EditorClassIdentifier: 
   active: 1
-  <displayName>k__BackingField: 
-  m_IsInitialized: 0
-  typeName: 
   mode:
     m_OverrideState: 1
     m_Value: 2
@@ -56,11 +53,6 @@ MonoBehaviour:
   singlePassInstanced:
     m_OverrideState: 1
     m_Value: 1
-  depthCopyMaterial: {fileID: 0}
-  blurMaterial: {fileID: 0}
-  maskApplierMaterial: {fileID: 0}
-  outlinePostProcessMaterial: {fileID: 0}
-  currentCameraIsSinglePassInstanced: 0
 --- !u!114 &-7256609750662588956
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -175,6 +167,59 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   m_LimitManualRangeNearBlur:
+    m_OverrideState: 0
+    m_Value: 0
+--- !u!114 &-4445149925737342753
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec08c789f09cebf47b9dfa879f470851, type: 3}
+  m_Name: HDRPOutline
+  m_EditorClassIdentifier: 
+  active: 1
+  mode:
+    m_OverrideState: 1
+    m_Value: 1
+  width:
+    m_OverrideState: 1
+    m_Value: 0.6
+  fillAmount:
+    m_OverrideState: 1
+    m_Value: 0.084
+  patternTexture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  patternFillAmount:
+    m_OverrideState: 0
+    m_Value: 0.2
+  patternTile:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1}
+  iterations:
+    m_OverrideState: 0
+    m_Value: 1
+  blurRadius:
+    m_OverrideState: 0
+    m_Value: 1
+  blurIterations:
+    m_OverrideState: 0
+    m_Value: 1
+  overglow:
+    m_OverrideState: 0
+    m_Value: 1
+  softnessEnabled:
+    m_OverrideState: 0
+    m_Value: 0
+  softness:
+    m_OverrideState: 0
+    m_Value: 0.5
+  singlePassInstanced:
     m_OverrideState: 0
     m_Value: 0
 --- !u!114 &-2980659426749047291
@@ -492,6 +537,7 @@ MonoBehaviour:
   - {fileID: -36414969593838154}
   - {fileID: -2115670081204253724}
   - {fileID: -6584849662188257082}
+  - {fileID: -4445149925737342753}
 --- !u!114 &1880163708194025631
 MonoBehaviour:
   m_ObjectHideFlags: 3

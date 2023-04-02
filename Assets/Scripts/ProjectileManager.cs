@@ -59,7 +59,8 @@ public class ProjectileManager : MonoBehaviour
         {
             this.transform.position = impactPoint;
             impactEffect.transform.position = impactPoint;
-            
+            impactEffect.transform.rotation = Quaternion.FromToRotation(impactEffect.transform.up, hit.normal) * impactEffect.transform.rotation;
+
             impactEffect.Play();
         }
         collided = true;
