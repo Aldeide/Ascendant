@@ -7,46 +7,26 @@ public class PlayerTarget : MonoBehaviour
     public LayerMask layerMask;
     public GameObject player;
 
-    public bool thirdPerson = true;
+    private Vector3 newTarget = new Vector3();
 
-    // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
-        if (thirdPerson)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (!thirdPerson)
-        {
-            Plane plane = new Plane(new Vector3(0, 1, 0), player.transform.position);
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float enter = 0;
-            plane.Raycast(ray, out enter);
-            Vector3 hit = ray.GetPoint(enter);
-            hit.y += 1.5f;
-            this.transform.position = hit;
-            return;
-        } else
-        {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray.origin, ray.direction, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore))
             {
-                this.transform.position = hit.point;
+            newTarget = hit.point;
             } else
             {
-                this.transform.position = ray.GetPoint(10.0f);
+            newTarget = ray.GetPoint(10.0f);
             }
-        }
-        
-
+        transform.position = Vector3.Lerp(this.transform.position, newTarget, Time.deltaTime * 8.0f);
     }
 
     private void OnDrawGizmos()

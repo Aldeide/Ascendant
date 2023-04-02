@@ -29376,16 +29376,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a34dce33c4213c4393266fbcd799d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material: {fileID: 2100000, guid: e03f8e93993156a429830aa97a41c3e3, type: 2}
-  color:
-    r: 1
-    g: 1
-    b: 1
-    a: 1
-  mask: {fileID: 0}
-  fresnelScale: 2
-  fresnelPower: 2
-  alphaThreshold: 0.5
 --- !u!4 &858337746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 906426afbb4e9a14097575a691afcc02,
@@ -44003,7 +43993,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258912245}
   m_LocalRotation: {x: -0, y: 0.98205507, z: -0, w: 0.18859453}
-  m_LocalPosition: {x: -2.11, y: 0, z: -8.07}
+  m_LocalPosition: {x: -1.45, y: 0, z: -16.321}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
