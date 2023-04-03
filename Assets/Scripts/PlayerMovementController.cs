@@ -32,6 +32,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private Vector3 forward = new Vector3();
     private Vector3 right = new Vector3();
+    private Vector3 up = new Vector3(0,1,0);
 
     public GameObject head;
     public GameObject weapon;
@@ -65,11 +66,14 @@ public class PlayerMovementController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         characterController = GetComponent<CharacterController>();
         followTarget = GameObject.Find("FollowTarget");
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(IsGrounded()) { stateManager.GroundedState = PlayerGroundedState.Grounded; }
+
         ComputeSpeed();
         forward = Camera.main.transform.forward;
         forward.y = 0f;
@@ -86,8 +90,8 @@ public class PlayerMovementController : MonoBehaviour
 
         if (Vector3.Angle(transform.forward, direction) > 160)
         {
-            Debug.Log(Vector3.Angle(transform.forward, direction));
-            Debug.Log("Direction Switch!");
+            // Debug.Log(Vector3.Angle(transform.forward, direction));
+            // Debug.Log("Direction Switch!");
             //TODO: animate 180 degrees turns.
         }
         currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
@@ -111,7 +115,8 @@ public class PlayerMovementController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, currentAngle, 0);
                 */
             }
-        } else if (stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
+        } 
+        else if (stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
         {
             Vector3 lookAtTest = this.transform.position + forward;
             lookAtTest.y = this.transform.position.y;
@@ -130,8 +135,11 @@ public class PlayerMovementController : MonoBehaviour
             */
         }
 
-        // Applying gravity.
-        Gravity();
+        if(stateManager.GroundedState == PlayerGroundedState.Climbing) {
+            direction = direction = up * movementInput.y + right * movementInput.x;
+        } else {
+            Gravity();
+        }
 
         // Applying speed and perfoming the movement.
         direction.x *= currentSpeed;
@@ -208,8 +216,13 @@ public class PlayerMovementController : MonoBehaviour
 
     private void Jump()
     {
-        Debug.Log("Jump!");
         verticalVelocity += 2.2f;
+        stateManager.GroundedState = PlayerGroundedState.Jumping;
+    }
+
+    private void JumpOutOfClimbable() {
+        verticalVelocity = 0;
+        stateManager.GroundedState = PlayerGroundedState.Falling;
     }
 
     private void Gravity()
@@ -331,8 +344,15 @@ public class PlayerMovementController : MonoBehaviour
     public void OnJump(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-        if (!IsGrounded()) return;
-        Jump();
+        switch(stateManager.GroundedState) {
+            case PlayerGroundedState.Grounded:
+                Jump();
+                break;
+            case PlayerGroundedState.Climbing:
+                JumpOutOfClimbable();
+                break;
+        }
+        
         //this.jumpInput = context.ReadValue<float>();
     }
 
@@ -346,5 +366,6 @@ public class PlayerMovementController : MonoBehaviour
         if (!isSprinting) isSprinting = true;
         if (!isSprinting) isSprinting = true;
     }
+    
     #endregion
 }

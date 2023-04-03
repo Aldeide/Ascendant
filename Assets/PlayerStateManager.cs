@@ -21,7 +21,8 @@ public enum PlayerGroundedState
 {
     Grounded,
     Jumping,
-    Falling
+    Falling,
+    Climbing
 }
 
 public enum PlayerFiringState
@@ -29,7 +30,6 @@ public enum PlayerFiringState
     NotFiring,
     Firing
 }
-
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(PlayerMovementController))]
@@ -48,7 +48,20 @@ public class PlayerStateManager : MonoBehaviour
 
     public PlayerStanceState stanceState;
     public PlayerMovementState movementState;
-    public PlayerFiringState firingState;
+    private PlayerGroundedState groundedState;
+    public PlayerGroundedState GroundedState 
+        { 
+            get => groundedState;
+            set { 
+                if(groundedState != value) {
+                    groundedState = value;
+                    Debug.Log("PlayerGroundedState changed to: " + value);
+                }
+            }
+        }
+    public PlayerFiringState firingState;    
+    private Ray dectectClimbableRay;
+    private RaycastHit hitInfo;
 
     public float timeSinceLastFired;
     public float firingTimeStanceDelay = 1.2f;
@@ -99,7 +112,7 @@ public class PlayerStateManager : MonoBehaviour
         // Jumping.
         if (movementController.isGrounded)
         {
-
+            //Not working
         }
 
         // Firing
@@ -115,6 +128,16 @@ public class PlayerStateManager : MonoBehaviour
         {
             firingState = PlayerFiringState.NotFiring;
         }
+
+        // Climbing        
+        dectectClimbableRay = new Ray(transform.position,transform.forward);
+        if(GroundedState != PlayerGroundedState.Climbing 
+            && Physics.Raycast(dectectClimbableRay, out hitInfo,0.8f) 
+            && hitInfo.collider.gameObject.tag == "Climbable"
+            && movementInput.y > 0){
+                GroundedState = PlayerGroundedState.Climbing;
+        }
+        
 
         // Animator updates.
         if (movementInput.sqrMagnitude > 0 && stanceState != PlayerStanceState.Aiming && firingState != PlayerFiringState.Firing)
@@ -201,7 +224,7 @@ public class PlayerStateManager : MonoBehaviour
         Ray ray = new Ray(transform.position, -1.0f * transform.up);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100.0f, layerMask, QueryTriggerInteraction.Ignore)) {
-            Debug.Log(hit.distance);
+            // Debug.Log(hit.distance);
             return hit.distance;
         }
         return 0;
