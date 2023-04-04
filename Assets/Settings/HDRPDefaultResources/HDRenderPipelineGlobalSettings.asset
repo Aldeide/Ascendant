@@ -69,8 +69,7 @@ MonoBehaviour:
   beforePostProcessCustomPostProcesses: []
   afterPostProcessBlursCustomPostProcesses: []
   afterPostProcessCustomPostProcesses:
-  - Knife.HDRPOutline.Core.HDRPOutline, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-    PublicKeyToken=null
+  - OutlinePostProcess, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   beforeTAACustomPostProcesses: []
   lightLayerName0: Light Layer default
   lightLayerName1: Light Layer 1
