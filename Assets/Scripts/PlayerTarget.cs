@@ -11,7 +11,8 @@ public class PlayerTarget : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 

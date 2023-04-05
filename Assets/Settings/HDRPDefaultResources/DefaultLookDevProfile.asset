@@ -537,7 +537,6 @@ MonoBehaviour:
   - {fileID: -36414969593838154}
   - {fileID: -2115670081204253724}
   - {fileID: -6584849662188257082}
-  - {fileID: -4445149925737342753}
 --- !u!114 &1880163708194025631
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -559,7 +558,7 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 2.138
+    m_Value: 1.442
   directLightingStrength:
     m_OverrideState: 1
     m_Value: 0.5056
@@ -631,7 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ddcec8a8eb2d684d833ac8f5d26aebd, type: 3}
   m_Name: HDShadowSettings
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   maxShadowDistance:
     m_OverrideState: 1
     m_Value: 50
@@ -729,7 +728,7 @@ MonoBehaviour:
     m_Value: 2
   threshold:
     m_OverrideState: 1
-    m_Value: 25.84
+    m_Value: 25
   intensity:
     m_OverrideState: 1
     m_Value: 0
@@ -772,7 +771,7 @@ MonoBehaviour:
   active: 1
   skyType:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 0
   cloudType:
     m_OverrideState: 0
     m_Value: 0

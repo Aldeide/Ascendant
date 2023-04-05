@@ -14,7 +14,8 @@ public class IKManager : MonoBehaviour
     {
         stateManager = GetComponent<PlayerStateManager>();
         aimIK = GetComponent<AimIK>();
-        target = GameObject.Find("Target");
+        target = GameObject.Find("Game/Target");
+        aimIK.solver.target = target.transform;
     }
 
 

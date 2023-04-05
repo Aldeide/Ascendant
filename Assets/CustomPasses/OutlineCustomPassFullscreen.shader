@@ -1,16 +1,10 @@
-Shader "02_Selection/Fullscreen"
+Shader "OutlineShader/Fullscreen"
 {
     properties
     {
-        _SamplePrecision ("Sampling Precision", Range(1,3) ) = 1
+        _Iterations ("Iterations", Range(1,3) ) = 1
         _OutlineWidth ("Outline Width", Float ) = 5
-        
-        _InnerColor ("Inner Color", Color) = (1, 1, 0, 0.5)
-        _OuterColor( "Outer Color", Color ) = (1, 1, 0, 1)
-        _Texture ("Texture", 2D ) = "black" {}
-        _TextureSize("Texture Pixels Size", Vector) = (64,64,0,0)
-        
-        _BehindFactor("Behind Factor", Range(0,1)) = 0.2
+        _InsideColor ("Inside Color", Color) = (1, 1, 0, 0.5)
     }
 
     HLSLINCLUDE
@@ -71,16 +65,9 @@ Shader "02_Selection/Fullscreen"
         float2( -s225, -c225 )
     };
     
-    int _SamplePrecision;
+    int _Iterations;
     float _OutlineWidth;
-    
-    float4 _InnerColor;
-    float4 _OuterColor;
-    
-    Texture2D _Texture;
-    float2 _TextureSize;
-    
-    float _BehindFactor;
+    float4 _InsideColor;
 
     float4 FullScreenPass(Varyings varyings) : SV_Target
     {
@@ -89,23 +76,13 @@ Shader "02_Selection/Fullscreen"
         float depth = LoadCameraDepth(varyings.positionCS.xy);
         PositionInputs posInput = GetPositionInput(varyings.positionCS.xy, _ScreenSize.zw, depth, UNITY_MATRIX_I_VP, UNITY_MATRIX_V);
         float3 viewDirection = GetWorldSpaceNormalizeViewDir(posInput.positionWS);
-        
-        
-
 		float4 c = LoadCustomColor(posInput.positionSS);
         float2 uvOffsetPerPixel = 1.0/_ScreenSize .xy;
-        float d = LoadCustomDepth(posInput.positionSS);
-        float db = LoadCameraDepth(posInput.positionSS);
-        //c.a = (db>d) ? 0.5:1;
-        //if(db>d) discard;
-        float obj = c.a;
-        
-        uint offset = 5;
-        
-        uint sampleCount = min( 2 * pow(2, _SamplePrecision ), MAXSAMPLES ) ;
-        
+        //float d = LoadCustomDepth(posInput.positionSS);
+        //float dc = LoadCameraDepth(posInput.positionSS);
+                
+        uint sampleCount = min( 2 * pow(2, _Iterations ), MAXSAMPLES ) ;
         float4 outline = float4(0,0,0,0);
-        float alphaFactor = (db>d)?_BehindFactor:1;
         for (uint i=0 ; i<sampleCount ; ++i )
         {
             outline =  max( SampleCustomColor( posInput.positionNDC + uvOffsetPerPixel * _OutlineWidth * offsets[i] ), outline );
@@ -113,21 +90,8 @@ Shader "02_Selection/Fullscreen"
         }
 
         float4 o = float4(0,0,0,0);
-        
-        float4 innerColor = SAMPLE_TEXTURE2D( _Texture, s_trilinear_repeat_sampler, posInput.positionSS / _TextureSize) * _InnerColor;
-        
-        innerColor.a *= alphaFactor;
-        //outline.b = (db - d) * 300;
-        //o = outline;
-        
-
-        o = lerp(o, _OuterColor * float4(outline.rgb, 1), outline.a);
-        
-        o = lerp(o, innerColor * float4(c.rgb, 1), obj);
-        //o = c;
-        //o.r = d * 200;
-
-
+        o = lerp(o, float4(outline.rgb, 1), outline.a);
+        o = lerp(o, _InsideColor, c.a);
         return o;
     }
 

@@ -10,13 +10,17 @@ public class FollowTarget : MonoBehaviour
     {
         if (target == null)
         {
-            target = GameObject.Find("Player");
+            target = GameObject.Find("mixamorig:Neck");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (target == null)
+        {
+            target = GameObject.Find("mixamorig:Neck");
+        }
         Vector3 targetPosition = target.transform.position;
         targetPosition.y = target.transform.position.y + 1.5f;
         this.transform.position = targetPosition;

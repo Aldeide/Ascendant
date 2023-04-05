@@ -15,6 +15,10 @@ public class PlayerCameraController : MonoBehaviour
     void Start()
     {
         stateManager = GetComponent<PlayerStateManager>();
+
+        defaultCamera = GameObject.Find("Camera - Third-Person");
+        sprintCamera = GameObject.Find("Camera - Sprinting");
+        aimCamera = GameObject.Find("Camera - Aim");
         defaultCamera.SetActive(true);
         sprintCamera.SetActive(false);
         aimCamera.SetActive(false);

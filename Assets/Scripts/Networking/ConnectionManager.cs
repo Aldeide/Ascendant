@@ -26,8 +26,21 @@ namespace Ascendant
         void Start()
         {
             Client = GetComponent<UnityClient>();
-            Client.ConnectInBackground(IPAddress.Loopback, Client.Port, false, ConnectCallback);
+            //Client.ConnectInBackground(IPAddress.Loopback, Client.Port, false, ConnectCallback);
             Client.MessageReceived += OnMessage;
+        }
+
+        internal void SpawnPlayerOnServerRequest()
+        {
+            using (Message message = Message.CreateEmpty((ushort)Tags.SpawnLocalPlayerRequest))
+            {
+                Client.SendMessage(message, SendMode.Reliable);
+            }
+        }
+
+        public void InitiateConnection()
+        {
+            Client.ConnectInBackground(IPAddress.Loopback, Client.Port, false, ConnectCallback);
         }
 
         private void ConnectCallback(Exception e)
@@ -59,8 +72,16 @@ namespace Ascendant
                     case Tags.JoinGameResponse:
                         OnJoinGameResponse(m.Deserialize<JoinGameResponseData>()); ;
                         break;
+                    case Tags.SpawnLocalPlayerResponse:
+                        OnSpawnLocalPlayerResponse(m.Deserialize<SpawnLocalPlayerResponseData>());
+                        break;
                 }
             }
+        }
+
+        private void OnSpawnLocalPlayerResponse(SpawnLocalPlayerResponseData data)
+        {
+            GameManager.Instance.SpawnLocalPlayer(data);
         }
 
         private void OnJoinGameResponse(JoinGameResponseData data)
@@ -71,7 +92,7 @@ namespace Ascendant
                 return;
             }
 
-            SceneManager.LoadScene("fps"); // Make sure you add Using UnityEngine.SceneManagement
+            SceneManager.LoadScene("TPS"); // Make sure you add Using UnityEngine.SceneManagement
         }
 
         private void OnDestroy()
