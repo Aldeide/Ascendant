@@ -13,7 +13,11 @@ namespace Ascendant.Networking
         JoinGameRequest = 3,
         JoinGameResponse = 4,
         SpawnLocalPlayerRequest = 5,
-        SpawnLocalPlayerResponse = 6
+        SpawnLocalPlayerResponse = 6,
+        PlayerInputData = 7,
+        PlayerInputDataFromServer = 8,
+        SyncPlayerStateRequest = 9,
+        SyncPlayerStateResponse = 10,
     }
 
     public struct LoginRequestData : IDarkRiftSerializable
@@ -97,39 +101,55 @@ namespace Ascendant.Networking
 
     public struct PlayerInputData : IDarkRiftSerializable
     {
-        // z = 0, q = 1, s = 2, d = 3, space = 4, leftClick = 5. 
-        public bool[] keyInputs;
+        Vector2 movementInput;
         public Quaternion lookDirection;
+        public float sprintInput;
+        public float crouchInput;
+        public float aimInput;
+        public float fireInput;
+        public float jumpInput;
         public uint time;
 
-        public PlayerInputData(bool[] keyInputs, Quaternion lookDirection, uint time)
+        public PlayerInputData(Vector2 movementInput, Quaternion lookDirection, float sprintInput, float crouchInput, float aimInput, float fireInput, float jumpInput, uint time)
         {
-            this.keyInputs = keyInputs;
+            this.movementInput = movementInput;
             this.lookDirection = lookDirection;
+            this.sprintInput = sprintInput;
+            this.crouchInput = crouchInput;
+            this.aimInput = aimInput;
+            this.fireInput = fireInput;
+            this.jumpInput = jumpInput;
             this.time = time;
         }
 
         public void Deserialize(DeserializeEvent e)
         {
-            keyInputs = e.Reader.ReadBooleans();
+            movementInput = new Vector2(e.Reader.ReadSingle(), e.Reader.ReadSingle());
             lookDirection = new Quaternion(e.Reader.ReadSingle(), e.Reader.ReadSingle(), e.Reader.ReadSingle(), e.Reader.ReadSingle());
-            if (keyInputs[5])
-            {
-                time = e.Reader.ReadUInt32();
-            }
+            sprintInput = e.Reader.ReadSingle();
+            crouchInput = e.Reader.ReadSingle();
+            aimInput = e.Reader.ReadSingle();
+            fireInput = e.Reader.ReadSingle();
+            jumpInput = e.Reader.ReadSingle();
+            time = e.Reader.ReadUInt32();
+
         }
 
         public void Serialize(SerializeEvent e)
         {
-            e.Writer.Write(keyInputs);
+            e.Writer.Write(movementInput.x);
+            e.Writer.Write(movementInput.y);
             e.Writer.Write(lookDirection.x);
             e.Writer.Write(lookDirection.y);
             e.Writer.Write(lookDirection.z);
             e.Writer.Write(lookDirection.w);
-            if (keyInputs[5])
-            {
-                e.Writer.Write(time);
-            }
+            e.Writer.Write(sprintInput);
+            e.Writer.Write(crouchInput);
+            e.Writer.Write(aimInput);
+            e.Writer.Write(fireInput);
+            e.Writer.Write(jumpInput);
+            e.Writer.Write(time);
+
         }
     }
 
@@ -171,6 +191,7 @@ namespace Ascendant.Networking
             e.Writer.Write(gravity);
         }
     }
+
 
 }
 

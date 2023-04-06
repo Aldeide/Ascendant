@@ -3,70 +3,77 @@ using System.Collections.Generic;
 using UnityEngine;
 using RootMotion.FinalIK;
 
-[RequireComponent(typeof(PlayerStateManager))]
-public class IKManager : MonoBehaviour
+namespace Ascendant
 {
-    public PlayerStateManager stateManager;
-    public AimIK aimIK;
-    public GameObject target;
-
-    void Start()
+    [RequireComponent(typeof(PlayerStateManager))]
+    public class IKManager : MonoBehaviour
     {
-        stateManager = GetComponent<PlayerStateManager>();
-        aimIK = GetComponent<AimIK>();
-        target = GameObject.Find("Game/Target");
-        aimIK.solver.target = target.transform;
-    }
+        public PlayerStateManager stateManager;
+        public AimIK aimIK;
+        public GameObject target;
 
-
-    void Update()
-    {
-        if ((stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
-            && aimIK.enabled == false && HasSufficientDistance())
+        void Start()
         {
-            aimIK.enabled = true;
-            StartCoroutine(SmoothActivate());
-        } else if (aimIK.enabled == true && !(stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing))
-        {
-            StartCoroutine(SmoothDeactivate());  
-        } else if (aimIK.enabled == true && !HasSufficientDistance())
-        {
-            StartCoroutine(SmoothDeactivate());
+            stateManager = GetComponent<PlayerStateManager>();
+            aimIK = GetComponent<AimIK>();
+            target = GameObject.Find("Game/Target");
+            aimIK.solver.target = target.transform;
         }
-    }
 
-    // Returns true if the target is sufficiently distant for aimIK to be used.
-    // Returns false otherwise.
-    bool HasSufficientDistance()
-    {
-        if (Vector3.Distance(target.transform.position, this.transform.position) > 1.5f)
-        {
-            return true;
-        }
-        return false;
-    }
 
-    IEnumerator SmoothActivate()
-    {
-        int i = 0;
-        while (i < 10)
+        void Update()
         {
-            i++;
-            aimIK.GetIKSolver().IKPositionWeight = i / 10.0f;
-            yield return null;
+            if ((stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
+                && aimIK.enabled == false && HasSufficientDistance())
+            {
+                aimIK.enabled = true;
+                StartCoroutine(SmoothActivate());
+            }
+            else if (aimIK.enabled == true && !(stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing))
+            {
+                StartCoroutine(SmoothDeactivate());
+            }
+            else if (aimIK.enabled == true && !HasSufficientDistance())
+            {
+                StartCoroutine(SmoothDeactivate());
+            }
         }
-    }
 
-    IEnumerator SmoothDeactivate()
-    {
-        int i = 0;
-        while (i < 10)
+        // Returns true if the target is sufficiently distant for aimIK to be used.
+        // Returns false otherwise.
+        bool HasSufficientDistance()
         {
-            i++;
-            aimIK.GetIKSolver().IKPositionWeight = 1 - i / 10.0f;
-            yield return null;
+            if (Vector3.Distance(target.transform.position, this.transform.position) > 1.5f)
+            {
+                return true;
+            }
+            return false;
         }
-        aimIK.enabled = false;
+
+        IEnumerator SmoothActivate()
+        {
+            int i = 0;
+            while (i < 10)
+            {
+                i++;
+                aimIK.GetIKSolver().IKPositionWeight = i / 10.0f;
+                yield return null;
+            }
+        }
+
+        IEnumerator SmoothDeactivate()
+        {
+            int i = 0;
+            while (i < 10)
+            {
+                i++;
+                aimIK.GetIKSolver().IKPositionWeight = 1 - i / 10.0f;
+                yield return null;
+            }
+            aimIK.enabled = false;
+        }
+
     }
 
 }
+

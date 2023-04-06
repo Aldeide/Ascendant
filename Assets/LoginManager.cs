@@ -61,7 +61,6 @@ namespace Ascendant.Networking
         {
             ConnectionManager.Instance.clientId = data.clientId;
             SceneManager.LoadScene("TPS");
-            throw new NotImplementedException();
         }
 
         private void OnLoginRequestRejected()

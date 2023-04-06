@@ -13,6 +13,7 @@ namespace Ascendant
         public Dictionary<ushort, GameObject> connectedPlayers = new Dictionary<ushort, GameObject>();
         public ushort localPlayerId;
         public static GameManager Instance;
+        public GameObject localPlayer;
         void Awake()
         {
             if (Instance != null)
@@ -27,14 +28,20 @@ namespace Ascendant
         // Start is called before the first frame update
         void Start()
         {
+            /*
             localPlayerId = ConnectionManager.Instance.Client.ID;
             Debug.Log("Local Player ID set to: " + localPlayerId);
             ConnectionManager.Instance.SpawnPlayerOnServerRequest();
+            */
         }
 
-        // Update is called once per frame
-        void Update()
+
+        void FixedUpdate()
         {
+                using (Message message = Message.Create((ushort)Tags.SyncPlayerStateRequest, localPlayer.GetComponent<PlayerStateManager>().ToPlayerStateData()))
+                {
+                    ConnectionManager.Instance.Client.SendMessage(message, SendMode.Reliable);
+                }
 
         }
 
@@ -42,7 +49,7 @@ namespace Ascendant
         {
             if (!connectedPlayers.ContainsKey(data.ID))
             {
-                Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+                localPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
             }
         }
     }

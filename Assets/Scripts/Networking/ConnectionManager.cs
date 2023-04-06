@@ -38,8 +38,11 @@ namespace Ascendant.Networking
             Client.MessageReceived += OnMessage;
         }
 
+        public bool IsConnected() => Client.ConnectionState == ConnectionState.Connected;
+
         internal void SpawnPlayerOnServerRequest()
         {
+            Debug.Log("Sending Spawn Request");
             using (Message message = Message.CreateEmpty((ushort)Tags.SpawnLocalPlayerRequest))
             {
                 Client.SendMessage(message, SendMode.Reliable);
@@ -51,8 +54,8 @@ namespace Ascendant.Networking
             if (Client.ConnectionState == ConnectionState.Connected)
             {
                 Debug.Log("Connected to server!");
-                OnConnected?.Invoke();
-                //OnConnectedToServer();
+                //OnConnected?.Invoke();
+                OnConnectedToServer();
             }
             else
             {
@@ -62,10 +65,17 @@ namespace Ascendant.Networking
 
         private void OnConnectedToServer()
         {
+            using (Message message = Message.Create((ushort)Tags.LoginRequest, new LoginRequestData("Aldeide")))
+            {
+                ConnectionManager.Instance.Client.SendMessage(message, SendMode.Reliable);
+            }
+            
+            /*
             using (Message message = Message.CreateEmpty((ushort)Tags.JoinGameRequest))
             {
                 Client.SendMessage(message, SendMode.Reliable);
             }
+            */
         }
 
         private void OnMessage(object sender, MessageReceivedEventArgs e)
@@ -80,12 +90,27 @@ namespace Ascendant.Networking
                     case Tags.SpawnLocalPlayerResponse:
                         OnSpawnLocalPlayerResponse(m.Deserialize<SpawnLocalPlayerResponseData>());
                         break;
+                    case Tags.SyncPlayerStateResponse:
+                        OnSyncPlayerResponse(m.Deserialize<PlayerStateData>());
+                        break;
+                    case Tags.LoginRequestRejected:
+                        break;
+                    case Tags.LoginRequestAccepted:
+                        SpawnPlayerOnServerRequest();
+                        break;
                 }
             }
         }
 
+        private void OnSyncPlayerResponse(PlayerStateData data)
+        {
+            Debug.Log(data.position);
+        }
+
+
         private void OnSpawnLocalPlayerResponse(SpawnLocalPlayerResponseData data)
         {
+            Debug.Log("Spawing local player");
             GameManager.Instance.SpawnLocalPlayer(data);
         }
 

@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Ascendant
+namespace Ascendant.Networking
 {
     public enum PlayerMovementState
     {
@@ -34,13 +32,19 @@ namespace Ascendant
     }
 
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(PlayerInputController))]
     [RequireComponent(typeof(PlayerMovementController))]
-    public class PlayerStateManager : MonoBehaviour
+    public class NetworkedPlayerStateManager : MonoBehaviour
     {
+        public Vector2 movementInput = new Vector2();
+        public Vector2 lookInput = new Vector2();
+        public float sprintInput = 0f;
+        public float crouchInput = 0f;
+        public float aimInput = 0f;
+        public float fireInput = 0f;
+        public float jumpInput = 0f;
+
         private Animator animator;
         private PlayerMovementController movementController;
-        private PlayerInputController inputController;
 
         public PlayerStanceState stanceState;
         public PlayerMovementState movementState;
@@ -71,7 +75,6 @@ namespace Ascendant
             // Fetch required components.
             animator = GetComponent<Animator>();
             movementController = GetComponent<PlayerMovementController>();
-            inputController = GetComponent<PlayerInputController>();
 
             // Initialise variables.
             stanceState = PlayerStanceState.Upright;
@@ -81,10 +84,10 @@ namespace Ascendant
         void Update()
         {
             // Movement state update.
-            if (inputController.movementInput.sqrMagnitude > 0)
+            if (movementInput.sqrMagnitude > 0)
             {
                 movementState = PlayerMovementState.Running;
-                if (inputController.sprintInput > 0)
+                if (sprintInput > 0)
                 {
                     movementState = PlayerMovementState.Sprinting;
                 }
@@ -95,13 +98,13 @@ namespace Ascendant
             }
 
             // Stance state update.
-            if (inputController.crouchInput > 0)
+            if (crouchInput > 0)
             {
                 stanceState = PlayerStanceState.Crouched;
             }
 
             // Aiming overrides crouching.
-            if (inputController.aimInput > 0)
+            if (aimInput > 0)
             {
                 stanceState = PlayerStanceState.Aiming;
             }
@@ -111,18 +114,13 @@ namespace Ascendant
             }
 
             // Jumping.
-            if (inputController.jumpInput > 0 && movementController.IsGrounded())
+            if (movementController.isGrounded)
             {
-                animator.SetBool("IsJumping", true);
-                animator.SetBool("IsGrounded", false);
-            }
-            else
-            {
-                animator.SetBool("IsJumping", false);
+                //Not working
             }
 
             // Firing
-            if (inputController.fireInput > 0)
+            if (fireInput > 0)
             {
                 // TODO: maintaining the fire button but not being able to fire (e.g. reloading) should not reset
                 // the timer.
@@ -140,26 +138,26 @@ namespace Ascendant
             if (GroundedState != PlayerGroundedState.Climbing
                 && Physics.Raycast(dectectClimbableRay, out hitInfo, 0.8f)
                 && hitInfo.collider.gameObject.tag == "Climbable"
-                && inputController.movementInput.y > 0)
+                && movementInput.y > 0)
             {
                 GroundedState = PlayerGroundedState.Climbing;
             }
 
 
             // Animator updates.
-            if (inputController.movementInput.sqrMagnitude > 0 && stanceState != PlayerStanceState.Aiming && firingState != PlayerFiringState.Firing)
+            if (movementInput.sqrMagnitude > 0 && stanceState != PlayerStanceState.Aiming && firingState != PlayerFiringState.Firing)
             {
                 animator.SetFloat("MovementY", 1.0f, 10.1f, 3.5f);
                 animator.SetFloat("MovementX", 0.0f, 10.1f, 3.5f);
                 animator.SetBool("isRunning", true);
             }
-            if (inputController.movementInput.sqrMagnitude > 0 && (stanceState == PlayerStanceState.Aiming || firingState == PlayerFiringState.Firing))
+            if (movementInput.sqrMagnitude > 0 && (stanceState == PlayerStanceState.Aiming || firingState == PlayerFiringState.Firing))
             {
-                animator.SetFloat("MovementX", inputController.movementInput.x, 10.1f, 3.5f);
-                animator.SetFloat("MovementY", inputController.movementInput.y, 10.1f, 3.5f);
+                animator.SetFloat("MovementX", movementInput.x, 10.1f, 3.5f);
+                animator.SetFloat("MovementY", movementInput.y, 10.1f, 3.5f);
                 animator.SetBool("isRunning", true);
             }
-            if (inputController.movementInput.sqrMagnitude < 0.01)
+            if (movementInput.sqrMagnitude < 0.01)
             {
                 animator.SetBool("isRunning", false);
             }
@@ -177,6 +175,47 @@ namespace Ascendant
                 animator.SetBool("IsFalling", false);
                 animator.SetBool("IsGrounded", true);
             }
+        }
+
+        // Callbacks.
+        public void OnMoveCallback(InputAction.CallbackContext context)
+        {
+            movementInput = context.ReadValue<Vector2>();
+        }
+        public void OnLookCallback(InputAction.CallbackContext context)
+        {
+            lookInput = context.ReadValue<Vector2>();
+        }
+        public void OnSprintCallback(InputAction.CallbackContext context)
+        {
+            sprintInput = context.ReadValue<float>();
+        }
+        public void OnCrouchCallback(InputAction.CallbackContext context)
+        {
+            crouchInput = context.ReadValue<float>();
+        }
+        public void OnAimCallback(InputAction.CallbackContext context)
+        {
+            aimInput = context.ReadValue<float>();
+        }
+        public void OnJumpCallback(InputAction.CallbackContext context)
+        {
+            //if (!context.started) return;
+            //if (!movementController.IsGrounded()) return;
+            jumpInput = context.ReadValue<float>();
+            if (context.ReadValue<float>() > 0 && movementController.IsGrounded())
+            {
+                animator.SetBool("IsJumping", true);
+                animator.SetBool("IsGrounded", false);
+            }
+            else
+            {
+                animator.SetBool("IsJumping", false);
+            }
+        }
+        public void OnFireCallBack(InputAction.CallbackContext context)
+        {
+            fireInput = context.ReadValue<float>();
         }
 
         // Plants.
@@ -198,11 +237,7 @@ namespace Ascendant
             return 0;
         }
 
-        public Networking.PlayerStateData ToPlayerStateData()
-        {
-            return new Networking.PlayerStateData(GameManager.Instance.localPlayerId, -9.81f, this.transform.position, this.transform.rotation);
-        }
-
     }
 }
+
 
