@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using DarkRift;
 using DarkRift.Client;
+using Ascendant.Networking;
 
 namespace Ascendant
 {
-
-
     public class GameManager : MonoBehaviour
     {
         public GameObject playerPrefab;
