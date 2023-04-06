@@ -16,11 +16,11 @@ namespace Ascendant
 
         void Start()
         {
+            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             stateManager = GetComponent<PlayerStateManager>();
-
             defaultCamera = GameObject.Find("Camera - Third-Person");
             sprintCamera = GameObject.Find("Camera - Sprinting");
-            aimCamera = GameObject.Find("Camera - Aim");
+            aimCamera = GameObject.Find("Game/Cameras/CameraAim");
             defaultCamera.SetActive(true);
             sprintCamera.SetActive(false);
             aimCamera.SetActive(false);
@@ -29,6 +29,7 @@ namespace Ascendant
         // Update is called once per frame
         void Update()
         {
+            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             // Activate aim camera if needed. The aim camera is much closer to the player.
             if (stateManager.stanceState == PlayerStanceState.Aiming && !aimCamera.activeInHierarchy)
             {

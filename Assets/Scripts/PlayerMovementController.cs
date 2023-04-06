@@ -58,6 +58,7 @@ namespace Ascendant
 
         void Update()
         {
+            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             if (IsGrounded()) { stateManager.GroundedState = PlayerGroundedState.Grounded; }
 
             ComputeSpeed();

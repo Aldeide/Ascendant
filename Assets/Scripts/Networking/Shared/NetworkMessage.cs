@@ -14,10 +14,11 @@ namespace Ascendant.Networking
         JoinGameResponse = 4,
         SpawnLocalPlayerRequest = 5,
         SpawnLocalPlayerResponse = 6,
-        PlayerInputData = 7,
+        SpawnPlayer = 7,
         PlayerInputDataFromServer = 8,
         SyncPlayerStateRequest = 9,
         SyncPlayerStateResponse = 10,
+        SyncOtherPlayer = 11,
     }
 
     public struct LoginRequestData : IDarkRiftSerializable
@@ -192,7 +193,26 @@ namespace Ascendant.Networking
         }
     }
 
+    public struct SpawnPlayerData : IDarkRiftSerializable
+    {
+        public ushort id;
 
+        public SpawnPlayerData(ushort id)
+        {
+            this.id = id;
+        }
+
+        public void Deserialize(DeserializeEvent e)
+        {
+            id = e.Reader.ReadUInt16();
+        }
+
+        public void Serialize(SerializeEvent e)
+        {
+            e.Writer.Write(id);
+        }
+
+    }
 }
 
 

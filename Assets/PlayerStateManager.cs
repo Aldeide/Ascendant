@@ -80,6 +80,7 @@ namespace Ascendant
 
         void Update()
         {
+            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             // Movement state update.
             if (inputController.movementInput.sqrMagnitude > 0)
             {

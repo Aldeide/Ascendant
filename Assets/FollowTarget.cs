@@ -1,28 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class FollowTarget : MonoBehaviour
+namespace Ascendant
 {
-    public GameObject target;
-    // Start is called before the first frame update
-    void Start()
+    public class FollowTarget : MonoBehaviour
     {
-        if (target == null)
+        public Transform target;
+        // Start is called before the first frame update
+        void Start()
         {
-            target = GameObject.Find("mixamorig:Neck");
+            if (GameManager.Instance.localPlayer != null)
+            {
+                target = GameManager.Instance.localPlayer.transform.GetComponentsInChildren<Transform>()
+                        .Where(transform => transform.name == "mixamorig:Neck").First();
+            }
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (target == null)
+        // Update is called once per frame
+        void Update()
         {
-            target = GameObject.Find("mixamorig:Neck");
+            if (target == null)
+            {
+                target = GameManager.Instance.localPlayer.transform.GetComponentsInChildren<Transform>()
+                    .Where(transform => transform.name == "mixamorig:Neck").First();
+            }
+            Vector3 targetPosition = target.transform.position;
+            targetPosition.y = target.transform.position.y + 1.5f;
+            this.transform.position = targetPosition;
         }
-        Vector3 targetPosition = target.transform.position;
-        targetPosition.y = target.transform.position.y + 1.5f;
-        this.transform.position = targetPosition;
     }
 }
+
+

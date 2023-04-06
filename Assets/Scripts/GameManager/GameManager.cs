@@ -50,7 +50,29 @@ namespace Ascendant
             if (!connectedPlayers.ContainsKey(data.ID))
             {
                 localPlayer = Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity);
+                localPlayerId = data.ID;
             }
+        }
+
+        public void SpawnOtherPlayer(ushort id)
+        {
+            Debug.Log("Attempting to add another player: " + id);
+            if (!connectedPlayers.ContainsKey(id))
+            {
+                Debug.Log("Adding other player: " + id);
+                connectedPlayers.Add(id, Instantiate(playerPrefab, playerPrefab.transform.position, Quaternion.identity));
+            }
+        }
+
+        public bool IsLocalPlayer(GameObject obj)
+        {
+            return Object.Equals(obj, localPlayer);
+        }
+
+        internal void SyncOtherPlayer(PlayerStateData playerStateData)
+        {
+            connectedPlayers[playerStateData.id].transform.position = playerStateData.position;
+            connectedPlayers[playerStateData.id].transform.rotation = playerStateData.lookDirection;
         }
     }
 }

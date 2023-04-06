@@ -98,8 +98,24 @@ namespace Ascendant.Networking
                     case Tags.LoginRequestAccepted:
                         SpawnPlayerOnServerRequest();
                         break;
+                    case Tags.SpawnPlayer:
+                        OnSpawnPlayer(m.Deserialize<SpawnPlayerData>());
+                        break;
+                    case Tags.SyncOtherPlayer:
+                        OnSyncOtherPlayer(m.Deserialize<PlayerStateData>());
+                        break;
                 }
             }
+        }
+
+        private void OnSyncOtherPlayer(PlayerStateData playerStateData)
+        {
+            GameManager.Instance.SyncOtherPlayer(playerStateData);
+        }
+
+        private void OnSpawnPlayer(SpawnPlayerData spawnPlayerData)
+        {
+            GameManager.Instance.SpawnOtherPlayer(spawnPlayerData.id);
         }
 
         private void OnSyncPlayerResponse(PlayerStateData data)
@@ -123,6 +139,7 @@ namespace Ascendant.Networking
             }
             SceneManager.LoadScene("TPS");
         }
+
 
         private void OnDestroy()
         {
