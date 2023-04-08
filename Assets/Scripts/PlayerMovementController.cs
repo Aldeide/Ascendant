@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Ascendant
+namespace Ascendant.Controllers
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInputController))]
@@ -40,16 +40,13 @@ namespace Ascendant
 
         public float sprintAcceleration = 3.2f;
 
-        float xRotation = 0f;
-        float yRotation = 0f;
-
-        private PlayerStateManager stateManager;
+        private PlayerStateController stateController;
 
 
         void Start()
         {
             currentSpeed = 0f;
-            stateManager = GetComponent<PlayerStateManager>();
+            stateController = GetComponent<PlayerStateController>();
             Cursor.lockState = CursorLockMode.Locked;
             characterController = GetComponent<CharacterController>();
             followTarget = GameObject.Find("FollowTarget");
@@ -59,7 +56,7 @@ namespace Ascendant
         void Update()
         {
             if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
-            if (IsGrounded()) { stateManager.GroundedState = PlayerGroundedState.Grounded; }
+            //if (IsGrounded()) { stateManager.GroundedState = PlayerGroundedState.Grounded; }
 
             ComputeSpeed();
             forward = Camera.main.transform.forward;
@@ -86,7 +83,7 @@ namespace Ascendant
             // Performing the player rotation.
             if (inputController.movementInput.sqrMagnitude > 0)
             {
-                if (stateManager.stanceState != PlayerStanceState.Aiming && stateManager.firingState != PlayerFiringState.Firing)
+                if (!stateController.IsAiming() && !stateController.IsFiring())
                 {
                     transform.rotation = Quaternion.Euler(0, currentAngle, 0);
                 }
@@ -94,35 +91,17 @@ namespace Ascendant
                 {
                     Vector3 lookAtTest = this.transform.position + forward;
                     lookAtTest.y = this.transform.position.y;
-
                     this.transform.LookAt(lookAtTest);
-                    /*
-                    targetAngle = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-                    currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
-                    transform.rotation = Quaternion.Euler(0, currentAngle, 0);
-                    */
                 }
             }
-            else if (stateManager.stanceState == PlayerStanceState.Aiming || stateManager.firingState == PlayerFiringState.Firing)
+            else if (stateController.IsAiming() || stateController.IsFiring())
             {
-                Vector3 lookAtTest = this.transform.position + forward;
-                lookAtTest.y = this.transform.position.y;
-
-                this.transform.LookAt(lookAtTest);
-                /*
-                var targetAngle2 = Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg;
-
-                if (targetAngle2 < 0)
-                {
-                    targetAngle2 = 360 + targetAngle2;
-                }
-                Debug.Log(targetAngle2);
-                currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle2, ref currentAngleVelocity, 0.02f);
-                transform.rotation = Quaternion.Euler(0, currentAngle, 0);
-                */
+                Vector3 lookAtvector = this.transform.position + forward;
+                lookAtvector.y = this.transform.position.y;
+                this.transform.LookAt(lookAtvector);
             }
 
-            if (stateManager.GroundedState == PlayerGroundedState.Climbing)
+            if (stateController.IsClimbing())
             {
                 direction = direction = up * inputController.movementInput.y + right * inputController.movementInput.x;
             }
@@ -136,7 +115,11 @@ namespace Ascendant
             direction.x *= currentSpeed;
             direction.z *= currentSpeed;
             direction.y *= 6.0f;
-            characterController.Move(direction * Time.deltaTime);
+
+            if (stateController.CanMove())
+            {
+                characterController.Move(direction * Time.deltaTime);
+            }
 
             // Debug lines.
             Debug.DrawLine(transform.position, transform.position + forward, Color.red);
@@ -185,13 +168,13 @@ namespace Ascendant
             if (!IsGrounded()) return;
             if (inputController.jumpInput == 0) return;
             verticalVelocity += 2.2f;
-            stateManager.GroundedState = PlayerGroundedState.Jumping;
+            //stateManager.GroundedState = PlayerGroundedState.Jumping;
         }
 
         private void JumpOutOfClimbable()
         {
             verticalVelocity = 0;
-            stateManager.GroundedState = PlayerGroundedState.Falling;
+            //stateManager.GroundedState = PlayerGroundedState.Falling;
         }
 
         private void Gravity()

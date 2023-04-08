@@ -78,6 +78,12 @@ namespace Ascendant.Networking
             */
         }
 
+
+        private void OnDestroy()
+        {
+            Client.MessageReceived -= OnMessage;
+        }
+
         private void OnMessage(object sender, MessageReceivedEventArgs e)
         {
             using (Message m = e.GetMessage())
@@ -99,13 +105,23 @@ namespace Ascendant.Networking
                         SpawnPlayerOnServerRequest();
                         break;
                     case Tags.SpawnPlayer:
-                        OnSpawnPlayer(m.Deserialize<SpawnPlayerData>());
+                        OnSpawnPlayer(m.Deserialize<PlayerClientId>());
                         break;
                     case Tags.SyncOtherPlayer:
                         OnSyncOtherPlayer(m.Deserialize<PlayerStateData>());
                         break;
+                    case Tags.PlayerDisconnectedNotification:
+                        OnPlayerDisconnectedNotification(m.Deserialize<PlayerClientId>());
+                        break;
                 }
             }
+        }
+
+        // Processes a notification that another player has disconnected. Removes the player
+        // from the game manager and removes its GameObject.
+        private void OnPlayerDisconnectedNotification(PlayerClientId playerClientId)
+        {
+            GameManager.Instance.RemovePlayer(playerClientId.id);
         }
 
         private void OnSyncOtherPlayer(PlayerStateData playerStateData)
@@ -113,7 +129,7 @@ namespace Ascendant.Networking
             GameManager.Instance.SyncOtherPlayer(playerStateData);
         }
 
-        private void OnSpawnPlayer(SpawnPlayerData spawnPlayerData)
+        private void OnSpawnPlayer(PlayerClientId spawnPlayerData)
         {
             GameManager.Instance.SpawnOtherPlayer(spawnPlayerData.id);
         }
@@ -122,7 +138,6 @@ namespace Ascendant.Networking
         {
             Debug.Log(data.position);
         }
-
 
         private void OnSpawnLocalPlayerResponse(SpawnLocalPlayerResponseData data)
         {
@@ -141,9 +156,6 @@ namespace Ascendant.Networking
         }
 
 
-        private void OnDestroy()
-        {
-            Client.MessageReceived -= OnMessage;
-        }
+
     }
 }

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Climbable
+  - OtherPlayer
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - FirstPersonCulled
   - Player
   - Selection
-  - 
+  - Projectile
   - 
   - 
   - 

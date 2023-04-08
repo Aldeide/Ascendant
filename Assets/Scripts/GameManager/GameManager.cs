@@ -4,6 +4,7 @@ using UnityEngine;
 using DarkRift;
 using DarkRift.Client;
 using Ascendant.Networking;
+using System;
 
 namespace Ascendant
 {
@@ -28,21 +29,26 @@ namespace Ascendant
         // Start is called before the first frame update
         void Start()
         {
-            /*
+            //localPlayer = GameObject.Find("NetworkedPlayer");
+            
             localPlayerId = ConnectionManager.Instance.Client.ID;
             Debug.Log("Local Player ID set to: " + localPlayerId);
             ConnectionManager.Instance.SpawnPlayerOnServerRequest();
-            */
+            
         }
 
 
         void FixedUpdate()
         {
-                using (Message message = Message.Create((ushort)Tags.SyncPlayerStateRequest, localPlayer.GetComponent<PlayerStateManager>().ToPlayerStateData()))
+            if (localPlayer == null)
+            {
+                localPlayer = GameObject.Find("NetworkedPlayer");
+                return;
+            }
+            using (Message message = Message.Create((ushort)Tags.SyncPlayerStateRequest, localPlayer.GetComponent<Controllers.PlayerStateController>().ToPlayerStateData()))
                 {
                     ConnectionManager.Instance.Client.SendMessage(message, SendMode.Reliable);
                 }
-
         }
 
         public void SpawnLocalPlayer(SpawnLocalPlayerResponseData data)
@@ -66,13 +72,21 @@ namespace Ascendant
 
         public bool IsLocalPlayer(GameObject obj)
         {
-            return Object.Equals(obj, localPlayer);
+            //return true;
+            return UnityEngine.Object.Equals(obj, localPlayer);
         }
 
         internal void SyncOtherPlayer(PlayerStateData playerStateData)
         {
             connectedPlayers[playerStateData.id].transform.position = playerStateData.position;
             connectedPlayers[playerStateData.id].transform.rotation = playerStateData.lookDirection;
+        }
+
+        internal void RemovePlayer(ushort id)
+        {
+            if (!connectedPlayers.ContainsKey(id)) return;
+            Destroy(connectedPlayers[id]);
+            connectedPlayers.Remove(id);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Ascendant.Networking
         SyncPlayerStateRequest = 9,
         SyncPlayerStateResponse = 10,
         SyncOtherPlayer = 11,
+        PlayerDisconnectedNotification = 12
     }
 
     public struct LoginRequestData : IDarkRiftSerializable
@@ -193,11 +194,11 @@ namespace Ascendant.Networking
         }
     }
 
-    public struct SpawnPlayerData : IDarkRiftSerializable
+    public struct PlayerClientId : IDarkRiftSerializable
     {
         public ushort id;
 
-        public SpawnPlayerData(ushort id)
+        public PlayerClientId(ushort id)
         {
             this.id = id;
         }

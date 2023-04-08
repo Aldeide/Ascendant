@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ascendant
+namespace Ascendant.Controllers
 {
     public class PlayerCameraController : MonoBehaviour
     {
@@ -12,12 +12,12 @@ namespace Ascendant
         public GameObject sprintCamera;
 
         // Player components.
-        private PlayerStateManager stateManager;
+        private PlayerStateController stateController;
 
         void Start()
         {
             if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
-            stateManager = GetComponent<PlayerStateManager>();
+            stateController = GetComponent<PlayerStateController>();
             defaultCamera = GameObject.Find("Camera - Third-Person");
             sprintCamera = GameObject.Find("Camera - Sprinting");
             aimCamera = GameObject.Find("Game/Cameras/CameraAim");
@@ -31,7 +31,7 @@ namespace Ascendant
         {
             if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             // Activate aim camera if needed. The aim camera is much closer to the player.
-            if (stateManager.stanceState == PlayerStanceState.Aiming && !aimCamera.activeInHierarchy)
+            if (stateController.IsAiming() && !aimCamera.activeInHierarchy)
             {
                 defaultCamera.SetActive(false);
                 sprintCamera.SetActive(false);
@@ -41,9 +41,9 @@ namespace Ascendant
 
             // Activate the sprint camera if needed. The sprint camera follows the player from afar.
             // Sprinting isn't possible while aiming.
-            if (stateManager.movementState == PlayerMovementState.Sprinting
+            if (stateController.IsSprinting()
                 && !sprintCamera.activeInHierarchy
-                && stateManager.stanceState != PlayerStanceState.Aiming)
+                && !stateController.IsAiming())
             {
                 defaultCamera.SetActive(false);
                 sprintCamera.SetActive(true);
@@ -53,8 +53,8 @@ namespace Ascendant
 
             // Activate the default camera if needed.
             if (!defaultCamera.activeInHierarchy
-                && stateManager.stanceState != PlayerStanceState.Aiming
-                && stateManager.movementState != PlayerMovementState.Sprinting)
+                && !stateController.IsAiming()
+                && !stateController.IsSprinting())
             {
                 defaultCamera.SetActive(true);
                 sprintCamera.SetActive(false);

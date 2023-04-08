@@ -64,6 +64,12 @@ public class ProjectileManager : MonoBehaviour
             impactEffect.Play();
         }
         collided = true;
+
+        if (hit.collider.GetComponent<PlayerStatsManager>() != null)
+        {
+            hit.collider.GetComponent<PlayerStatsManager>().Damage(20.0f);
+        }
+
         /*
 
         if (hit.distance * hit.distance > (speed * Time.deltaTime * transform.forward).sqrMagnitude)

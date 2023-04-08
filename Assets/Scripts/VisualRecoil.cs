@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Ascendant
+namespace Ascendant.Controllers
 {
     public class VisualRecoil : MonoBehaviour
     {
@@ -21,13 +21,13 @@ namespace Ascendant
         public float recoilZ;
         public float kickbackZ;
 
-        private WeaponManager weaponManager;
+        private WeaponController weaponManager;
 
         void Start()
         {
             initialPosition = transform.localPosition;
             initialRotation = transform.localRotation;
-            weaponManager = GameObject.Find("Player").GetComponent<WeaponManager>();
+            weaponManager = GameObject.Find("Player").GetComponent<WeaponController>();
         }
 
         // Update is called once per frame

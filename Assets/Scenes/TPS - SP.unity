@@ -39399,6 +39399,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 2262616458022701787, guid: 3fd2c0a0f36bf814f817ec2b1f9d001b,
     type: 3}
   localPlayerId: 0
+  localPlayer: {fileID: 0}
 --- !u!1 &1233665213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7917349904687423284, guid: b3c0d461c3375934e96bbee5cf32cfc6,
@@ -43138,6 +43139,7 @@ GameObject:
   - component: {fileID: 1354421132}
   - component: {fileID: 1354421133}
   - component: {fileID: 1354421134}
+  - component: {fileID: 1354421135}
   m_Layer: 0
   m_Name: Player - TopDown
   m_TagString: Player
@@ -43179,13 +43181,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 55
-  thirdPersonController: 1
   followTarget: {fileID: 0}
   rotationPower: 1
-  crouchInput: 0
-  isSprinting: 0
-  isSliding: 0
-  isGrounded: 0
   head: {fileID: 1567810032}
   weapon: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
@@ -43490,16 +43487,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d86e3c7e9a5f149952b439beff39a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementInput: {x: 0, y: 0}
-  lookInput: {x: 0, y: 0}
-  sprintInput: 0
-  crouchInput: 0
-  aimInput: 0
-  fireInput: 0
-  jumpInput: 0
-  stanceState: 0
-  movementState: 0
-  firingState: 0
   timeSinceLastFired: 0
   firingTimeStanceDelay: 2
   layerMask:
@@ -44014,7 +44001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c66af2bf135947849a4a3dd656abaeed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateManager: {fileID: 0}
+  stateController: {fileID: 0}
   aimIK: {fileID: 0}
   target: {fileID: 0}
 --- !u!143 &1354421132
@@ -44105,6 +44092,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3571428374bea6740bda81ce2c0e7d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1354421135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354421120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fed90879e9362ac46bd490e942dfeb09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementInput: {x: 0, y: 0}
+  lookInput: {x: 0, y: 0}
+  sprintInput: 0
+  crouchInput: 0
+  aimInput: 0
+  fireInput: 0
+  jumpInput: 0
 --- !u!1 &1356639284
 GameObject:
   m_ObjectHideFlags: 0
@@ -72635,6 +72641,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5782008707121353881, guid: 3fd2c0a0f36bf814f817ec2b1f9d001b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5782008707121353881, guid: 3fd2c0a0f36bf814f817ec2b1f9d001b,
         type: 3}
