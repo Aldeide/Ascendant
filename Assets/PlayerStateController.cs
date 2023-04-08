@@ -6,21 +6,18 @@ using UnityEngine.InputSystem;
 
 namespace Ascendant.Controllers
 {
-
-
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(PlayerInputController))]
     [RequireComponent(typeof(PlayerMovementController))]
-    [RequireComponent(typeof(PlayerStatsManager))]
+    [RequireComponent(typeof(EntityStateModel))]
     public class PlayerStateController : MonoBehaviour
     {
         private Animator animator;
         private PlayerMovementController movementController;
         private PlayerInputController inputController;
-        private PlayerStatsManager statsManager;
+        private PlayerStatsController statsController;
 
-        public Models.EntityStateModel entityStateModel { get; set; }
-        public Models.EntityStateModel previousEntityStateModel { get; set; }
+        public EntityStateModel entityStateModel { get; set; }
 
         private Ray dectectClimbableRay;
         private RaycastHit hitInfo;
@@ -37,36 +34,46 @@ namespace Ascendant.Controllers
             animator = GetComponent<Animator>();
             movementController = GetComponent<PlayerMovementController>();
             inputController = GetComponent<PlayerInputController>();
-            statsManager = GetComponent<PlayerStatsManager>();
+            statsController = GetComponent<PlayerStatsController>();
 
             // Initialise state model.
-            entityStateModel = new EntityStateModel(transform.position, transform.forward, transform.rotation, new Vector3());
+            entityStateModel = GetComponent<EntityStateModel>();
         }
 
         void Update()
         {
             if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
 
+            entityStateModel.position = this.transform.position;
+            entityStateModel.rotation = this.transform.rotation;
+            entityStateModel.aimPoint = GameObject.Find("Target").transform.position;
+
             // Death State.
-            if (statsManager.currentHealth <= 0)
+            if (statsController.GetHealth() <= 0)
             {
                 if (entityStateModel.aliveState == EntityAliveState.Alive)
                 {
                     Debug.Log("Died");
                     entityStateModel.timeOfDeath = Time.time;
-                    animator.SetBool("isDead", true);
-                    animator.SetTrigger("died");
+                    //animator.SetBool("isDead", true);
+                    //animator.SetTrigger("died");
                     entityStateModel.aliveState = EntityAliveState.Dead;
                 }
             } else
             {
                 entityStateModel.aliveState = EntityAliveState.Alive;
-                animator.SetBool("isDead", false);
+                //animator.SetBool("isDead", false);
             }
             if (entityStateModel.aliveState == EntityAliveState.Dead && Time.time > entityStateModel.timeOfDeath + respawnDelay)
             {
                 Respawn();
             }
+
+            if (movementController.IsGrounded() || FallHeight() < 0.4)
+            {
+                entityStateModel.groundedState = EntityGroundedState.Grounded;
+            }
+
 
             // Movement state update.
             if (inputController.movementInput.sqrMagnitude > 0)
@@ -98,17 +105,6 @@ namespace Ascendant.Controllers
                 entityStateModel.stanceState = EntityStanceState.Upright;
             }
 
-            // Jumping.
-            if (inputController.jumpInput > 0 && movementController.IsGrounded())
-            {
-                animator.SetBool("IsJumping", true);
-                animator.SetBool("IsGrounded", false);
-            }
-            else
-            {
-                animator.SetBool("IsJumping", false);
-            }
-
             // Firing
             if (inputController.fireInput > 0)
             {
@@ -131,39 +127,6 @@ namespace Ascendant.Controllers
                 && inputController.movementInput.y > 0)
             {
                 entityStateModel.groundedState = EntityGroundedState.Climbing;
-            }
-
-
-            // Animator updates.
-            if (inputController.movementInput.sqrMagnitude > 0 && entityStateModel.stanceState != EntityStanceState.Aiming && entityStateModel.firingState != EntityFiringState.Firing)
-            {
-                animator.SetFloat("MovementY", 1.0f, 10.1f, 3.5f);
-                animator.SetFloat("MovementX", 0.0f, 10.1f, 3.5f);
-                animator.SetBool("isRunning", true);
-            }
-            if (inputController.movementInput.sqrMagnitude > 0 && (entityStateModel.stanceState == EntityStanceState.Aiming || entityStateModel.firingState == EntityFiringState.Firing))
-            {
-                animator.SetFloat("MovementX", inputController.movementInput.x, 10.1f, 3.5f);
-                animator.SetFloat("MovementY", inputController.movementInput.y, 10.1f, 3.5f);
-                animator.SetBool("isRunning", true);
-            }
-            if (inputController.movementInput.sqrMagnitude < 0.01)
-            {
-                animator.SetBool("isRunning", false);
-            }
-            // Jumping is handled inside the callback function.
-
-            // Falling
-            if (!movementController.IsGrounded() && FallHeight() > 0.4f)
-            {
-                animator.SetBool("IsFalling", true);
-                //animator.SetBool("IsJumping", false);
-                animator.SetBool("IsGrounded", false);
-            }
-            if (movementController.IsGrounded())
-            {
-                animator.SetBool("IsFalling", false);
-                animator.SetBool("IsGrounded", true);
             }
         }
 
@@ -188,7 +151,7 @@ namespace Ascendant.Controllers
 
         public Networking.PlayerStateData ToPlayerStateData()
         {
-            return new Networking.PlayerStateData(GameManager.Instance.localPlayerId, -9.81f, this.transform.position, this.transform.rotation);
+            return entityStateModel.ToNetworkedState();
         }
 
         public bool IsAiming()
@@ -224,11 +187,19 @@ namespace Ascendant.Controllers
         public void Respawn()
         {
             transform.position = new Vector3(0, 0, 0);
-            statsManager.currentHealth = statsManager.maxHealth;
-            statsManager.currentShield = statsManager.maxShield;
+            statsController.RestoreAll();
             entityStateModel.aliveState = EntityAliveState.Alive;
         }
 
+        public void Jump()
+        {
+            entityStateModel.groundedState = EntityGroundedState.Jumping;
+        }
+
+        public void SetDirection(Vector3 direction)
+        {
+            entityStateModel.direction = direction;
+        }
 
     }
 }

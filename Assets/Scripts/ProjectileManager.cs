@@ -65,37 +65,10 @@ public class ProjectileManager : MonoBehaviour
         }
         collided = true;
 
-        if (hit.collider.GetComponent<PlayerStatsManager>() != null)
+        if (hit.collider.GetComponent<PlayerStatsController>() != null)
         {
-            hit.collider.GetComponent<PlayerStatsManager>().Damage(20.0f);
+            hit.collider.GetComponent<PlayerStatsController>().Damage(20.0f);
         }
-
-        /*
-
-        if (hit.distance * hit.distance > (speed * Time.deltaTime * transform.forward).sqrMagnitude)
-        {
-            potentialDistance = hit.distance;
-            potentialHit = hit.point;
-            transform.position += speed * Time.deltaTime * transform.forward;
-            return;
-        } else
-        {
-            impactPoint = hit.point;
-            if ((hit.point - origin).magnitude > potentialDistance)
-            {
-                impactPoint = potentialHit;
-                if (impactEffect != null && !collided)
-                {
-                    impactEffect.transform.position = impactPoint;
-                    impactEffect.Play();
-                }
-                collided = true;
-
-            }
-            transform.position = impactPoint;
-            //Destroy(this.gameObject);
-        }
-        */
     }
 
     private void OnDrawGizmos()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStatsManager : MonoBehaviour
+public class PlayerStatsController : MonoBehaviour
 {
     public float currentHealth { get; set; }
     public float maxHealth { get; set; }
@@ -40,4 +40,6 @@ public class PlayerStatsManager : MonoBehaviour
             }
         }
     }
+
+
 }

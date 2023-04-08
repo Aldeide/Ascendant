@@ -104,7 +104,7 @@ namespace Ascendant.Networking
                     case Tags.LoginRequestAccepted:
                         SpawnPlayerOnServerRequest();
                         break;
-                    case Tags.SpawnPlayer:
+                    case Tags.SpawnPlayerNotification:
                         OnSpawnPlayer(m.Deserialize<PlayerClientId>());
                         break;
                     case Tags.SyncOtherPlayer:
@@ -113,8 +113,16 @@ namespace Ascendant.Networking
                     case Tags.PlayerDisconnectedNotification:
                         OnPlayerDisconnectedNotification(m.Deserialize<PlayerClientId>());
                         break;
+                    case Tags.SyncPlayerStatsNotification:
+                        OnSyncStatsNotification(m.Deserialize<PlayerStatsData>());
+                        break;
                 }
             }
+        }
+
+        private void OnSyncStatsNotification(PlayerStatsData data)
+        {
+            GameManager.Instance.SyncOtherPlayerStats(data);
         }
 
         // Processes a notification that another player has disconnected. Removes the player

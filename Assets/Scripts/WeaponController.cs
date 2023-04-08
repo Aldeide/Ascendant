@@ -71,31 +71,6 @@ namespace Ascendant.Controllers
         // Update is called once per frame
         void Update()
         {
-            /*
-            if (playerMovementController.isSprinting && stance != 1)
-            {
-                weaponModel.transform.localPosition = currentWeapon.sprintPosition;
-                weaponModel.transform.localRotation = Quaternion.Euler(currentWeapon.sprintRotation);
-                stance = 1;
-            }
-            if (playerMovementController.isSliding || playerMovementController.crouchInput > 0 && stance != 2)
-            {
-                weaponModel.transform.localPosition = currentWeapon.crouchPosition;
-                weaponModel.transform.localRotation = Quaternion.Euler(currentWeapon.crouchRotation);
-                stance = 2;
-            }
-            if (!playerMovementController.isSliding && !playerMovementController.isSprinting && playerMovementController.crouchInput == 0 && stance != 0)
-            {
-                weaponModel.transform.localPosition = currentWeapon.hipFirePosition;
-                weaponModel.transform.localRotation = Quaternion.Euler(currentWeapon.hipFireRotation);
-                stance = 0;
-            }
-
-
-
-
-            AimingDownSights();
-            */
             if (lastFired > 0)
             {
                 lastFired -= Time.deltaTime;
@@ -117,8 +92,6 @@ namespace Ascendant.Controllers
                 effect.GetComponent<VisualEffect>().Play();
                 PlayFireAudio();
             }
-            // Handling weapon sway.
-            //WeaponSway();
         }
 
         public void AimingDownSights()

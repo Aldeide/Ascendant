@@ -1,3 +1,4 @@
+using Ascendant.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,11 @@ namespace Ascendant
         public RectTransform healthBar;
         public RectTransform shieldBar;
 
-        private PlayerStatsManager playerStatsManager;
+        private EntityStatsModel statsModel;
 
         void Start()
         {
-            playerStatsManager = GetComponentInParent<PlayerStatsManager>();
+            statsModel = GetComponentInParent<EntityStatsModel>();
         }
 
         void Update()
@@ -25,12 +26,12 @@ namespace Ascendant
             }
             healthBar.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
-                0.98f * playerStatsManager.currentHealth / playerStatsManager.maxHealth
+                0.98f * statsModel.currentHealth / statsModel.maxHealth
                 );
             shieldBar.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
-                0.98f * playerStatsManager.currentShield / playerStatsManager.maxShield
-                );
+                0.98f * statsModel.currentShield / statsModel.maxShield);
+                
         }
     }
 }

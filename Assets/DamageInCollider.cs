@@ -2,33 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageInCollider : MonoBehaviour
+namespace Ascendant
 {
-    public float damage = 10.0f;
-    public float tickDelay = 1.0f;
-    public float nextTick = 0;
-    // Start is called before the first frame update
-    void Start()
+    public class DamageInCollider : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if(Time.time > nextTick)
+        public float damage = 10.0f;
+        public float tickDelay = 1.0f;
+        public float nextTick = 0;
+        // Start is called before the first frame update
+        void Start()
         {
-            if (other.CompareTag("Player"))
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (Time.time > nextTick)
             {
-                other.GetComponent<PlayerStatsManager>().Damage(damage);
-                nextTick = Time.time + tickDelay;
+                if (other.CompareTag("Player"))
+                {
+                    other.GetComponent<Controllers.PlayerStatsController>().Damage(damage);
+                    nextTick = Time.time + tickDelay;
+                }
             }
         }
-    }
 
+    }
 }
+

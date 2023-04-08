@@ -57,7 +57,7 @@ namespace Ascendant.Controllers
         {
             if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             //if (IsGrounded()) { stateManager.GroundedState = PlayerGroundedState.Grounded; }
-
+            stateController.SetDirection(new Vector3(inputController.movementInput.x, inputController.movementInput.y, 0f));
             ComputeSpeed();
             forward = Camera.main.transform.forward;
             forward.y = 0f;
@@ -67,7 +67,7 @@ namespace Ascendant.Controllers
             right.Normalize();
 
             direction = forward * inputController.movementInput.y + right * inputController.movementInput.x;
-
+            
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             var currentAngle = transform.rotation.eulerAngles.y;
             var currentAngleVelocity = 0f;
@@ -80,26 +80,30 @@ namespace Ascendant.Controllers
             }
             currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
 
-            // Performing the player rotation.
-            if (inputController.movementInput.sqrMagnitude > 0)
+            if (stateController.CanMove())
             {
-                if (!stateController.IsAiming() && !stateController.IsFiring())
+                // Performing the player rotation.
+                if (inputController.movementInput.sqrMagnitude > 0)
                 {
-                    transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                    if (!stateController.IsAiming() && !stateController.IsFiring())
+                    {
+                        transform.rotation = Quaternion.Euler(0, currentAngle, 0);
+                    }
+                    else
+                    {
+                        Vector3 lookAtTest = this.transform.position + forward;
+                        lookAtTest.y = this.transform.position.y;
+                        this.transform.LookAt(lookAtTest);
+                    }
                 }
-                else
+                else if (stateController.IsAiming() || stateController.IsFiring())
                 {
-                    Vector3 lookAtTest = this.transform.position + forward;
-                    lookAtTest.y = this.transform.position.y;
-                    this.transform.LookAt(lookAtTest);
+                    Vector3 lookAtvector = this.transform.position + forward;
+                    lookAtvector.y = this.transform.position.y;
+                    this.transform.LookAt(lookAtvector);
                 }
             }
-            else if (stateController.IsAiming() || stateController.IsFiring())
-            {
-                Vector3 lookAtvector = this.transform.position + forward;
-                lookAtvector.y = this.transform.position.y;
-                this.transform.LookAt(lookAtvector);
-            }
+
 
             if (stateController.IsClimbing())
             {
@@ -120,6 +124,9 @@ namespace Ascendant.Controllers
             {
                 characterController.Move(direction * Time.deltaTime);
             }
+
+            
+
 
             // Debug lines.
             Debug.DrawLine(transform.position, transform.position + forward, Color.red);
@@ -168,6 +175,7 @@ namespace Ascendant.Controllers
             if (!IsGrounded()) return;
             if (inputController.jumpInput == 0) return;
             verticalVelocity += 2.2f;
+            stateController.Jump();
             //stateManager.GroundedState = PlayerGroundedState.Jumping;
         }
 
