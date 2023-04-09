@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using FishNet.Object;
 namespace Ascendant.Controllers
 {
-    public class PlayerCameraController : MonoBehaviour
+    public class PlayerCameraController : NetworkBehaviour
     {
         // Cinemachine cameras.
         public GameObject defaultCamera;
@@ -16,7 +16,6 @@ namespace Ascendant.Controllers
 
         void Start()
         {
-            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
             stateController = GetComponent<PlayerStateController>();
             defaultCamera = GameObject.Find("Camera - Third-Person");
             sprintCamera = GameObject.Find("Camera - Sprinting");
@@ -29,7 +28,7 @@ namespace Ascendant.Controllers
         // Update is called once per frame
         void Update()
         {
-            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
+            if (!IsOwner) return;
             // Activate aim camera if needed. The aim camera is much closer to the player.
             if (stateController.IsAiming() && !aimCamera.activeInHierarchy)
             {

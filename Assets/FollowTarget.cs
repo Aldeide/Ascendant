@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using FishNet;
 
 namespace Ascendant
 {
@@ -11,11 +12,13 @@ namespace Ascendant
         // Start is called before the first frame update
         void Start()
         {
+            /*
             if (GameManager.Instance.localPlayer != null)
             {
                 target = GameManager.Instance.localPlayer.transform.GetComponentsInChildren<Transform>()
                         .Where(transform => transform.name == "mixamorig:Neck").First();
             }
+            */
         }
 
         // Update is called once per frame
@@ -23,7 +26,7 @@ namespace Ascendant
         {
             if (target == null)
             {
-                target = GameManager.Instance.localPlayer.transform.GetComponentsInChildren<Transform>()
+                target = GameManager.Instance.localPlayer.GetComponent<Player>().controlledCharacter.transform.GetComponentsInChildren<Transform>()
                     .Where(transform => transform.name == "mixamorig:Neck").First();
             }
             Vector3 targetPosition = target.transform.position;

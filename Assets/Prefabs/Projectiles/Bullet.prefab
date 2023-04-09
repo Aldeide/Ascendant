@@ -179,7 +179,7 @@ MonoBehaviour:
   ttl: 4
   layerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 769
   impactEffect: {fileID: 0}
 --- !u!1 &5400856961627095664
 GameObject:

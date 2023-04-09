@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using FishNet;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using FishNet.Object.Prediction;
+using FishNet.Transporting;
 
 namespace Ascendant.Controllers
 {
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInputController))]
-    public class PlayerMovementController : MonoBehaviour
+    public sealed class PlayerMovementController : NetworkBehaviour
     {
         public LayerMask layerMask;
         public GameObject followTarget;
@@ -43,7 +48,37 @@ namespace Ascendant.Controllers
         private PlayerStateController stateController;
 
 
-        void Start()
+        public override void OnStartNetwork()
+        {
+            base.OnStartNetwork();
+            base.TimeManager.OnTick += TimeManagerOnTick;
+        }
+
+        public override void OnStopNetwork()
+        {
+            base.OnStopNetwork();
+            if (base.TimeManager != null)
+            {
+                base.TimeManager.OnTick -= TimeManagerOnTick;
+            }
+        }
+
+        private void TimeManagerOnTick()
+        {
+            if (base.IsOwner)
+            {
+                BuildActions(out MoveData moveData);
+                Move(moveData, false);
+            }
+        }
+
+        private void BuildActions(out MoveData moveData)
+        {
+            moveData = default;
+            moveData.inputData = inputController.inputData;
+        }
+
+        void Awake()
         {
             currentSpeed = 0f;
             stateController = GetComponent<PlayerStateController>();
@@ -55,9 +90,19 @@ namespace Ascendant.Controllers
 
         void Update()
         {
-            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
-            //if (IsGrounded()) { stateManager.GroundedState = PlayerGroundedState.Grounded; }
-            stateController.SetDirection(new Vector3(inputController.movementInput.x, inputController.movementInput.y, 0f));
+            // Debug lines.
+            Debug.DrawLine(transform.position, transform.position + forward, Color.red);
+            Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
+            Debug.DrawLine(transform.position, transform.position + direction, Color.blue);
+
+            CameraRotation();
+        }
+
+        [Replicate]
+        private void Move(MoveData moveData, bool asServer, Channel channel = Channel.Unreliable, bool replaying = false)
+        {
+            float delta = (float)base.TimeManager.TickDelta;
+            stateController.SetDirection(new Vector3(moveData.inputData.movementInput.x, moveData.inputData.movementInput.y, 0f));
             ComputeSpeed();
             forward = Camera.main.transform.forward;
             forward.y = 0f;
@@ -66,8 +111,8 @@ namespace Ascendant.Controllers
             right.y = 0f;
             right.Normalize();
 
-            direction = forward * inputController.movementInput.y + right * inputController.movementInput.x;
-            
+            direction = forward * moveData.inputData.movementInput.y + right * moveData.inputData.movementInput.x;
+
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             var currentAngle = transform.rotation.eulerAngles.y;
             var currentAngleVelocity = 0f;
@@ -83,7 +128,7 @@ namespace Ascendant.Controllers
             if (stateController.CanMove())
             {
                 // Performing the player rotation.
-                if (inputController.movementInput.sqrMagnitude > 0)
+                if (moveData.inputData.movementInput.sqrMagnitude > 0)
                 {
                     if (!stateController.IsAiming() && !stateController.IsFiring())
                     {
@@ -107,12 +152,12 @@ namespace Ascendant.Controllers
 
             if (stateController.IsClimbing())
             {
-                direction = direction = up * inputController.movementInput.y + right * inputController.movementInput.x;
+                direction = direction = up * moveData.inputData.movementInput.y + right * moveData.inputData.movementInput.x;
             }
             else
             {
                 Jump();
-                Gravity();
+                Gravity(delta);
             }
 
             // Applying speed and perfoming the movement.
@@ -122,34 +167,33 @@ namespace Ascendant.Controllers
 
             if (stateController.CanMove())
             {
-                characterController.Move(direction * Time.deltaTime);
+
+                characterController.Move(direction * delta);
             }
-
-            
-
-
-            // Debug lines.
-            Debug.DrawLine(transform.position, transform.position + forward, Color.red);
-            Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
-            Debug.DrawLine(transform.position, transform.position + direction, Color.blue);
-
-            CameraRotation();
         }
+
+        [Reconcile]
+        private void Reconcile(MoveReconcileData data, bool asServer, Channel channel = Channel.Unreliable)
+        {
+            transform.position = data.position;
+            verticalVelocity = data.verticalVelocity;
+        }
+
         private void ComputeSpeed()
         {
             if (currentSpeed < 0)
             {
                 currentSpeed = 0;
             }
-            if (inputController.movementInput.magnitude == 0)
+            if (inputController.inputData.movementInput.magnitude == 0)
             {
                 currentSpeed = 2.0f;
             }
-            if (inputController.crouchInput > 0 && IsGrounded() && currentSpeed < 3.0f)
+            if (inputController.inputData.crouchInput > 0 && IsGrounded() && currentSpeed < 3.0f)
             {
                 currentSpeed = maxCrouchingSpeed;
             }
-            if (inputController.sprintInput > 0)
+            if (inputController.inputData.sprintInput > 0)
             {
                 currentSpeed += Time.deltaTime * sprintAcceleration;
                 if (currentSpeed > maxSprintingSpeed)
@@ -158,7 +202,7 @@ namespace Ascendant.Controllers
                 }
                 return;
             }
-            if (inputController.movementInput.magnitude > 0.1f)
+            if (inputController.inputData.movementInput.magnitude > 0.1f)
             {
                 currentSpeed += Time.deltaTime * sprintAcceleration;
                 if (currentSpeed > maxRunningSpeed)
@@ -173,7 +217,7 @@ namespace Ascendant.Controllers
         private void Jump()
         {
             if (!IsGrounded()) return;
-            if (inputController.jumpInput == 0) return;
+            if (inputController.inputData.jumpInput == 0) return;
             verticalVelocity += 2.2f;
             stateController.Jump();
             //stateManager.GroundedState = PlayerGroundedState.Jumping;
@@ -185,7 +229,7 @@ namespace Ascendant.Controllers
             //stateManager.GroundedState = PlayerGroundedState.Falling;
         }
 
-        private void Gravity()
+        private void Gravity(float delta)
         {
             if (IsGrounded() && verticalVelocity < 0f)
             {
@@ -193,7 +237,7 @@ namespace Ascendant.Controllers
             }
             else
             {
-                verticalVelocity += -10 * 0.81f * Time.deltaTime;
+                verticalVelocity += -10 * 0.81f * delta;
             }
             direction.y = verticalVelocity;
         }
@@ -203,8 +247,8 @@ namespace Ascendant.Controllers
         private void CameraRotation()
         {
             // Horizontal Camera Rotation.
-            followTarget.transform.rotation *= Quaternion.AngleAxis(inputController.lookInput.x * rotationPower, Vector3.up);
-            followTarget.transform.rotation *= Quaternion.AngleAxis(inputController.lookInput.y * rotationPower, -1.0f * Vector3.right);
+            followTarget.transform.rotation *= Quaternion.AngleAxis(inputController.inputData.lookInput.x * rotationPower, Vector3.up);
+            followTarget.transform.rotation *= Quaternion.AngleAxis(inputController.inputData.lookInput.y * rotationPower, -1.0f * Vector3.right);
 
             // Vertical Camera Rotation
             var angles = followTarget.transform.localEulerAngles;
@@ -222,7 +266,10 @@ namespace Ascendant.Controllers
             followTarget.transform.localEulerAngles = angles;
         }
 
+        
+
     }
+
 }
 
 

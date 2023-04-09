@@ -8,10 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Models/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Login.unity
     guid: 8927f2cf65a3a854095626a1456c7ffc
   - enabled: 1
     path: Assets/Scenes/TPS.unity
     guid: 69b5a394da2feb74a867144801ef49bb
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 831cdb9f24c5c204c9118a784698b534,
+      type: 2}

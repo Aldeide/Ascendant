@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
+using FishNet.Object.Synchronizing.Internal;
 
 namespace Ascendant.Models
 {
@@ -37,47 +40,29 @@ namespace Ascendant.Models
         Alive,
         Dead
     }
-    public class EntityStateModel : MonoBehaviour
+    public class EntityStateModel : NetworkBehaviour
     {
-        public Vector3 position;
-        public Vector3 direction;
-        public Quaternion rotation;
-        public Vector3 aimPoint;
+        [field: SyncVar]
+        public Vector3 position { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public Vector3 direction { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public Quaternion rotation { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public Vector3 aimPoint { get; [ServerRpc] set; }
 
-        public EntityMovementState movementState { get; set; }
-        public EntityStanceState stanceState { get; set; }
-        public EntityGroundedState groundedState { get; set; }
-        public EntityFiringState firingState { get; set; }
-        public EntityAliveState aliveState { get; set; }
-        public float timeOfDeath { get; set; }
-
-        public EntityStateModel(Vector3 position, Vector3 direction, Quaternion rotation, Vector3 aimPoint)
-        {
-            this.position = position;
-            this.direction = direction;
-            this.rotation = rotation;
-            this.aimPoint = aimPoint;
-
-            movementState = EntityMovementState.Idle;
-            stanceState = EntityStanceState.Upright;
-            groundedState = EntityGroundedState.Grounded;
-            firingState = EntityFiringState.Firing;
-            aliveState = EntityAliveState.Alive;
-        }
-
-        public EntityStateModel()
-        {
-            this.position = Vector3.zero;
-            this.direction = Vector3.zero;
-            this.rotation= Quaternion.identity;
-            this.aimPoint = Vector3.zero;
-
-            movementState = EntityMovementState.Idle;
-            stanceState = EntityStanceState.Upright;
-            groundedState = EntityGroundedState.Grounded;
-            firingState = EntityFiringState.Firing;
-            aliveState = EntityAliveState.Alive;
-        }
+        [field: SyncVar]
+        public EntityMovementState movementState { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public EntityStanceState stanceState { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public EntityGroundedState groundedState { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public EntityFiringState firingState { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public EntityAliveState aliveState { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public float timeOfDeath { get; [ServerRpc] set; }
 
         public bool IsMoving()
         {
@@ -120,5 +105,11 @@ namespace Ascendant.Models
         }
 
     }
+
+    public class SyncEntityStateModel : SyncBase, ICustomSync
+    {
+        public object GetSerializedType() => typeof(EntityStateModel);
+    }
+
 }
 

@@ -65,9 +65,10 @@ public class ProjectileManager : MonoBehaviour
         }
         collided = true;
 
-        if (hit.collider.GetComponent<PlayerStatsController>() != null)
+        if (hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>() != null)
         {
-            hit.collider.GetComponent<PlayerStatsController>().Damage(20.0f);
+            Debug.Log("hit");
+            hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>().Damage(2.0f);
         }
     }
 

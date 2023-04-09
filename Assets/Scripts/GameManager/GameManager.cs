@@ -5,15 +5,23 @@ using DarkRift;
 using DarkRift.Client;
 using Ascendant.Networking;
 using System;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
 namespace Ascendant
 {
-    public class GameManager : MonoBehaviour
+    public sealed class GameManager : NetworkBehaviour
     {
+        public static GameManager Instance { get; private set; }
+
+        [SyncObject]
+        public readonly SyncList<Player> players = new();
+
+
         public GameObject playerPrefab;
         public Dictionary<ushort, GameObject> connectedPlayers = new Dictionary<ushort, GameObject>();
         public ushort localPlayerId;
-        public static GameManager Instance;
+        
         public GameObject localPlayer;
         public GameObject networkedPlayerPrefab;
 
@@ -26,22 +34,27 @@ namespace Ascendant
             }
 
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         // Start is called before the first frame update
         void Start()
         {
             //localPlayer = GameObject.Find("NetworkedPlayer");
             
-            localPlayerId = ConnectionManager.Instance.Client.ID;
-            Debug.Log("Local Player ID set to: " + localPlayerId);
-            ConnectionManager.Instance.SpawnPlayerOnServerRequest();
+            //localPlayerId = ConnectionManager.Instance.Client.ID;
+            //Debug.Log("Local Player ID set to: " + localPlayerId);
+            //ConnectionManager.Instance.SpawnPlayerOnServerRequest();
             
+        }
+
+        private void Update()
+        {
+            if (!IsServer) return;
         }
 
 
         void FixedUpdate()
         {
+            /*
             if (localPlayer == null)
             {
                 localPlayer = GameObject.Find("NetworkedPlayer");
@@ -55,6 +68,7 @@ namespace Ascendant
             {
                 ConnectionManager.Instance.Client.SendMessage(message, SendMode.Reliable);
             }
+            */
         }
 
         public void SpawnLocalPlayer(SpawnLocalPlayerResponseData data)

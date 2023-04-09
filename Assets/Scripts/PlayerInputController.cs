@@ -1,53 +1,61 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using FishNet.Object;
 
 namespace Ascendant
 {
-    public class PlayerInputController : MonoBehaviour
+    public struct InputData
     {
-        public Vector2 movementInput = new Vector2();
-        public Vector2 lookInput = new Vector2();
-        public float sprintInput = 0f;
-        public float crouchInput = 0f;
-        public float aimInput = 0f;
-        public float fireInput = 0f;
-        public float jumpInput = 0f;
+        public Vector2 movementInput;
+        public Vector2 lookInput;
+        public float sprintInput;
+        public float crouchInput;
+        public float aimInput;
+        public float fireInput;
+        public float jumpInput;
+    }
+
+
+    public class PlayerInputController : NetworkBehaviour
+    {
+        public InputData inputData;
 
         // Callbacks.
         public void OnMoveCallback(InputAction.CallbackContext context)
         {
-            movementInput = context.ReadValue<Vector2>();
+            if (!IsOwner) return;
+            inputData.movementInput = context.ReadValue<Vector2>();
         }
         public void OnLookCallback(InputAction.CallbackContext context)
         {
-            lookInput = context.ReadValue<Vector2>();
+            if (!IsOwner) return;
+            inputData.lookInput = context.ReadValue<Vector2>();
         }
         public void OnSprintCallback(InputAction.CallbackContext context)
         {
-            sprintInput = context.ReadValue<float>();
+            if (!IsOwner) return;
+            inputData.sprintInput = context.ReadValue<float>();
         }
         public void OnCrouchCallback(InputAction.CallbackContext context)
         {
-            crouchInput = context.ReadValue<float>();
+            if (!IsOwner) return;
+            inputData.crouchInput = context.ReadValue<float>();
         }
         public void OnAimCallback(InputAction.CallbackContext context)
         {
-            aimInput = context.ReadValue<float>();
+            if (!IsOwner) return;
+            inputData.aimInput = context.ReadValue<float>();
         }
         public void OnJumpCallback(InputAction.CallbackContext context)
         {
-            jumpInput = context.ReadValue<float>();
+            if (!IsOwner) return;
+            inputData.jumpInput = context.ReadValue<float>();
         }
         public void OnFireCallBack(InputAction.CallbackContext context)
         {
-            fireInput = context.ReadValue<float>();
+            if (!IsOwner) return;
+            inputData.fireInput = context.ReadValue<float>();
         }
-
-        public Networking.PlayerInputData ToPlayerInputData()
-        {
-            return new Networking.PlayerInputData(movementInput, this.transform.rotation, sprintInput, crouchInput, aimInput, fireInput, jumpInput, 1);
-        }
-
     }
 }
 

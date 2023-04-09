@@ -75,8 +75,8 @@ namespace Ascendant.Networking
 
         void OnDestroy()
         {
-            ConnectionManager.Instance.OnConnected -= StartLoginProcess;
-            ConnectionManager.Instance.Client.MessageReceived -= OnMessage;
+            //ConnectionManager.Instance.OnConnected -= StartLoginProcess;
+            //ConnectionManager.Instance.Client.MessageReceived -= OnMessage;
         }
     }
 }

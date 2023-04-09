@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
 namespace Ascendant.Controllers
 {
@@ -10,14 +12,14 @@ namespace Ascendant.Controllers
     [RequireComponent(typeof(PlayerInputController))]
     [RequireComponent(typeof(PlayerMovementController))]
     [RequireComponent(typeof(EntityStateModel))]
-    public class PlayerStateController : MonoBehaviour
+    public class PlayerStateController : NetworkBehaviour
     {
         private Animator animator;
         private PlayerMovementController movementController;
         private PlayerInputController inputController;
         private PlayerStatsController statsController;
 
-        public EntityStateModel entityStateModel { get; set; }
+        public EntityStateModel entityStateModel;
 
         private Ray dectectClimbableRay;
         private RaycastHit hitInfo;
@@ -42,7 +44,7 @@ namespace Ascendant.Controllers
 
         void Update()
         {
-            if (!GameManager.Instance.IsLocalPlayer(this.gameObject)) return;
+            if (!IsOwner) return;
 
             entityStateModel.position = this.transform.position;
             entityStateModel.rotation = this.transform.rotation;
@@ -76,10 +78,10 @@ namespace Ascendant.Controllers
 
 
             // Movement state update.
-            if (inputController.movementInput.sqrMagnitude > 0)
+            if (inputController.inputData.movementInput.sqrMagnitude > 0)
             {
                 entityStateModel.movementState = EntityMovementState.Running;
-                if (inputController.sprintInput > 0)
+                if (inputController.inputData.sprintInput > 0)
                 {
                     entityStateModel.movementState = EntityMovementState.Sprinting;
                 }
@@ -90,13 +92,13 @@ namespace Ascendant.Controllers
             }
 
             // Stance state update.
-            if (inputController.crouchInput > 0)
+            if (inputController.inputData.crouchInput > 0)
             {
                 entityStateModel.stanceState = EntityStanceState.Crouched;
             }
 
             // Aiming overrides crouching.
-            if (inputController.aimInput > 0)
+            if (inputController.inputData.aimInput > 0)
             {
                 entityStateModel.stanceState = EntityStanceState.Aiming;
             }
@@ -106,7 +108,7 @@ namespace Ascendant.Controllers
             }
 
             // Firing
-            if (inputController.fireInput > 0)
+            if (inputController.inputData.fireInput > 0)
             {
                 // TODO: maintaining the fire button but not being able to fire (e.g. reloading) should not reset
                 // the timer.
@@ -124,7 +126,7 @@ namespace Ascendant.Controllers
             if (entityStateModel.groundedState != EntityGroundedState.Climbing
                 && Physics.Raycast(dectectClimbableRay, out hitInfo, 0.8f)
                 && hitInfo.collider.gameObject.tag == "Climbable"
-                && inputController.movementInput.y > 0)
+                && inputController.inputData.movementInput.y > 0)
             {
                 entityStateModel.groundedState = EntityGroundedState.Climbing;
             }

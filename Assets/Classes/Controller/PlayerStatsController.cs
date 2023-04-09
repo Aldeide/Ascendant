@@ -2,12 +2,13 @@ using Ascendant.Models;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using FishNet.Object;
+using FishNet.Object.Synchronizing;
 
 namespace Ascendant.Controllers
 {
     [RequireComponent(typeof(EntityStatsModel))]
-    public class PlayerStatsController : MonoBehaviour
+    public class PlayerStatsController : NetworkBehaviour
     {
         public EntityStatsModel statsModel;
 
@@ -23,29 +24,21 @@ namespace Ascendant.Controllers
 
         }
 
-        public Networking.PlayerStatsData ToPlayerStatsData()
-        {
-            return new Networking.PlayerStatsData(
-                GameManager.Instance.localPlayerId,
-                statsModel.currentHealth,
-                statsModel.maxHealth,
-                statsModel.currentShield,
-                statsModel.maxShield
-                );
-        }
-
         public float GetHealth()
         {
             return statsModel.currentHealth;
         }
 
+        [ServerRpc]
         public void RestoreAll()
         {
             statsModel.currentHealth = statsModel.maxHealth;
             statsModel.currentShield = statsModel.maxShield;
         }
+        [ServerRpc(RequireOwnership =false)]
         public void Damage(float damage)
         {
+            Debug.Log("Applying damage: " + damage);
             statsModel.currentShield -= damage;
             if (statsModel.currentShield < 0)
             {
