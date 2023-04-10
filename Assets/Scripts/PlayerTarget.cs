@@ -1,31 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FishNet.Object;
 
 namespace Ascendant
 {
-    public class PlayerTarget : MonoBehaviour
+    public class PlayerTarget : NetworkBehaviour
     {
         public LayerMask layerMask;
-        public GameObject player;
-
         private Vector3 newTarget = new Vector3();
+
 
         void Start()
         {
-            if (GameManager.Instance.localPlayer != null)
-            {
-                player = GameManager.Instance.localPlayer;
-            }
             Cursor.lockState = CursorLockMode.Locked;
         }
 
         void Update()
         {
-            if (player == null)
-            {
-                player = GameManager.Instance.localPlayer;
-            }
+            if (!IsOwner) return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray.origin, ray.direction, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore))

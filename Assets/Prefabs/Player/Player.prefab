@@ -50,6 +50,8 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 548582297127928802}
   username: 
   controlledCharacter: {fileID: 0}
+  targetPrefab: {fileID: 8511580608413211299, guid: 4afd1552b432a0041ab38002c535b8ef,
+    type: 3}
 --- !u!114 &548582297127928802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,15 +66,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <IsNested>k__BackingField: 0
   <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
   - {fileID: 8851503693825674020}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
   _isGlobal: 0
+  _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: -1
+  <PrefabId>k__BackingField: 65535
+  <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 2376927613
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 4121606829519803397

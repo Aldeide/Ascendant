@@ -26,12 +26,18 @@ namespace Ascendant
         {
             if (target == null)
             {
-                target = GameManager.Instance.localPlayer.GetComponent<Player>().controlledCharacter.transform.GetComponentsInChildren<Transform>()
-                    .Where(transform => transform.name == "mixamorig:Neck").First();
+                return;
+                //target = GameManager.Instance.localPlayer.GetComponent<Player>().controlledCharacter.transform.GetComponentsInChildren<Transform>()
+                //    .Where(transform => transform.name == "mixamorig:Neck").First();
             }
             Vector3 targetPosition = target.transform.position;
             targetPosition.y = target.transform.position.y + 1.5f;
             this.transform.position = targetPosition;
+        }
+
+        public void AssignTarget(Transform transform)
+        {
+            this.target = transform;
         }
     }
 }

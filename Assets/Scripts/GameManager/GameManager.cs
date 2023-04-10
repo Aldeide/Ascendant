@@ -51,26 +51,6 @@ namespace Ascendant
             if (!IsServer) return;
         }
 
-
-        void FixedUpdate()
-        {
-            /*
-            if (localPlayer == null)
-            {
-                localPlayer = GameObject.Find("NetworkedPlayer");
-                return;
-            }
-            using (Message message = Message.Create((ushort)Tags.SyncPlayerStateRequest, localPlayer.GetComponent<Controllers.PlayerStateController>().ToPlayerStateData()))
-                {
-                    ConnectionManager.Instance.Client.SendMessage(message, SendMode.Reliable);
-                }
-            using (Message message = Message.Create((ushort)Tags.SyncPlayerStatsRequest, localPlayer.GetComponent<Controllers.PlayerStatsController>().ToPlayerStatsData()))
-            {
-                ConnectionManager.Instance.Client.SendMessage(message, SendMode.Reliable);
-            }
-            */
-        }
-
         public void SpawnLocalPlayer(SpawnLocalPlayerResponseData data)
         {
             if (!connectedPlayers.ContainsKey(data.ID))
@@ -93,17 +73,10 @@ namespace Ascendant
             }
         }
 
-        public bool IsLocalPlayer(GameObject obj)
-        {
-            //return true;
-            return UnityEngine.Object.Equals(obj, localPlayer);
-        }
-
         internal void SyncOtherPlayer(PlayerStateData playerStateData)
         {
             Debug.Log("Syncing another player with id: " + playerStateData.id);
             if (localPlayerId == playerStateData.id) return;
-            connectedPlayers[playerStateData.id].GetComponent<Controllers.EntityStateSyncController>().SyncState(playerStateData);
         }
 
         internal void RemovePlayer(ushort id)
@@ -117,7 +90,6 @@ namespace Ascendant
         {
             Debug.Log("Syncing stats from player with id:" + data.id);
             if (localPlayerId == data.id) return;
-            connectedPlayers[data.id].GetComponent<Controllers.EntityStateSyncController>().SyncStats(data);
         }
     }
 }

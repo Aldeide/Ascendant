@@ -14,14 +14,18 @@ namespace Ascendant
 
         [SyncVar]
         public Character controlledCharacter;
+        [SyncVar]
+        public GameObject aimTarget;
 
         private bool spawnRequested = false;
+
+        [SerializeField]
+        private GameObject targetPrefab;
 
         public override void OnStartServer()
         {
             base.OnStartServer();
             GameManager.Instance.players.Add(this);
-            
         }
 
         public override void OnStopServer()
@@ -35,11 +39,8 @@ namespace Ascendant
             if (controlledCharacter == null && !spawnRequested)
             {
                 ServerSpawnCharacter();
+                //ServerSpawnTarget();
                 spawnRequested = true;
-            }
-            if (GameManager.Instance.localPlayer == null)
-            {
-                GameManager.Instance.localPlayer = this.gameObject;
             }
         }
 
@@ -52,6 +53,22 @@ namespace Ascendant
             this.controlledCharacter = characterInstance.GetComponent<Character>();
             controlledCharacter.controllingPlayer = this;
             Spawn(characterInstance, Owner);
+
+            
+
+            
+            
+        }
+
+        [ServerRpc]
+        private void ServerSpawnTarget()
+        {
+            GameObject target = Instantiate(targetPrefab);
+            aimTarget = target;
+            controlledCharacter.gameObject.GetComponent<Controllers.PlayerStateController>().aimTarget = target;
+            controlledCharacter.gameObject.GetComponent<Controllers.WeaponController>().target = target;
+            controlledCharacter.gameObject.GetComponent<RootMotion.FinalIK.AimIK>().solver.target = target.transform;
+            Spawn(target, Owner);
         }
 
     }

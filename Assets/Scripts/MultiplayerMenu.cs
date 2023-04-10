@@ -18,11 +18,11 @@ namespace Ascendant.Networking
             hostButton.onClick.AddListener(() =>
             {
                 InstanceFinder.ServerManager.StartConnection();
-                InstanceFinder.ClientManager.StartConnection();
+                InstanceFinder.ClientManager.StartConnection("82.66.176.102", 7770);
             });
             connectButton.onClick.AddListener(() =>
             {
-                InstanceFinder.ClientManager.StartConnection();
+                InstanceFinder.ClientManager.StartConnection("82.66.176.102", 7770);
             });
         }
     }

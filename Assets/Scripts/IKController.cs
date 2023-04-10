@@ -10,16 +10,20 @@ namespace Ascendant.Controllers
     {
         public PlayerStateController stateController;
         public AimIK aimIK;
-        public GameObject target;
+        public Transform target;
 
-        void Start()
+        void Awake()
         {
             stateController = GetComponent<PlayerStateController>();
             aimIK = GetComponent<AimIK>();
-            target = GameObject.Find("Game/Target");
-            aimIK.solver.target = target.transform;
+            
+            
         }
 
+        private void Start()
+        {
+            aimIK.solver.target = target;
+        }
 
         void Update()
         {
@@ -43,7 +47,7 @@ namespace Ascendant.Controllers
         // Returns false otherwise.
         bool HasSufficientDistance()
         {
-            if (Vector3.Distance(target.transform.position, this.transform.position) > 1.5f)
+            if (Vector3.Distance(stateController.aimTarget.transform.position, this.transform.position) > 1.5f)
             {
                 return true;
             }

@@ -1671,6 +1671,99 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.03329125, y: -0.25025594, z: 0.041062422}
     m_Extent: {x: 0.3055078, y: 0.8202065, z: 0.18646497}
   m_DirtyAABB: 0
+--- !u!1 &2977129787365871825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1259964687627849061}
+  - component: {fileID: 2159623432480487079}
+  - component: {fileID: 2759909162938660939}
+  m_Layer: 8
+  m_Name: AimTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1259964687627849061
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977129787365871825}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 256421593496237806}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2159623432480487079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977129787365871825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 9
+  _addedNetworkObject: {fileID: 3842749986559891388}
+  _networkObjectCache: {fileID: 3842749986559891388}
+  _componentConfiguration: 0
+  _synchronizeParent: 0
+  _packing:
+    Position: 1
+    Rotation: 1
+    Scale: 0
+  _interpolation: 2
+  _extrapolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  _clientAuthoritative: 1
+  _sendToOwner: 1
+  _synchronizePosition: 1
+  _positionSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeRotation: 1
+  _rotationSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeScale: 1
+  _scaleSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+--- !u!114 &2759909162938660939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2977129787365871825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1ad7ff7ae49d24dbcd015844e3aca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 10
+  _addedNetworkObject: {fileID: 3842749986559891388}
+  _networkObjectCache: {fileID: 3842749986559891388}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &2994998863334647968
 GameObject:
   m_ObjectHideFlags: 0
@@ -4755,8 +4848,9 @@ Transform:
   - {fileID: 8614506300486030363}
   - {fileID: 7482135294029319430}
   - {fileID: 9223340562240089288}
+  - {fileID: 1259964687627849061}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 158.258, z: 0}
 --- !u!114 &1316568927006552809
 MonoBehaviour:
@@ -5207,6 +5301,7 @@ MonoBehaviour:
   fireDelay: 100
   muzzleTransform: {fileID: 0}
   effect: {fileID: 0}
+  target: {fileID: 2977129787365871825}
   cameraRecoil: {fileID: 0}
   stance: 0
 --- !u!95 &324966920431409710
@@ -5252,6 +5347,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
+  aimTarget: {fileID: 2977129787365871825}
 --- !u!114 &2804118561317603701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5266,7 +5362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateController: {fileID: 0}
   aimIK: {fileID: 0}
-  target: {fileID: 0}
+  target: {fileID: 1259964687627849061}
 --- !u!114 &9057063105984657727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5805,10 +5901,10 @@ MonoBehaviour:
   fixTransforms: 1
   solver:
     executedInEditor: 0
-    IKPosition: {x: 2.6428037, y: -2.2339025, z: 0.6619595}
+    IKPosition: {x: 1.2363958, y: -2.5051837, z: -24.78317}
     IKPositionWeight: 1
     root: {fileID: 256421593496237806}
-    target: {fileID: 0}
+    target: {fileID: 1259964687627849061}
     tolerance: 0
     maxIterations: 4
     useRotationLimits: 1
@@ -5818,8 +5914,8 @@ MonoBehaviour:
       weight: 1
       solverPosition: {x: 0, y: 0, z: 0}
       solverRotation: {x: 0, y: 0, z: 0, w: 0}
-      defaultLocalPosition: {x: 9.964063e-11, y: 0.27841517, z: 3.5581792e-16}
-      defaultLocalRotation: {x: 0.00075806363, y: -0.008668469, z: 0.08709546, w: 0.996162}
+      defaultLocalPosition: {x: -0.00000008940692, y: 0.27841538, z: 0.00000015239894}
+      defaultLocalRotation: {x: -0.038235545, y: -0.10919314, z: 0.36028332, w: 0.9256408}
       length: 0
       sqrMag: 0
       axis: {x: 0, y: 0, z: 0}
@@ -5827,15 +5923,15 @@ MonoBehaviour:
       weight: 1
       solverPosition: {x: 0, y: 0, z: 0}
       solverRotation: {x: 0, y: 0, z: 0, w: 0}
-      defaultLocalPosition: {x: -0.00000022858599, y: 0.2832884, z: 0.000000044725386}
-      defaultLocalRotation: {x: -0.20188607, y: -0.25291184, z: 0.115184575, w: 0.93915397}
+      defaultLocalPosition: {x: -0.00000031664945, y: 0.28328854, z: 0.00000015297972}
+      defaultLocalRotation: {x: 0.09945739, y: -0.005782288, z: 0.10845466, w: 0.9890968}
       length: 0
       sqrMag: 0
       axis: {x: 0, y: 0, z: 0}
     transform: {fileID: 8976537455280994021}
     axis: {x: 0, y: 0, z: 1}
     poleAxis: {x: 0, y: 1, z: 0}
-    polePosition: {x: 1.4631768, y: -0.12809527, z: -2.8271747}
+    polePosition: {x: 1.4811257, y: -0.110064685, z: -21.289814}
     poleWeight: 0
     poleTarget: {fileID: 0}
     clampWeight: 0.1
@@ -5891,7 +5987,7 @@ MonoBehaviour:
   <position>k__BackingField: {x: 0, y: 0, z: 0}
   <direction>k__BackingField: {x: 0, y: 0, z: 0}
   <rotation>k__BackingField: {x: 0, y: 0, z: 0, w: 0}
-  <aimPoint>k__BackingField: {x: 0, y: 0, z: 0}
+  <aimPoint>k__BackingField: {fileID: 0}
   <movementState>k__BackingField: 0
   <stanceState>k__BackingField: 0
   <groundedState>k__BackingField: 0
@@ -5927,10 +6023,10 @@ MonoBehaviour:
   _componentIndexCache: 6
   _addedNetworkObject: {fileID: 3842749986559891388}
   _networkObjectCache: {fileID: 3842749986559891388}
-  <currentHealth>k__BackingField: 100
-  <maxHealth>k__BackingField: 100
-  <currentShield>k__BackingField: 100
-  <maxShield>k__BackingField: 100
+  currentHealth: 100
+  maxHealth: 100
+  currentShield: 100
+  maxShield: 100
 --- !u!114 &1697766117737057360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5972,6 +6068,8 @@ MonoBehaviour:
   - {fileID: 3478178790568185853}
   - {fileID: 1697766117737057360}
   - {fileID: -9186446379713333787}
+  - {fileID: 2159623432480487079}
+  - {fileID: 2759909162938660939}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
   _isNetworked: 1
@@ -5979,14 +6077,13 @@ MonoBehaviour:
   _initializeOrder: 0
   _defaultDespawnType: 0
   NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 9
+  <PrefabId>k__BackingField: 10
   <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2536583913
+  _scenePathHash: 2376927613
   <SceneId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 16377053476881061663
   _sceneNetworkObjects:
   - {fileID: 3842749986559891388}
-  - {fileID: 0}
 --- !u!114 &-9186446379713333787
 MonoBehaviour:
   m_ObjectHideFlags: 0

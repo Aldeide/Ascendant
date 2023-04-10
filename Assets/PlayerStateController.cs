@@ -29,8 +29,9 @@ namespace Ascendant.Controllers
         public float respawnDelay = 5.0f;
 
         public LayerMask layerMask;
+        public GameObject aimTarget;
 
-        void Start()
+        void Awake()
         {
             // Fetch required components.
             animator = GetComponent<Animator>();
@@ -45,10 +46,9 @@ namespace Ascendant.Controllers
         void Update()
         {
             if (!IsOwner) return;
-
             entityStateModel.position = this.transform.position;
             entityStateModel.rotation = this.transform.rotation;
-            entityStateModel.aimPoint = GameObject.Find("Target").transform.position;
+            entityStateModel.aimPoint = aimTarget.transform;
 
             // Death State.
             if (statsController.GetHealth() <= 0)
@@ -149,11 +149,6 @@ namespace Ascendant.Controllers
                 return hit.distance;
             }
             return 0;
-        }
-
-        public Networking.PlayerStateData ToPlayerStateData()
-        {
-            return entityStateModel.ToNetworkedState();
         }
 
         public bool IsAiming()

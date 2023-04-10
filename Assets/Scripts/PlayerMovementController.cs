@@ -47,7 +47,6 @@ namespace Ascendant.Controllers
 
         private PlayerStateController stateController;
 
-
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();

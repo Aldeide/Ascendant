@@ -49,7 +49,7 @@ namespace Ascendant.Models
         [field: SyncVar]
         public Quaternion rotation { get; [ServerRpc] set; }
         [field: SyncVar]
-        public Vector3 aimPoint { get; [ServerRpc] set; }
+        public Transform aimPoint { get; [ServerRpc] set; }
 
         [field: SyncVar]
         public EntityMovementState movementState { get; [ServerRpc] set; }
@@ -73,35 +73,6 @@ namespace Ascendant.Models
         public bool IsGrounded()
         {
             return groundedState == EntityGroundedState.Grounded;
-        }
-
-        public Networking.PlayerStateData ToNetworkedState()
-        {
-            return new Networking.PlayerStateData(
-                GameManager.Instance.localPlayerId,
-                position,
-                direction,
-                rotation,
-                aimPoint,
-                (ushort)movementState,
-                (ushort)stanceState,
-                (ushort)groundedState,
-                (ushort)firingState,
-                (ushort)aliveState
-                );
-        }
-
-        public void SyncFromNetworkedState(Networking.PlayerStateData data)
-        {
-            position = data.position;
-            direction = data.forward;
-            rotation = data.rotation;
-            aimPoint = data.aimPoint;
-            movementState = (EntityMovementState)data.movementState;
-            stanceState = (EntityStanceState)data.stanceState;
-            groundedState = (EntityGroundedState)data.groundedState;
-            firingState = (EntityFiringState)data.firingState;
-            aliveState = (EntityAliveState)data.aliveState;
         }
 
     }

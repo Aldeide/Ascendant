@@ -24,7 +24,7 @@ namespace Ascendant.Controllers
         public GameObject effect;
 
         // Target
-        private GameObject target;
+        public GameObject target;
 
         // Coroutines.
         private IEnumerator toAdsCoroutine;
@@ -42,7 +42,6 @@ namespace Ascendant.Controllers
             playerMovementController = GetComponent<PlayerMovementController>();
 
             lookInput = new Vector2(0, 0);
-            target = GameObject.Find("Target");
             if (currentWeapon == null)
             {
                 Debug.Log("No Weapon equipped");

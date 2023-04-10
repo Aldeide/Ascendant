@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FishNet.Object;
+using System.Linq;
+
 namespace Ascendant.Controllers
 {
     public class PlayerCameraController : NetworkBehaviour
@@ -18,7 +20,7 @@ namespace Ascendant.Controllers
         {
             stateController = GetComponent<PlayerStateController>();
             defaultCamera = GameObject.Find("Camera - Third-Person");
-            sprintCamera = GameObject.Find("Camera - Sprinting");
+            sprintCamera = GameObject.Find("Game/Cameras/CameraSprinting");
             aimCamera = GameObject.Find("Game/Cameras/CameraAim");
             defaultCamera.SetActive(true);
             sprintCamera.SetActive(false);
@@ -29,6 +31,10 @@ namespace Ascendant.Controllers
         void Update()
         {
             if (!IsOwner) return;
+            // Ensure the follow target is following this player.
+            GameObject.Find("FollowTarget").GetComponent<FollowTarget>().AssignTarget(this.transform.GetComponentsInChildren<Transform>()
+                .Where(transform => transform.name == "mixamorig:Neck").First());
+
             // Activate aim camera if needed. The aim camera is much closer to the player.
             if (stateController.IsAiming() && !aimCamera.activeInHierarchy)
             {

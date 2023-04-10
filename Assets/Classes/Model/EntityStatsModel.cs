@@ -14,14 +14,6 @@ namespace Ascendant.Models
         public float currentShield = 100.0f;
         [SyncVar]
         public float maxShield = 100.0f;
-
-        internal void SyncFromNetworkedStats(PlayerStatsData data)
-        {
-            this.currentHealth = data.currentHealth;
-            this.currentShield = data.currentShield;
-            this.maxHealth = data.maxHealth;
-            this.maxShield = data.maxShield;
-        }
     }
 }
 
