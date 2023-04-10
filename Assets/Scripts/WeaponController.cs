@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.InputSystem;
+using FishNet.Object;
 
 namespace Ascendant.Controllers
 {
-    public class WeaponController : MonoBehaviour
+    public class WeaponController : NetworkBehaviour
     {
         public Weapon currentWeapon;
         public PlayerMovementController playerMovementController;
@@ -70,6 +71,7 @@ namespace Ascendant.Controllers
         // Update is called once per frame
         void Update()
         {
+            if (!IsOwner) return;
             if (lastFired > 0)
             {
                 lastFired -= Time.deltaTime;
