@@ -41,6 +41,7 @@ namespace Ascendant
                 ServerSpawnCharacter();
                 //ServerSpawnTarget();
                 spawnRequested = true;
+                GameManager.Instance.localPlayer = this.gameObject;
             }
         }
 

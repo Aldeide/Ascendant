@@ -29,6 +29,16 @@ namespace Ascendant.Controllers
             return statsModel.currentHealth;
         }
 
+        public float GetHealthRatio()
+        {
+            return statsModel.currentHealth / statsModel.maxHealth;
+        }
+
+        public float GetShieldRatio()
+        {
+            return statsModel.currentShield / statsModel.maxShield;
+        }
+
         [ServerRpc]
         public void RestoreAll()
         {
