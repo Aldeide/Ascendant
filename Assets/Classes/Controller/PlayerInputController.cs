@@ -56,6 +56,20 @@ namespace Ascendant
             if (!IsOwner) return;
             inputData.fireInput = context.ReadValue<float>();
         }
+
+        public void OnRespawnCallback(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+            Respawn();
+        }
+
+        [ServerRpc]
+        private void Respawn()
+        {
+            this.GetComponent<CharacterController>().enabled = false;
+            this.transform.position = new Vector3(0, 0, 0);
+            this.GetComponent<CharacterController>().enabled = true;
+        }
     }
 }
 
