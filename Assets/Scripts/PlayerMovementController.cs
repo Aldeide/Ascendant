@@ -169,7 +169,10 @@ namespace Ascendant.Controllers
             }
             else
             {
-                Jump();
+                if (moveData.inputData.jumpInput > 0 && IsGrounded())
+                {
+                    verticalVelocity += 2.2f;
+                }
                 Gravity(delta);
             }
 
