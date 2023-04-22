@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5665447063958385416}
   - component: {fileID: 7771536186253540538}
   m_Layer: 0
-  m_Name: Impact Orange A
+  m_Name: Impact Blue A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,6 +46,7 @@ VisualEffect:
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
