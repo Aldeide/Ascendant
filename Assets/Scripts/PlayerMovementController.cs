@@ -66,8 +66,20 @@ namespace Ascendant.Controllers
         {
             if (base.IsOwner)
             {
+                Reconcile(default, false);
                 BuildActions(out MoveData moveData);
                 Move(moveData, false);
+            }
+            if (IsServer)
+            {
+                Move(default, true);
+                MoveReconcileData rd = new MoveReconcileData()
+                {
+                    position = transform.position,
+                    rotation = transform.rotation,
+                    verticalVelocity = verticalVelocity
+                };
+                Reconcile(rd, true);
             }
         }
 
@@ -75,6 +87,8 @@ namespace Ascendant.Controllers
         {
             moveData = default;
             moveData.inputData = inputController.inputData;
+            moveData.cameraForward = Camera.main.transform.forward;
+            moveData.cameraRight = Camera.main.transform.right;
         }
 
         void Awake()
@@ -103,10 +117,10 @@ namespace Ascendant.Controllers
             float delta = (float)base.TimeManager.TickDelta;
             stateController.SetDirection(new Vector3(moveData.inputData.movementInput.x, moveData.inputData.movementInput.y, 0f));
             ComputeSpeed();
-            forward = Camera.main.transform.forward;
+            forward = moveData.cameraForward;
             forward.y = 0f;
             forward.Normalize();
-            right = Camera.main.transform.right;
+            right = moveData.cameraRight;
             right.y = 0f;
             right.Normalize();
 
@@ -159,6 +173,8 @@ namespace Ascendant.Controllers
                 Gravity(delta);
             }
 
+            currentSpeed = 3.9f;
+
             // Applying speed and perfoming the movement.
             direction.x *= currentSpeed;
             direction.z *= currentSpeed;
@@ -175,6 +191,7 @@ namespace Ascendant.Controllers
         private void Reconcile(MoveReconcileData data, bool asServer, Channel channel = Channel.Unreliable)
         {
             transform.position = data.position;
+            transform.rotation = data.rotation;
             verticalVelocity = data.verticalVelocity;
         }
 

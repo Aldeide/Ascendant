@@ -7,6 +7,8 @@ using FishNet.Object.Prediction;
 public struct MoveData : IReplicateData
 {
     public Ascendant.InputData inputData;
+    public Vector3 cameraForward;
+    public Vector3 cameraRight;
 
     private uint _tick;
     public void Dispose() { }
@@ -17,6 +19,7 @@ public struct MoveData : IReplicateData
 public struct MoveReconcileData : IReconcileData
 {
     public Vector3 position;
+    public Quaternion rotation;
     public float verticalVelocity;
 
     private uint _tick;

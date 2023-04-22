@@ -42,27 +42,18 @@ namespace Ascendant.Models
     }
     public class EntityStateModel : NetworkBehaviour
     {
-        [field: SyncVar]
-        public Vector3 position { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public Vector3 direction { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public Quaternion rotation { get; [ServerRpc] set; }
+        public Vector3 position { get; set; }
+        public Vector3 direction { get; set; }
+        public Quaternion rotation { get; set; }
         [field: SyncVar]
         public Transform aimPoint { get; [ServerRpc] set; }
 
-        [field: SyncVar]
-        public EntityMovementState movementState { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public EntityStanceState stanceState { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public EntityGroundedState groundedState { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public EntityFiringState firingState { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public EntityAliveState aliveState { get; [ServerRpc] set; }
-        [field: SyncVar]
-        public float timeOfDeath { get; [ServerRpc] set; }
+        public EntityMovementState movementState { get; set; }
+        public EntityStanceState stanceState { get; set; }
+        public EntityGroundedState groundedState { get; set; }
+        public EntityFiringState firingState { get; set; }
+        public EntityAliveState aliveState { get; set; }
+        public float timeOfDeath { get; set; }
 
         public bool IsMoving()
         {
