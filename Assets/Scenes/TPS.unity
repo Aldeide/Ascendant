@@ -20005,6 +20005,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 578750859}
+  - component: {fileID: 578750861}
+  - component: {fileID: 578750860}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -20031,6 +20033,81 @@ Transform:
   m_Father: {fileID: 543450653399364489}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &578750860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578750858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 578750861}
+  _networkObjectCache: {fileID: 0}
+  _componentConfiguration: 0
+  _synchronizeParent: 0
+  _packing:
+    Position: 1
+    Rotation: 1
+    Scale: 0
+  _interpolation: 2
+  _extrapolation: 2
+  _enableTeleport: 0
+  _teleportThreshold: 1
+  _clientAuthoritative: 1
+  _sendToOwner: 1
+  _synchronizePosition: 1
+  _positionSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeRotation: 1
+  _rotationSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+  _synchronizeScale: 1
+  _scaleSnapping:
+    X: 0
+    Y: 0
+    Z: 0
+--- !u!114 &578750861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578750858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsNested>k__BackingField: 0
+  <ComponentIndex>k__BackingField: 0
+  <PredictedSpawn>k__BackingField: {fileID: 0}
+  _networkBehaviours:
+  - {fileID: 7041628270463217857}
+  <ParentNetworkObject>k__BackingField: {fileID: 0}
+  <ChildNetworkObjects>k__BackingField: []
+  _isNetworked: 1
+  _isGlobal: 0
+  _initializeOrder: 0
+  _defaultDespawnType: 0
+  NetworkObserver: {fileID: 0}
+  <PrefabId>k__BackingField: 0
+  <SpawnableCollectionId>k__BackingField: 0
+  _scenePathHash: 2536583913
+  <SceneId>k__BackingField: 10894544949962763142
+  <AssetPathHash>k__BackingField: 0
+  _sceneNetworkObjects:
+  - {fileID: 578750861}
+  - {fileID: 908096775}
+  - {fileID: 1233101732}
 --- !u!4 &581198487 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1766644919164077064, guid: a4cf82ffc867bdd498ad56a476d583fe,
@@ -41686,7 +41763,7 @@ MonoBehaviour:
   _sceneNetworkObjects:
   - {fileID: 908096775}
   - {fileID: 1233101732}
-  - {fileID: 919132149463050548}
+  - {fileID: 0}
 --- !u!1 &1233665213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7917349904687423284, guid: b3c0d461c3375934e96bbee5cf32cfc6,
@@ -46949,7 +47026,7 @@ MonoBehaviour:
   _sceneNetworkObjects:
   - {fileID: 908096775}
   - {fileID: 1233101732}
-  - {fileID: 919132149463050548}
+  - {fileID: 0}
 --- !u!1 &1356639284
 GameObject:
   m_ObjectHideFlags: 0
@@ -73433,7 +73510,6 @@ GameObject:
   - component: {fileID: 543450653399364489}
   - component: {fileID: 239509330}
   - component: {fileID: 239509329}
-  - component: {fileID: 919132149463050548}
   m_Layer: 0
   m_Name: door_basic
   m_TagString: Untagged
@@ -73441,39 +73517,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &919132149463050548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149463050547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26b716c41e9b56b4baafaf13a523ba2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <IsNested>k__BackingField: 0
-  <ComponentIndex>k__BackingField: 0
-  <PredictedSpawn>k__BackingField: {fileID: 0}
-  _networkBehaviours:
-  - {fileID: 7041628270463217857}
-  <ParentNetworkObject>k__BackingField: {fileID: 0}
-  <ChildNetworkObjects>k__BackingField: []
-  _isNetworked: 1
-  _isGlobal: 0
-  _initializeOrder: 0
-  _defaultDespawnType: 0
-  NetworkObserver: {fileID: 0}
-  <PrefabId>k__BackingField: 0
-  <SpawnableCollectionId>k__BackingField: 0
-  _scenePathHash: 2536583913
-  <SceneId>k__BackingField: 10894544953937988849
-  <AssetPathHash>k__BackingField: 0
-  _sceneNetworkObjects:
-  - {fileID: 908096775}
-  - {fileID: 1233101732}
-  - {fileID: 919132149463050548}
 --- !u!1 &927087764455056527 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7474258433040857384, guid: 762461ba0db13ac4e883630e93e4c93a,
@@ -77028,8 +77071,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 919132149463050548}
-  _networkObjectCache: {fileID: 919132149463050548}
+  _addedNetworkObject: {fileID: 0}
+  _networkObjectCache: {fileID: 578750861}
   _componentConfiguration: 0
   _synchronizeParent: 0
   _packing:
