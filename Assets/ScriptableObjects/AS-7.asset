@@ -31,6 +31,8 @@ MonoBehaviour:
   sprintPosition: {x: -0.2, y: -0.27, z: 0.36}
   sprintRotation: {x: -90, y: 119, z: -1.2}
   fireAudio: {fileID: 8300000, guid: b0f7e60bcef3a54488c40afb8ed413e3, type: 3}
+  effectsPrefab: {fileID: 8571033879178837698, guid: 7862ab0a57b18094e8240f22cb37856f,
+    type: 3}
   aimDownSightsAnimationCurve:
     serializedVersion: 2
     m_Curve:

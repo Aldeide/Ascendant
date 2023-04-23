@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e75d16e799af894b8c468abcdd3f2eb
+    m_Address: Assets/Materials/Special/Bullet Trail A.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1f13d73458929564cb50c62849496693, type: 2}
   m_SchemaSet:

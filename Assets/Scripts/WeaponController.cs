@@ -95,8 +95,8 @@ namespace Ascendant.Controllers
             // Gathering the tick the firing command was requested on the client.
             PreciseTick pt = base.TimeManager.GetPreciseTick(base.TimeManager.LastPacketTick);
             lastFired = fireDelay;
-            PlayMuzzleVisualEffect();
-            PlayFireAudio();
+            //PlayMuzzleVisualEffect();
+            //PlayFireAudio();
             // Calling Fire on the server.
             ServerFire(pt);
         }
@@ -107,7 +107,9 @@ namespace Ascendant.Controllers
             // TODO: implement rollback.
             var projectile = Instantiate(currentWeapon.projectile, muzzleTransform.position, Quaternion.LookRotation(target.transform.position - muzzleTransform.position, Vector3.up));
             Spawn(projectile, Owner);
-            ObserversFire();
+            var weaponEffects = Instantiate(currentWeapon.effectsPrefab, muzzleTransform.position, Quaternion.LookRotation(target.transform.position - muzzleTransform.position, Vector3.up));
+            Spawn(weaponEffects, Owner);
+            //ObserversFire();
         }
 
         [ObserversRpc]
@@ -117,8 +119,8 @@ namespace Ascendant.Controllers
             {
                 return;
             }
-            PlayFireAudio();
-            PlayMuzzleVisualEffect();
+            //PlayFireAudio();
+            //PlayMuzzleVisualEffect();
         }
 
 
@@ -128,8 +130,8 @@ namespace Ascendant.Controllers
             {
                 return;
             }
-            weaponModel.GetComponent<AudioSource>().clip = currentWeapon.fireAudio;
-            weaponModel.GetComponent<AudioSource>().Play();
+            //weaponModel.GetComponent<AudioSource>().clip = currentWeapon.fireAudio;
+            //weaponModel.GetComponent<AudioSource>().Play();
         }
 
         public void PlayMuzzleVisualEffect()

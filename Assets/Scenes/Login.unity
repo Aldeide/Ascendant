@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 262.1177, g: 324.74368, b: 429.81012, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -532,7 +532,7 @@ MonoBehaviour:
   _maximumConsumeCount: 4
   _redundancyCount: 3
   _allowPredictedSpawning: 0
-  _reservedObjectIds: 15
+  _reservedObjectIds: 45
 --- !u!1 &283765564
 GameObject:
   m_ObjectHideFlags: 0

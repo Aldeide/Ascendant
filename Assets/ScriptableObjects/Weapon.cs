@@ -33,6 +33,9 @@ public class Weapon : ScriptableObject
     [Header("Audio")]
     public AudioClip fireAudio;
 
+    [Header("EffectsPrefab")]
+    public GameObject effectsPrefab;
+
     [Header("AnimationInterpolation")]
     public AnimationCurve aimDownSightsAnimationCurve;
 
