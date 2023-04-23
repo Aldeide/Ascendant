@@ -20045,9 +20045,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 0
   _addedNetworkObject: {fileID: 578750861}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 578750861}
   _componentConfiguration: 0
   _synchronizeParent: 0
   _packing:
@@ -20091,6 +20091,7 @@ MonoBehaviour:
   <ComponentIndex>k__BackingField: 0
   <PredictedSpawn>k__BackingField: {fileID: 0}
   _networkBehaviours:
+  - {fileID: 578750860}
   - {fileID: 7041628270463217857}
   <ParentNetworkObject>k__BackingField: {fileID: 0}
   <ChildNetworkObjects>k__BackingField: []
@@ -41761,9 +41762,9 @@ MonoBehaviour:
   <SceneId>k__BackingField: 10894544954154894000
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
+  - {fileID: 578750861}
   - {fileID: 908096775}
   - {fileID: 1233101732}
-  - {fileID: 0}
 --- !u!1 &1233665213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7917349904687423284, guid: b3c0d461c3375934e96bbee5cf32cfc6,
@@ -47024,9 +47025,9 @@ MonoBehaviour:
   <SceneId>k__BackingField: 10894544949942675299
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
+  - {fileID: 578750861}
   - {fileID: 908096775}
   - {fileID: 1233101732}
-  - {fileID: 0}
 --- !u!1 &1356639284
 GameObject:
   m_ObjectHideFlags: 0
@@ -77070,16 +77071,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2836e36774ca1c4bbbee976e17b649c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 0
-  _addedNetworkObject: {fileID: 0}
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 578750861}
   _networkObjectCache: {fileID: 578750861}
   _componentConfiguration: 0
   _synchronizeParent: 0
   _packing:
-    Position: 1
-    Rotation: 1
+    Position: 0
+    Rotation: 0
     Scale: 0
-  _interpolation: 2
+  _interpolation: 1
   _extrapolation: 2
   _enableTeleport: 0
   _teleportThreshold: 1
@@ -77090,12 +77091,12 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
-  _synchronizeRotation: 1
+  _synchronizeRotation: 0
   _rotationSnapping:
     X: 0
     Y: 0
     Z: 0
-  _synchronizeScale: 1
+  _synchronizeScale: 0
   _scaleSnapping:
     X: 0
     Y: 0

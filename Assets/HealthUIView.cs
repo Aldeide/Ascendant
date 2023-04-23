@@ -23,7 +23,7 @@ namespace Ascendant.Views
         private float shieldSize;
         private float healthReserveSize;
 
-        void Start()
+        void Awake()
         {
             healthSize = healthBar.rect.width;
             healthReserveSize = healthReserveBar.rect.width;

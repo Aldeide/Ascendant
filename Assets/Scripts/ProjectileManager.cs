@@ -21,12 +21,32 @@ public class ProjectileManager : MonoBehaviour
         origin = transform.position;
         impactEffect = GetComponentInChildren<VisualEffect>();
         impactEffect.Stop();
-        // origin - potentialhit.
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, transform.forward);
+        Physics.Raycast(ray, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore);
+        impactPoint = hit.point;
+        if (impactEffect != null)
+        {
+            this.transform.position = impactPoint;
+            impactEffect.transform.position = impactPoint;
+            //impactEffect.transform.rotation = Quaternion.FromToRotation(impactEffect.transform.up, hit.normal) * impactEffect.transform.rotation;
+            impactEffect.transform.forward = hit.normal;
+            impactEffect.Play();
+        }
+        collided = true;
+
+        if (hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>() != null)
+        {
+            Debug.Log("hit");
+            hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>().Damage(2.0f);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
         previousDelta = Time.deltaTime;
         currentLife += Time.deltaTime;
         if (currentLife > ttl)
@@ -70,6 +90,7 @@ public class ProjectileManager : MonoBehaviour
             Debug.Log("hit");
             hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>().Damage(2.0f);
         }
+        */
     }
 
     private void OnDrawGizmos()

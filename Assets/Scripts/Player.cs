@@ -50,15 +50,9 @@ namespace Ascendant
         {
             GameObject characterPrefab = Addressables.LoadAssetAsync<GameObject>("Character").WaitForCompletion();
             GameObject characterInstance = Instantiate(characterPrefab);
-            
             this.controlledCharacter = characterInstance.GetComponent<Character>();
             controlledCharacter.controllingPlayer = this;
             Spawn(characterInstance, Owner);
-
-            
-
-            
-            
         }
 
         [ServerRpc]
