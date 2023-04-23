@@ -46,51 +46,7 @@ public class ProjectileManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        previousDelta = Time.deltaTime;
-        currentLife += Time.deltaTime;
-        if (currentLife > ttl)
-        {
-            Destroy(this.gameObject);
-        }
-        if (collided)
-        {
-            return;
-        }
-        
-        // Check for future collisions.
-        RaycastHit hit;
-        Ray ray = new Ray(transform.position, transform.forward);
 
-
-        Physics.Raycast(ray, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore);
-        if (hit.collider == null)
-        {
-            transform.position += speed * Time.deltaTime * transform.forward;
-            return;
-        }
-
-        if (hit.collider.isTrigger)
-        {
-            return;
-        }
-        impactPoint = hit.point;
-        if (impactEffect != null && !collided)
-        {
-            this.transform.position = impactPoint;
-            impactEffect.transform.position = impactPoint;
-            //impactEffect.transform.rotation = Quaternion.FromToRotation(impactEffect.transform.up, hit.normal) * impactEffect.transform.rotation;
-            impactEffect.transform.forward = hit.normal;
-            impactEffect.Play();
-        }
-        collided = true;
-
-        if (hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>() != null)
-        {
-            Debug.Log("hit");
-            hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>().Damage(2.0f);
-        }
-        */
     }
 
     private void OnDrawGizmos()
