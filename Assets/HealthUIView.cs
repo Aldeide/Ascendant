@@ -29,8 +29,12 @@ namespace Ascendant.Views
             healthReserveSize = healthReserveBar.rect.width;
             shieldSize = shieldBar.rect.width;
             localPlayer = GameManager.Instance.localPlayer;
-            currentHealth = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
-            currentShield = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
+            if (localPlayer != null)
+            {
+                currentHealth = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
+                currentShield = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
+            }
+            
             UpdateUI();
         }
 
@@ -39,6 +43,15 @@ namespace Ascendant.Views
             if (localPlayer == null)
             {
                 localPlayer = GameManager.Instance.localPlayer;
+                if (localPlayer != null)
+                {
+                    currentHealth = localPlayer.GetComponent<Player>().controlledCharacter.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
+                    currentShield = localPlayer.GetComponent<Player>().controlledCharacter.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
+                } else
+                {
+                    return;
+                }
+                
             }
             if (currentHealth == localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio()
                 && currentShield == localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio())

@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 1306993579819604701}
   - component: {fileID: 6338355376984538801}
   - component: {fileID: 1904850587335998420}
+  - component: {fileID: -7102385496370103230}
   m_Layer: 0
-  m_Name: WeaponSound
+  m_Name: WeaponEffects A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -254,7 +255,7 @@ MonoBehaviour:
   <SpawnableCollectionId>k__BackingField: 0
   _scenePathHash: 0
   <SceneId>k__BackingField: 0
-  <AssetPathHash>k__BackingField: 13685318389495061165
+  <AssetPathHash>k__BackingField: 4160980709319644809
   _sceneNetworkObjects: []
 --- !u!114 &1904850587335998420
 MonoBehaviour:
@@ -298,3 +299,21 @@ MonoBehaviour:
     X: 0
     Y: 0
     Z: 0
+--- !u!114 &-7102385496370103230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8571033879178837698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b597e1828355a4d994a69cbb11ef85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 6338355376984538801}
+  _networkObjectCache: {fileID: 0}
+  _allowSpawning: 1
+  _allowDespawning: 1
+  _allowSyncTypes: 1

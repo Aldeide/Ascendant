@@ -531,7 +531,7 @@ MonoBehaviour:
   _maximumServerReplicates: 15
   _maximumConsumeCount: 4
   _redundancyCount: 3
-  _allowPredictedSpawning: 0
+  _allowPredictedSpawning: 1
   _reservedObjectIds: 45
 --- !u!1 &283765564
 GameObject:
