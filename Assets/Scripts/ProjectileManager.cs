@@ -40,7 +40,7 @@ public class ProjectileManager : MonoBehaviour
 
         
 
-        if (hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>() != null)
+        if (collided && hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>() != null)
         {
             Debug.Log("hit");
             hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>().Damage(2.0f);

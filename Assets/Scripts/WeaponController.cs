@@ -24,7 +24,7 @@ namespace Ascendant.Controllers
         public float lastFired = 0;
         public float fireDelay = 100;
         public Transform muzzleTransform;
-        public GameObject effect;
+        public VisualEffect effect;
 
         // Target
         public GameObject target;
@@ -58,8 +58,8 @@ namespace Ascendant.Controllers
             muzzleTransform = weaponModel.transform.Find("Muzzle").transform;
 
             // Instantiating VFX.
-            effect = Instantiate(currentWeapon.muzzleEffect, muzzleTransform);
-            effect.GetComponent<VisualEffect>().Stop();
+            effect = muzzleTransform.GetComponent<VisualEffect>();
+            effect.Stop();
 
             // Setting up recoil.
             cameraRecoil = transform.Find("First-Person").transform.Find("Head Location").Find("Recoil").GetComponent<CameraRecoil>();
@@ -92,38 +92,34 @@ namespace Ascendant.Controllers
         [Client]
         private void Fire()
         {
-            // Gathering the tick the firing command was requested on the client.
-            PreciseTick pt = base.TimeManager.GetPreciseTick(base.TimeManager.LastPacketTick);
             lastFired = fireDelay;
-            //PlayMuzzleVisualEffect();
-            //PlayFireAudio();
-            // Calling Fire on the server.
-            var weaponEffects = Instantiate(currentWeapon.effectsPrefab, muzzleTransform.position, Quaternion.LookRotation(target.transform.position - muzzleTransform.position, Vector3.up));
-            Spawn(weaponEffects, Owner);
-            ServerFire(pt);
+            //ObserversFire();
+            ServerFire();
+            effect.Play();
+            PlayFireAudio();
+        }
+
+        [ObserversRpc(ExcludeOwner = true)]
+        private void ObserversFire()
+        {
+            Debug.Log("Playing VFX on: " + OwnerId);
+            effect.Play();
+            PlayFireAudio();
         }
 
         [ServerRpc]
-        private void ServerFire(PreciseTick pt)
+        private void ServerFire()
         {
+            ObserversFire();
             // TODO: implement rollback.
             var projectile = Instantiate(currentWeapon.projectile, muzzleTransform.position, Quaternion.LookRotation(target.transform.position - muzzleTransform.position, Vector3.up));
             Spawn(projectile, Owner);
             
             
-            //ObserversFire();
+            
         }
 
-        [ObserversRpc]
-        private void ObserversFire()
-        {
-            if (IsOwner || IsServer)
-            {
-                return;
-            }
-            //PlayFireAudio();
-            //PlayMuzzleVisualEffect();
-        }
+
 
 
         public void PlayFireAudio()
@@ -132,8 +128,8 @@ namespace Ascendant.Controllers
             {
                 return;
             }
-            //weaponModel.GetComponent<AudioSource>().clip = currentWeapon.fireAudio;
-            //weaponModel.GetComponent<AudioSource>().Play();
+            weaponModel.GetComponent<AudioSource>().clip = currentWeapon.fireAudio;
+            weaponModel.GetComponent<AudioSource>().Play();
         }
 
         public void PlayMuzzleVisualEffect()

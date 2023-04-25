@@ -8,7 +8,7 @@ public class Weapon : ScriptableObject
     [Header("3D Models")]
     public GameObject weaponModel;
     public GameObject projectile;
-    public GameObject muzzleEffect;
+    public VisualEffect muzzleEffect;
 
     [Header("Weapon Characteristics")]
     public string weaponName;

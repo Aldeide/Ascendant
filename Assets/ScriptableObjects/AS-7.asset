@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponModel: {fileID: 5907903814951587041, guid: 2efbf175ac5fdbb45acab4c951145785,
     type: 3}
-  projectile: {fileID: 2726186936953276674, guid: 4bd4e0949cac8d444b79a0424a09b7d2,
+  projectile: {fileID: 2904513502532504295, guid: 4bd4e0949cac8d444b79a0424a09b7d2,
     type: 3}
-  muzzleEffect: {fileID: 5246977582826306017, guid: 6ab4e1378c957884f81e3b6f87a91c53,
+  muzzleEffect: {fileID: 5246977582826306019, guid: 6ab4e1378c957884f81e3b6f87a91c53,
     type: 3}
   weaponName: AS-7
   clipSize: 30
