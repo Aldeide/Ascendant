@@ -73,6 +73,15 @@ namespace Ascendant.Controllers
         // Update is called once per frame
         void Update()
         {
+            if (weaponModel.active == false)
+            {
+                weaponModel.SetActive(true);
+
+            }
+            if (muzzleTransform.gameObject.active == false)
+            {
+                muzzleTransform.gameObject.SetActive(true);
+            }
             if (!IsOwner) return;
             if (lastFired > 0)
             {
@@ -114,13 +123,7 @@ namespace Ascendant.Controllers
             // TODO: implement rollback.
             var projectile = Instantiate(currentWeapon.projectile, muzzleTransform.position, Quaternion.LookRotation(target.transform.position - muzzleTransform.position, Vector3.up));
             Spawn(projectile, Owner);
-            
-            
-            
         }
-
-
-
 
         public void PlayFireAudio()
         {

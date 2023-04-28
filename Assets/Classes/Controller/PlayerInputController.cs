@@ -13,6 +13,7 @@ namespace Ascendant
         public float aimInput;
         public float fireInput;
         public float jumpInput;
+        public float dashInput;
     }
 
 
@@ -56,13 +57,22 @@ namespace Ascendant
             if (!IsOwner) return;
             inputData.fireInput = context.ReadValue<float>();
         }
-
+        public void OnDashCallback(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+            inputData.dashInput = context.ReadValue<float>();
+            if (GetComponent<Controllers.DashController>() != null)
+            {
+                GetComponent<Controllers.DashController>().TryDash();
+                Debug.Log("Dash Input");
+            }
+        }
         public void OnRespawnCallback(InputAction.CallbackContext context)
         {
             if (!IsOwner) return;
             Respawn();
         }
-
+        
         [ServerRpc]
         private void Respawn()
         {

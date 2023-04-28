@@ -25,6 +25,8 @@ namespace Ascendant
         public GameObject localPlayer;
         public GameObject networkedPlayerPrefab;
 
+        public GameObject ui;
+
         void Awake()
         {
             if (Instance != null)
@@ -91,5 +93,14 @@ namespace Ascendant
             Debug.Log("Syncing stats from player with id:" + data.id);
             if (localPlayerId == data.id) return;
         }
+
+        public void ActivateUI()
+        {
+            if (ui != null)
+            {
+                ui.SetActive(true);
+            }
+        }
+
     }
 }

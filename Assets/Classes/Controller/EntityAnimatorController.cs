@@ -59,10 +59,10 @@ namespace Ascendant.Controllers
             // Jump
             if (stateModel.groundedState == EntityGroundedState.Jumping)
             {
-                animator.SetBool("isJumping", true);
+                animator.SetBool("IsJumping", true);
             } else
             {
-                animator.SetBool("isJumping", false);
+                animator.SetBool("IsJumping", false);
             }
 
             // Falling

@@ -31,11 +31,19 @@ namespace Ascendant.Controllers
 
         public float GetHealthRatio()
         {
+            if (statsModel == null)
+            {
+                return 1.0f;
+            }
             return statsModel.currentHealth / statsModel.maxHealth;
         }
 
         public float GetShieldRatio()
         {
+            if (statsModel == null)
+            {
+                return 1.0f;
+            }
             return statsModel.currentShield / statsModel.maxShield;
         }
 

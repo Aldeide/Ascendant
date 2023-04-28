@@ -1,5 +1,5 @@
 {
-    "name": "Ascendant",
+    "name": "AscendantInput",
     "maps": [
         {
             "name": "Player",
@@ -72,6 +72,15 @@
                     "name": "Respawn",
                     "type": "Button",
                     "id": "bbe97278-f966-435f-80fc-5534b473fd20",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "5c4c0cbb-9a5b-42ab-b04c-bbed0b38bd0c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -351,6 +360,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Respawn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "245ef8c8-7b62-495e-b2aa-5a235ede5e32",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

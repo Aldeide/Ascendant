@@ -49,6 +49,7 @@ namespace Ascendant.Controllers
             entityStateModel.position = this.transform.position;
             entityStateModel.rotation = this.transform.rotation;
             entityStateModel.aimPoint = aimTarget.transform;
+            entityStateModel.direction = new Vector3(inputController.inputData.movementInput.x, inputController.inputData.movementInput.y, 0f);
 
             // Death State.
             if (statsController.GetHealth() <= 0)
@@ -193,6 +194,7 @@ namespace Ascendant.Controllers
             entityStateModel.groundedState = EntityGroundedState.Jumping;
         }
 
+        [ServerRpc(RequireOwnership = false)]
         public void SetDirection(Vector3 direction)
         {
             entityStateModel.direction = direction;

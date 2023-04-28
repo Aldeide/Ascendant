@@ -43,6 +43,10 @@ namespace Ascendant
                 spawnRequested = true;
                 GameManager.Instance.localPlayer = this.gameObject;
             }
+            if (controlledCharacter != null)
+            {
+                GameManager.Instance.ActivateUI();
+            }
         }
 
         [ServerRpc]

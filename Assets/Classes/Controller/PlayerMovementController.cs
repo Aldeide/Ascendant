@@ -47,6 +47,21 @@ namespace Ascendant.Controllers
 
         private PlayerStateController stateController;
 
+        [Header("Dash")]
+        public bool dashRequested = false;
+        [SyncVar]
+        public bool isDashing = false;
+        [SyncVar]
+        public float dashDuration = 0;
+        [SyncVar]
+        public int maxDashCharges = 3;
+        [SyncVar]
+        public int currentDashCharges = 3;
+        [SyncVar]
+        public float dashCooldown = 4;
+        [SyncVar]
+        public float currentDashCooldown = 0;
+
         public override void OnStartNetwork()
         {
             base.OnStartNetwork();
@@ -73,13 +88,18 @@ namespace Ascendant.Controllers
             if (IsServer)
             {
                 Move(default, true);
-                MoveReconcileData rd = new MoveReconcileData()
+                if (base.TimeManager.Tick % 3 == 0)
                 {
-                    position = transform.position,
-                    rotation = transform.rotation,
-                    verticalVelocity = verticalVelocity
-                };
-                Reconcile(rd, true);
+                    MoveReconcileData rd = new MoveReconcileData()
+                    {
+                        position = transform.position,
+                        rotation = transform.rotation,
+                        dashDuration = dashDuration,
+                        verticalVelocity = verticalVelocity
+                    };
+                    Reconcile(rd, true);
+                }
+                
             }
         }
 
@@ -89,6 +109,11 @@ namespace Ascendant.Controllers
             moveData.inputData = inputController.inputData;
             moveData.cameraForward = Camera.main.transform.forward;
             moveData.cameraRight = Camera.main.transform.right;
+            if (dashRequested)
+            {
+                moveData.inputData.dashInput = 1.0f;
+                moveData.dashDuration = dashDuration;
+            }
         }
 
         void Awake()
@@ -108,14 +133,23 @@ namespace Ascendant.Controllers
             Debug.DrawLine(transform.position, transform.position + right, Color.yellow);
             Debug.DrawLine(transform.position, transform.position + direction, Color.blue);
 
+            // Handle camera rotation.
             CameraRotation();
+
+            // Handle dash input.
+            if (inputController.inputData.dashInput > 0f)
+            {
+                dashRequested = true;
+            }
+
         }
 
         [Replicate]
         private void Move(MoveData moveData, bool asServer, Channel channel = Channel.Unreliable, bool replaying = false)
         {
             float delta = (float)base.TimeManager.TickDelta;
-            stateController.SetDirection(new Vector3(moveData.inputData.movementInput.x, moveData.inputData.movementInput.y, 0f));
+            //stateController.SetDirection();
+            
             ComputeSpeed();
             forward = moveData.cameraForward;
             forward.y = 0f;
@@ -126,16 +160,42 @@ namespace Ascendant.Controllers
 
             direction = forward * moveData.inputData.movementInput.y + right * moveData.inputData.movementInput.x;
 
+            // If the character should dash, perform the dash.
+            if (moveData.inputData.dashInput > 0f
+                && dashDuration <= 0
+                && currentDashCharges > 0)
+            {
+                direction.Normalize();
+                characterController.Move(direction * 3.0f);
+                dashRequested = false;
+                dashDuration = 1.0f;
+                currentDashCharges -= 1;
+                return;
+            }
+            // Prevent another dash from occuring within one second.
+            if (dashDuration > 0)
+            {
+                dashDuration -= delta;
+                dashRequested = false;
+            }
+            if (currentDashCharges == 0)
+            {
+                dashRequested = false;
+            }
+            // Update dash cooldown.
+            if (currentDashCharges < maxDashCharges)
+            {
+                currentDashCooldown += delta;
+                if (currentDashCooldown > dashCooldown)
+                {
+                    currentDashCooldown = 0;
+                    currentDashCharges += 1;
+                }
+            }
+
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             var currentAngle = transform.rotation.eulerAngles.y;
             var currentAngleVelocity = 0f;
-
-            if (Vector3.Angle(transform.forward, direction) > 160)
-            {
-                // Debug.Log(Vector3.Angle(transform.forward, direction));
-                // Debug.Log("Direction Switch!");
-                //TODO: animate 180 degrees turns.
-            }
             currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
 
             if (stateController.CanMove())
@@ -185,7 +245,6 @@ namespace Ascendant.Controllers
 
             if (stateController.CanMove())
             {
-
                 characterController.Move(direction * delta);
             }
         }
@@ -195,6 +254,7 @@ namespace Ascendant.Controllers
         {
             transform.position = data.position;
             transform.rotation = data.rotation;
+            dashDuration = data.dashDuration;
             verticalVelocity = data.verticalVelocity;
         }
 

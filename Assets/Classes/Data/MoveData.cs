@@ -9,6 +9,9 @@ public struct MoveData : IReplicateData
     public Ascendant.InputData inputData;
     public Vector3 cameraForward;
     public Vector3 cameraRight;
+    public float dashDuration;
+    public int dashCharges;
+    public float currentDashCooldown;
 
     private uint _tick;
     public void Dispose() { }
@@ -21,6 +24,9 @@ public struct MoveReconcileData : IReconcileData
     public Vector3 position;
     public Quaternion rotation;
     public float verticalVelocity;
+    public float dashDuration;
+    public int dashCharges;
+    public float currentDashCooldown;
 
     private uint _tick;
     public void Dispose() { }
