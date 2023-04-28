@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NetworkMessageManager : MonoBehaviour
+public class HitboxManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

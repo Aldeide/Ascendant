@@ -38,10 +38,10 @@ public class ProjectileManager : MonoBehaviour
 
         
 
-        if (collided && hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>() != null)
+        if (collided && hit.collider.GetComponent<Ascendant.HitboxElement>() != null)
         {
             Debug.Log("hit");
-            hit.collider.GetComponent<Ascendant.Controllers.PlayerStatsController>().Damage(2.0f);
+            hit.collider.GetComponent<Ascendant.HitboxElement>().Damage(2.0f);
         }
     }
 

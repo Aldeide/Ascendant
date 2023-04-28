@@ -14380,6 +14380,7 @@ MonoBehaviour:
   m_Script: {fileID: 1227158456}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Entries: []
 --- !u!4 &459877739
 Transform:
   m_ObjectHideFlags: 19
@@ -18735,8 +18736,11 @@ MonoBehaviour:
   <SceneId>k__BackingField: 10894544949962763142
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
+  - {fileID: 0}
   - {fileID: 578750861}
+  - {fileID: 0}
   - {fileID: 908096775}
+  - {fileID: 0}
   - {fileID: 1233101732}
 --- !u!1001 &582322745
 PrefabInstance:
@@ -20100,7 +20104,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 829f60df7f9143141abc391587384b3a,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 829f60df7f9143141abc391587384b3a,
         type: 3}
@@ -41446,7 +41450,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1309350863 stripped
 Transform:
