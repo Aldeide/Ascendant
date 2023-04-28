@@ -45,14 +45,6 @@ namespace Ascendant.Views
         {
             currentHealth = character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
             currentShield = character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
-
-            if (currentHealth == character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio()
-                && currentShield == character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio())
-            {
-                return;
-            }
-            currentHealth = character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
-            currentShield = character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
             UpdateUI();
         }
 
