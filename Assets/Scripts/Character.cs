@@ -13,9 +13,8 @@ namespace Ascendant
 
         public void Start()
         {
-            GameManager.Instance.ActivateUI();
+            //GameManager.Instance.ActivateUI();
         }
-
     }
 }
 

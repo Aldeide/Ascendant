@@ -51,15 +51,15 @@ namespace Ascendant.Controllers
         public bool dashRequested = false;
         [SyncVar]
         public bool isDashing = false;
-        [SyncVar]
+        
         public float dashDuration = 0;
         [SyncVar]
         public int maxDashCharges = 3;
-        [SyncVar]
+        
         public int currentDashCharges = 3;
-        [SyncVar]
+        
         public float dashCooldown = 4;
-        [SyncVar]
+        
         public float currentDashCooldown = 0;
 
         public override void OnStartNetwork()
@@ -95,11 +95,12 @@ namespace Ascendant.Controllers
                         position = transform.position,
                         rotation = transform.rotation,
                         dashDuration = dashDuration,
+                        dashCharges = currentDashCharges,
+                        currentDashCooldown = currentDashCooldown,
                         verticalVelocity = verticalVelocity
                     };
                     Reconcile(rd, true);
                 }
-                
             }
         }
 
@@ -109,11 +110,12 @@ namespace Ascendant.Controllers
             moveData.inputData = inputController.inputData;
             moveData.cameraForward = Camera.main.transform.forward;
             moveData.cameraRight = Camera.main.transform.right;
-            if (dashRequested)
-            {
-                moveData.inputData.dashInput = 1.0f;
-                moveData.dashDuration = dashDuration;
-            }
+            moveData.inputData.dashInput = 1.0f;
+            moveData.dashDuration = dashDuration;
+            moveData.dashRequested = dashRequested;
+            moveData.dashCharges = currentDashCharges;
+            moveData.currentDashCooldown = currentDashCooldown;
+            
         }
 
         void Awake()
@@ -148,7 +150,7 @@ namespace Ascendant.Controllers
         private void Move(MoveData moveData, bool asServer, Channel channel = Channel.Unreliable, bool replaying = false)
         {
             float delta = (float)base.TimeManager.TickDelta;
-            //stateController.SetDirection();
+
             
             ComputeSpeed();
             forward = moveData.cameraForward;
@@ -159,37 +161,41 @@ namespace Ascendant.Controllers
             right.Normalize();
 
             direction = forward * moveData.inputData.movementInput.y + right * moveData.inputData.movementInput.x;
-
+            if (direction.magnitude < 0.01f && moveData.dashRequested)
+            {
+                direction = forward.normalized;
+            }
             // If the character should dash, perform the dash.
-            if (moveData.inputData.dashInput > 0f
-                && dashDuration <= 0
-                && currentDashCharges > 0)
+            if (moveData.dashDuration <= 0
+                && moveData.dashRequested
+                && moveData.dashCharges > 0)
             {
                 direction.Normalize();
                 characterController.Move(direction * 3.0f);
                 dashRequested = false;
                 dashDuration = 1.0f;
-                currentDashCharges -= 1;
+                currentDashCharges = moveData.dashCharges - 1;
                 return;
             }
             // Prevent another dash from occuring within one second.
-            if (dashDuration > 0)
+            if (moveData.dashDuration > 0 && !replaying)
             {
                 dashDuration -= delta;
                 dashRequested = false;
             }
-            if (currentDashCharges == 0)
+            if (moveData.dashCharges == 0)
             {
                 dashRequested = false;
             }
             // Update dash cooldown.
-            if (currentDashCharges < maxDashCharges)
+            if (moveData.dashCharges < maxDashCharges && !replaying)
             {
-                currentDashCooldown += delta;
-                if (currentDashCooldown > dashCooldown)
-                {
-                    currentDashCooldown = 0;
-                    currentDashCharges += 1;
+                    currentDashCooldown += delta;
+               
+                if (moveData.currentDashCooldown > dashCooldown && !replaying) {
+                
+                        currentDashCooldown = 0;
+                        currentDashCharges = moveData.dashCharges + 1;
                 }
             }
 
@@ -255,6 +261,8 @@ namespace Ascendant.Controllers
             transform.position = data.position;
             transform.rotation = data.rotation;
             dashDuration = data.dashDuration;
+            currentDashCharges = data.dashCharges;
+            currentDashCooldown = data.currentDashCooldown;
             verticalVelocity = data.verticalVelocity;
         }
 

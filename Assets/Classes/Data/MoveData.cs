@@ -11,6 +11,7 @@ public struct MoveData : IReplicateData
     public Vector3 cameraRight;
     public float dashDuration;
     public int dashCharges;
+    public bool dashRequested;
     public float currentDashCooldown;
 
     private uint _tick;
