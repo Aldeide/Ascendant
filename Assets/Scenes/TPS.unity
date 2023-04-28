@@ -69611,10 +69611,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game
       objectReference: {fileID: 0}
+    - target: {fileID: 2761671336684028722, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4657673054617101327, guid: eb35572500006434989618b273393820,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1112
       objectReference: {fileID: 0}
     - target: {fileID: 4657673054617101327, guid: eb35572500006434989618b273393820,
         type: 3}
@@ -69696,12 +69701,51 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7607033282092647314, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: m_Name
+      value: Dash Charge Foreground
+      objectReference: {fileID: 0}
+    - target: {fileID: 8196983326244829933, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3794974207734662276, guid: eb35572500006434989618b273393820, type: 3}
+    - {fileID: 6796773245035538330, guid: eb35572500006434989618b273393820, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2800104909500145463, guid: eb35572500006434989618b273393820,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1913715868883469034}
   m_SourcePrefab: {fileID: 100100000, guid: eb35572500006434989618b273393820, type: 3}
+--- !u!1 &1913715868883469033 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2800104909500145463, guid: eb35572500006434989618b273393820,
+    type: 3}
+  m_PrefabInstance: {fileID: 1913715868883469032}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1913715868883469034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913715868883469033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b76b089f77e20458e8819f46c6c22a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  maxDashCharges: 0
+  currentDashCharges: 0
+  dashUIPrefab: {fileID: 5424206020832509581, guid: fa137a92c5cc9864bb53a5ea0b03053c,
+    type: 3}
+  dashUIElements: []
 --- !u!23 &1914653232388751215
 MeshRenderer:
   m_ObjectHideFlags: 0

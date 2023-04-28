@@ -25,7 +25,7 @@ namespace Ascendant
         public override void OnStartServer()
         {
             base.OnStartServer();
-            GameManager.Instance.players.Add(this);
+            GameManager.Instance.localPlayer = this;
         }
 
         public override void OnStopServer()
@@ -41,12 +41,12 @@ namespace Ascendant
                 ServerSpawnCharacter();
                 //ServerSpawnTarget();
                 spawnRequested = true;
-                GameManager.Instance.localPlayer = this.gameObject;
             }
+            /*
             if (controlledCharacter != null)
             {
                 GameManager.Instance.ActivateUI();
-            }
+            }*/
         }
 
         [ServerRpc]

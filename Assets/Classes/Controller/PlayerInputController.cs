@@ -61,11 +61,6 @@ namespace Ascendant
         {
             if (!IsOwner) return;
             inputData.dashInput = context.ReadValue<float>();
-            if (GetComponent<Controllers.DashController>() != null)
-            {
-                GetComponent<Controllers.DashController>().TryDash();
-                Debug.Log("Dash Input");
-            }
         }
         public void OnRespawnCallback(InputAction.CallbackContext context)
         {

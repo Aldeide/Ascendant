@@ -11,8 +11,6 @@ public class ProjectileManager : MonoBehaviour
     private Vector3 impactPoint;
     public LayerMask layerMask;
     private Vector3 origin = new Vector3();
-    float potentialDistance = 0.0f;
-    private Vector3 potentialHit = new Vector3();
 
     public VisualEffect impactEffect;
     private bool collided = false;

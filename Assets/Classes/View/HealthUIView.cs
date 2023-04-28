@@ -14,7 +14,7 @@ namespace Ascendant.Views
         [SerializeField]
         private RectTransform shieldBar;
         [SerializeField]
-        private GameObject localPlayer;
+        private Character character;
 
         private float currentHealth;
         private float currentShield;
@@ -28,11 +28,14 @@ namespace Ascendant.Views
             healthSize = healthBar.rect.width;
             healthReserveSize = healthReserveBar.rect.width;
             shieldSize = shieldBar.rect.width;
-            localPlayer = GameManager.Instance.localPlayer;
-            if (localPlayer != null)
+
+            // The UI is activated once the local character has been spawned.
+            // As such, it should be available on this script's Start function.
+            character = GameManager.Instance.localPlayer.controlledCharacter;
+            if (character != null)
             {
-                currentHealth = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
-                currentShield = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
+                currentHealth = character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
+                currentShield = character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
             }
             
             UpdateUI();
@@ -40,26 +43,16 @@ namespace Ascendant.Views
 
         void Update()
         {
-            if (localPlayer == null)
-            {
-                localPlayer = GameManager.Instance.localPlayer;
-                if (localPlayer != null)
-                {
-                    currentHealth = localPlayer.GetComponent<Player>().controlledCharacter.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
-                    currentShield = localPlayer.GetComponent<Player>().controlledCharacter.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
-                } else
-                {
-                    return;
-                }
-                
-            }
-            if (currentHealth == localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio()
-                && currentShield == localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio())
+            currentHealth = character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
+            currentShield = character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
+
+            if (currentHealth == character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio()
+                && currentShield == character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio())
             {
                 return;
             }
-            currentHealth = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
-            currentShield = localPlayer.GetComponent<Player>().controlledCharacter.gameObject.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
+            currentHealth = character.GetComponent<Controllers.PlayerStatsController>().GetHealthRatio();
+            currentShield = character.GetComponent<Controllers.PlayerStatsController>().GetShieldRatio();
             UpdateUI();
         }
 

@@ -10,6 +10,12 @@ namespace Ascendant
     {
         [SyncVar]
         public Player controllingPlayer;
+
+        public void Start()
+        {
+            GameManager.Instance.ActivateUI();
+        }
+
     }
 }
 
