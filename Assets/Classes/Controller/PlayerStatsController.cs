@@ -39,13 +39,13 @@ namespace Ascendant.Controllers
             return statsModel.currentShield / statsModel.maxShield;
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void RestoreAll()
         {
             statsModel.currentHealth = statsModel.maxHealth;
             statsModel.currentShield = statsModel.maxShield;
         }
-        [ServerRpc(RequireOwnership =false)]
+        [ServerRpc(RequireOwnership = false)]
         public void Damage(float damage)
         {
             Debug.Log("Applying damage: " + damage);
