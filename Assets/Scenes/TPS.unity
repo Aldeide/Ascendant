@@ -69622,6 +69622,21 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4115832826105581887, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4115832826105581887, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4115832826105581887, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4657673054617101327, guid: eb35572500006434989618b273393820,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -69631,6 +69646,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 695
+      objectReference: {fileID: 0}
+    - target: {fileID: 4713475208030843359, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4713475208030843359, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4713475208030843359, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5637575791212678751, guid: eb35572500006434989618b273393820,
         type: 3}
@@ -69652,6 +69682,21 @@ PrefabInstance:
       propertyPath: _sceneNetworkObjects.Array.data[0]
       value: 
       objectReference: {fileID: 578750861}
+    - target: {fileID: 7036455125278220659, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036455125278220659, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036455125278220659, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: Damping.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7562836387873849047, guid: eb35572500006434989618b273393820,
         type: 3}
       propertyPath: m_RootOrder

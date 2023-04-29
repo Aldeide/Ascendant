@@ -42,19 +42,29 @@ namespace Ascendant.Controllers
             // Movement animator updates.
             if (stateModel.IsMoving() && stateModel.stanceState != EntityStanceState.Aiming && stateModel.firingState != EntityFiringState.Firing)
             {
-                animator.SetFloat("MovementY", 1.0f, 10.1f, 3.5f);
-                animator.SetFloat("MovementX", 0.0f, 10.1f, 3.5f);
+                animator.SetFloat("MovementY", 1.0f, 0.1f, Time.deltaTime);
+                animator.SetFloat("MovementX", 0.0f, 0.1f, Time.deltaTime);
                 animator.SetBool("isRunning", true);
+                animator.SetBool("IsWalking", false);
             }
-            if (stateModel.IsMoving() && (stateModel.stanceState == EntityStanceState.Aiming || stateModel.firingState == EntityFiringState.Firing))
+            if (stateModel.IsMoving() && (stateModel.stanceState != EntityStanceState.Aiming && stateModel.firingState == EntityFiringState.Firing))
             {
-                animator.SetFloat("MovementX", stateModel.direction.x, 10.1f, 3.5f);
-                animator.SetFloat("MovementY", stateModel.direction.y, 10.1f, 3.5f);
+                animator.SetFloat("MovementX", stateModel.direction.x, 0.1f, Time.deltaTime);
+                animator.SetFloat("MovementY", stateModel.direction.y, 0.1f, Time.deltaTime);
                 animator.SetBool("isRunning", true);
+                animator.SetBool("IsWalking", false);
+            }
+            if (stateModel.IsMoving() && (stateModel.stanceState == EntityStanceState.Aiming))
+            {
+                animator.SetFloat("MovementX", stateModel.direction.x, 0.1f, Time.deltaTime);
+                animator.SetFloat("MovementY", stateModel.direction.y, 0.1f, Time.deltaTime);
+                animator.SetBool("isRunning", false);
+                animator.SetBool("IsWalking", true);
             }
             if (!stateModel.IsMoving())
             {
                 animator.SetBool("isRunning", false);
+                animator.SetBool("IsWalking", false);
             }
             // Jump
             if (stateModel.groundedState == EntityGroundedState.Jumping)
