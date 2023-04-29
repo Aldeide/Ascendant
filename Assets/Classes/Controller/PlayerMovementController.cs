@@ -45,7 +45,7 @@ namespace Ascendant.Controllers
 
         public float sprintAcceleration = 3.2f;
 
-        private PlayerStateController stateController;
+        public PlayerStateController stateController;
 
         [Header("Dash")]
         public bool dashRequested = false;
@@ -115,7 +115,7 @@ namespace Ascendant.Controllers
             moveData.dashRequested = dashRequested;
             moveData.dashCharges = currentDashCharges;
             moveData.currentDashCooldown = currentDashCooldown;
-            
+            moveData.isDead = stateController.entityStateModel.aliveState == Models.EntityAliveState.Dead;
         }
 
         void Awake()
@@ -150,7 +150,7 @@ namespace Ascendant.Controllers
         private void Move(MoveData moveData, bool asServer, Channel channel = Channel.Unreliable, bool replaying = false)
         {
             float delta = (float)base.TimeManager.TickDelta;
-
+            if (moveData.isDead) return;
             
             ComputeSpeed();
             forward = moveData.cameraForward;

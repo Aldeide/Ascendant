@@ -58,14 +58,11 @@ namespace Ascendant.Controllers
                 {
                     Debug.Log("Died");
                     entityStateModel.timeOfDeath = Time.time;
-                    //animator.SetBool("isDead", true);
-                    //animator.SetTrigger("died");
                     entityStateModel.aliveState = EntityAliveState.Dead;
                 }
             } else
             {
                 entityStateModel.aliveState = EntityAliveState.Alive;
-                //animator.SetBool("isDead", false);
             }
             if (entityStateModel.aliveState == EntityAliveState.Dead && Time.time > entityStateModel.timeOfDeath + respawnDelay)
             {
@@ -182,6 +179,7 @@ namespace Ascendant.Controllers
             return entityStateModel.aliveState == EntityAliveState.Alive;
         }
 
+        [ServerRpc]
         public void Respawn()
         {
             transform.position = new Vector3(0, 0, 0);

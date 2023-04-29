@@ -83,6 +83,7 @@ namespace Ascendant.Controllers
                 muzzleTransform.gameObject.SetActive(true);
             }
             if (!IsOwner) return;
+            if (playerMovementController.stateController.entityStateModel.aliveState == Models.EntityAliveState.Dead) return;
             if (lastFired > 0)
             {
                 lastFired -= Time.deltaTime;
@@ -102,7 +103,6 @@ namespace Ascendant.Controllers
         private void Fire()
         {
             lastFired = fireDelay;
-            //ObserversFire();
             ServerFire();
             effect.Play();
             PlayFireAudio();

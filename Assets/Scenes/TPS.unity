@@ -18736,11 +18736,8 @@ MonoBehaviour:
   <SceneId>k__BackingField: 10894544949962763142
   <AssetPathHash>k__BackingField: 0
   _sceneNetworkObjects:
-  - {fileID: 0}
   - {fileID: 578750861}
-  - {fileID: 0}
   - {fileID: 908096775}
-  - {fileID: 0}
   - {fileID: 1233101732}
 --- !u!1001 &582322745
 PrefabInstance:
@@ -69604,6 +69601,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: -21.198215
+      objectReference: {fileID: 0}
+    - target: {fileID: 240615140076607327, guid: eb35572500006434989618b273393820,
+        type: 3}
+      propertyPath: field of view
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 240615140076607327, guid: eb35572500006434989618b273393820,
         type: 3}

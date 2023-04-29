@@ -13,6 +13,7 @@ public struct MoveData : IReplicateData
     public int dashCharges;
     public bool dashRequested;
     public float currentDashCooldown;
+    public bool isDead;
 
     private uint _tick;
     public void Dispose() { }
