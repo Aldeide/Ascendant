@@ -116,6 +116,7 @@ namespace Ascendant.Controllers
             moveData.dashCharges = currentDashCharges;
             moveData.currentDashCooldown = currentDashCooldown;
             moveData.isDead = stateController.entityStateModel.aliveState == Models.EntityAliveState.Dead;
+            moveData.isAiming = stateController.entityStateModel.stanceState == Models.EntityStanceState.Aiming;
         }
 
         void Awake()
@@ -152,7 +153,6 @@ namespace Ascendant.Controllers
             float delta = (float)base.TimeManager.TickDelta;
             if (moveData.isDead) return;
             
-            ComputeSpeed();
             forward = moveData.cameraForward;
             forward.y = 0f;
             forward.Normalize();
@@ -200,10 +200,12 @@ namespace Ascendant.Controllers
             }
 
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            
             var currentAngle = transform.rotation.eulerAngles.y;
+            Debug.Log("Target:" + targetAngle + " Current: " + currentAngle);
             var currentAngleVelocity = 0f;
-            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.04f);
-
+            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.1f);
+            Debug.Log("Computed:" + currentAngle);
             if (stateController.CanMove())
             {
                 // Performing the player rotation.
@@ -243,7 +245,10 @@ namespace Ascendant.Controllers
             }
 
             currentSpeed = 3.9f;
-
+            if (moveData.isAiming)
+            {
+                currentSpeed = 2.5f;
+            }
             // Applying speed and perfoming the movement.
             direction.x *= currentSpeed;
             direction.z *= currentSpeed;
