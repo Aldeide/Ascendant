@@ -202,10 +202,8 @@ namespace Ascendant.Controllers
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
             
             var currentAngle = transform.rotation.eulerAngles.y;
-            Debug.Log("Target:" + targetAngle + " Current: " + currentAngle);
             var currentAngleVelocity = 0f;
-            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.1f);
-            Debug.Log("Computed:" + currentAngle);
+            currentAngle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref currentAngleVelocity, 0.05f);
             if (stateController.CanMove())
             {
                 // Performing the player rotation.
