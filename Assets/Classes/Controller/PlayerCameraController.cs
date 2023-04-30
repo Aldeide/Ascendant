@@ -36,7 +36,7 @@ namespace Ascendant.Controllers
                 .Where(transform => transform.name == "mixamorig:Neck").First());
 
             // Activate aim camera if needed. The aim camera is much closer to the player.
-            if (stateController.IsAiming() && !aimCamera.activeInHierarchy)
+            if (stateController.IsAiming() && !aimCamera.activeInHierarchy && stateController.entityStateModel.weaponTypeState != Models.EntityWeaponTypeState.Unarmed)
             {
                 defaultCamera.SetActive(false);
                 sprintCamera.SetActive(false);

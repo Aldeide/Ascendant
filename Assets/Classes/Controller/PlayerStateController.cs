@@ -151,12 +151,12 @@ namespace Ascendant.Controllers
 
         public bool IsAiming()
         {
-            return entityStateModel.stanceState == EntityStanceState.Aiming;
+            return entityStateModel.stanceState == EntityStanceState.Aiming && entityStateModel.weaponTypeState != EntityWeaponTypeState.Unarmed;
         }
 
         public bool IsFiring()
         {
-            return entityStateModel.firingState == EntityFiringState.Firing;
+            return entityStateModel.firingState == EntityFiringState.Firing && entityStateModel.weaponTypeState != EntityWeaponTypeState.Unarmed;
         }
 
         public bool IsSprinting()

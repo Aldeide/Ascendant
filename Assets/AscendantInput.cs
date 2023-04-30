@@ -127,22 +127,13 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Next Weapon"",
-                    ""type"": ""Value"",
-                    ""id"": ""c58b6194-77bf-4bef-bb99-e1f682861e34"",
-                    ""expectedControlType"": ""Axis"",
+                    ""name"": ""Unarmed"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5a5c6a8-e9e7-44bd-b774-6c723c19e70b"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Previous Weapon"",
-                    ""type"": ""Value"",
-                    ""id"": ""c0811fa9-0f82-4749-9b41-0b8bbf3126be"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -456,23 +447,12 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bc30af6c-52e1-49ef-82ed-dda22a42ec38"",
-                    ""path"": ""<Mouse>/scroll/up"",
+                    ""id"": ""846763ba-a441-4c3c-980a-8ee4b626d36d"",
+                    ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Previous Weapon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""238aa69b-d7de-44e7-8b05-ff4478244dc6"",
-                    ""path"": ""<Mouse>/scroll/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Next Weapon"",
+                    ""action"": ""Unarmed"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1071,8 +1051,7 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_PrimaryWeapon = m_Player.FindAction("Primary Weapon", throwIfNotFound: true);
         m_Player_SecondaryWeapon = m_Player.FindAction("Secondary Weapon", throwIfNotFound: true);
-        m_Player_NextWeapon = m_Player.FindAction("Next Weapon", throwIfNotFound: true);
-        m_Player_PreviousWeapon = m_Player.FindAction("Previous Weapon", throwIfNotFound: true);
+        m_Player_Unarmed = m_Player.FindAction("Unarmed", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1157,8 +1136,7 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_PrimaryWeapon;
     private readonly InputAction m_Player_SecondaryWeapon;
-    private readonly InputAction m_Player_NextWeapon;
-    private readonly InputAction m_Player_PreviousWeapon;
+    private readonly InputAction m_Player_Unarmed;
     public struct PlayerActions
     {
         private @AscendantInput m_Wrapper;
@@ -1174,8 +1152,7 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputAction @PrimaryWeapon => m_Wrapper.m_Player_PrimaryWeapon;
         public InputAction @SecondaryWeapon => m_Wrapper.m_Player_SecondaryWeapon;
-        public InputAction @NextWeapon => m_Wrapper.m_Player_NextWeapon;
-        public InputAction @PreviousWeapon => m_Wrapper.m_Player_PreviousWeapon;
+        public InputAction @Unarmed => m_Wrapper.m_Player_Unarmed;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1218,12 +1195,9 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
             @SecondaryWeapon.started += instance.OnSecondaryWeapon;
             @SecondaryWeapon.performed += instance.OnSecondaryWeapon;
             @SecondaryWeapon.canceled += instance.OnSecondaryWeapon;
-            @NextWeapon.started += instance.OnNextWeapon;
-            @NextWeapon.performed += instance.OnNextWeapon;
-            @NextWeapon.canceled += instance.OnNextWeapon;
-            @PreviousWeapon.started += instance.OnPreviousWeapon;
-            @PreviousWeapon.performed += instance.OnPreviousWeapon;
-            @PreviousWeapon.canceled += instance.OnPreviousWeapon;
+            @Unarmed.started += instance.OnUnarmed;
+            @Unarmed.performed += instance.OnUnarmed;
+            @Unarmed.canceled += instance.OnUnarmed;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1261,12 +1235,9 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
             @SecondaryWeapon.started -= instance.OnSecondaryWeapon;
             @SecondaryWeapon.performed -= instance.OnSecondaryWeapon;
             @SecondaryWeapon.canceled -= instance.OnSecondaryWeapon;
-            @NextWeapon.started -= instance.OnNextWeapon;
-            @NextWeapon.performed -= instance.OnNextWeapon;
-            @NextWeapon.canceled -= instance.OnNextWeapon;
-            @PreviousWeapon.started -= instance.OnPreviousWeapon;
-            @PreviousWeapon.performed -= instance.OnPreviousWeapon;
-            @PreviousWeapon.canceled -= instance.OnPreviousWeapon;
+            @Unarmed.started -= instance.OnUnarmed;
+            @Unarmed.performed -= instance.OnUnarmed;
+            @Unarmed.canceled -= instance.OnUnarmed;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1460,8 +1431,7 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnPrimaryWeapon(InputAction.CallbackContext context);
         void OnSecondaryWeapon(InputAction.CallbackContext context);
-        void OnNextWeapon(InputAction.CallbackContext context);
-        void OnPreviousWeapon(InputAction.CallbackContext context);
+        void OnUnarmed(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

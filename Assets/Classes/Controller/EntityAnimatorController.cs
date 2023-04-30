@@ -47,14 +47,15 @@ namespace Ascendant.Controllers
                 animator.SetBool("isRunning", true);
                 animator.SetBool("IsWalking", false);
             }
-            if (stateModel.IsMoving() && (stateModel.stanceState != EntityStanceState.Aiming && stateModel.firingState == EntityFiringState.Firing))
+            if (stateModel.IsMoving() && (stateModel.stanceState != EntityStanceState.Aiming
+                && (stateModel.firingState == EntityFiringState.Firing && stateModel.weaponTypeState != EntityWeaponTypeState.Unarmed)))
             {
                 animator.SetFloat("MovementX", stateModel.direction.x, 0.1f, Time.deltaTime);
                 animator.SetFloat("MovementY", stateModel.direction.y, 0.1f, Time.deltaTime);
                 animator.SetBool("isRunning", true);
                 animator.SetBool("IsWalking", false);
             }
-            if (stateModel.IsMoving() && (stateModel.stanceState == EntityStanceState.Aiming))
+            if (stateModel.IsMoving() && (stateModel.stanceState == EntityStanceState.Aiming && stateModel.weaponTypeState != EntityWeaponTypeState.Unarmed))
             {
                 animator.SetFloat("MovementX", stateModel.direction.x, 0.1f, Time.deltaTime);
                 animator.SetFloat("MovementY", stateModel.direction.y, 0.1f, Time.deltaTime);

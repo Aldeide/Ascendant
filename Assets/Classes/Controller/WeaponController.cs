@@ -37,6 +37,8 @@ namespace Ascendant.Controllers
         [Header("Controller")]
         public PlayerMovementController playerMovementController;
         public PlayerInputController playerInputController;
+        public PlayerStateController playerStateController;
+
         public float isFiring;
         public bool isAiming;
         public float wantsToAim;
@@ -60,45 +62,22 @@ namespace Ascendant.Controllers
         {
             playerMovementController = GetComponent<PlayerMovementController>();
             playerInputController = GetComponent<PlayerInputController>();
-
+            playerStateController = GetComponent<PlayerStateController>();
 
             weaponSlot = WeaponSlot.Primary;
-            Debug.Log("start");
+            playerStateController.entityStateModel.weaponTypeState = Models.EntityWeaponTypeState.Rifle;
             SwitchWeapon(weaponSlot);
-            Debug.Log("endstart");
-            /*
-            // Instantiate weapon.
-            weaponModel = Instantiate(weaponData.weaponModel, hand);
-            weaponModel.transform.localRotation = weaponData.rotation;
-            weaponModel.transform.localPosition = weaponData.position;
-
-            // A weapon is equipped. Instantiating the weapon and computing some values.
-            lastFired = 0;
-            fireDelay = 60.0f / weaponData.fireRate;
-            muzzleTransform = weaponModel.transform.Find("Muzzle").transform;
-
-            // Instantiating VFX.
-            effect = muzzleTransform.GetComponent<VisualEffect>();
-            effect.Stop();
-
-            // Setting up recoil.
-            cameraRecoil = transform.Find("First-Person").transform.Find("Head Location").Find("Recoil").GetComponent<CameraRecoil>();
-
-            // Setting hand effectors.
-            //var ik = transform.Find("First-Person").GetComponents<RootMotion.FinalIK.LimbIK>();
-            //ik[0].solver.target = weaponModel.transform.Find("Weapon Left Hand Effector").transform;
-            */
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (weaponModel.active == false)
+            if (weaponModel != null && weaponModel.active == false)
             {
                 weaponModel.SetActive(true);
 
             }
-            if (muzzleTransform.gameObject.active == false)
+            if (muzzleTransform != null && muzzleTransform.gameObject.active == false)
             {
                 muzzleTransform.gameObject.SetActive(true);
             }
@@ -110,6 +89,12 @@ namespace Ascendant.Controllers
 
             // Handling weapon switching.
             HandleWeaponSwitching();
+
+            // If the player is unarmed, they can't fire.
+            if (weaponSlot == WeaponSlot.Unarmed)
+            {
+                return;
+            }
 
             if (lastFired > 0)
             {
@@ -180,6 +165,10 @@ namespace Ascendant.Controllers
                 SwitchWeapon(WeaponSlot.Secondary);
                 return;
             }
+            if (playerInputController.inputData.unarmedInput > 0 && weaponSlot != WeaponSlot.Unarmed)
+            {
+                SwitchWeapon(WeaponSlot.Unarmed);
+            }
 
         }
 
@@ -193,6 +182,13 @@ namespace Ascendant.Controllers
             if (slot == WeaponSlot.Secondary)
             {
                 weaponData = secondaryWeapon;
+            }
+            if (slot == WeaponSlot.Unarmed)
+            {
+                Destroy(weaponModel);
+                weaponSlot = slot;
+                SwitchWeaponServer(slot);
+                return;
             }
             Debug.Log("switching");
             //Despawn(weaponModel);
@@ -240,7 +236,14 @@ namespace Ascendant.Controllers
             {
                 weaponData = secondaryWeapon;
             }
-
+            if (slot == WeaponSlot.Unarmed)
+            {
+                Destroy(weaponModel);
+                weaponSlot = slot;
+                playerStateController.entityStateModel.weaponTypeState = Models.EntityWeaponTypeState.Unarmed;
+                SwitchWeaponObservers(slot);
+                return;
+            }
             //Despawn(weaponModel);
             Destroy(weaponModel);
             weaponModel = Instantiate(weaponData.weaponModel, hand);
@@ -255,7 +258,14 @@ namespace Ascendant.Controllers
             effect.Stop();
             muzzleTransform.GetComponent<VisualEffect>().enabled = true;
             weaponSlot = slot;
-
+            if (slot == WeaponSlot.Primary)
+            {
+                playerStateController.entityStateModel.weaponTypeState = Models.EntityWeaponTypeState.Rifle;
+            }
+            if (slot == WeaponSlot.Secondary)
+            {
+                playerStateController.entityStateModel.weaponTypeState = Models.EntityWeaponTypeState.Handgun;
+            }
             if (weaponModel.transform.Find("LeftHandEffector") != null)
             {
                 var effector = weaponModel.transform.Find("LeftHandEffector");
@@ -287,7 +297,12 @@ namespace Ascendant.Controllers
             {
                 weaponData = secondaryWeapon;
             }
-
+            if (slot == WeaponSlot.Unarmed)
+            {
+                Destroy(weaponModel);
+                weaponSlot = slot;
+                return;
+            }
             //Despawn(weaponModel);
             Destroy(weaponModel);
             weaponModel = Instantiate(weaponData.weaponModel, hand);

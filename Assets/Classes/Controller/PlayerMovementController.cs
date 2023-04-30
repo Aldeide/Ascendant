@@ -116,7 +116,7 @@ namespace Ascendant.Controllers
             moveData.dashCharges = currentDashCharges;
             moveData.currentDashCooldown = currentDashCooldown;
             moveData.isDead = stateController.entityStateModel.aliveState == Models.EntityAliveState.Dead;
-            moveData.isAiming = stateController.entityStateModel.stanceState == Models.EntityStanceState.Aiming;
+            moveData.isAiming = stateController.IsAiming();
         }
 
         void Awake()
