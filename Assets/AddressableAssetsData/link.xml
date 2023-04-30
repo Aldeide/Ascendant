@@ -1,0 +1,128 @@
+<linker>
+  <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="Ascendant.Character" preserve="all" />
+    <type fullname="Ascendant.Controllers.EntityAnimatorController" preserve="all" />
+    <type fullname="Ascendant.Controllers.IKController" preserve="all" />
+    <type fullname="Ascendant.Controllers.PlayerCameraController" preserve="all" />
+    <type fullname="Ascendant.Controllers.PlayerMovementController" preserve="all" />
+    <type fullname="Ascendant.Controllers.PlayerStateController" preserve="all" />
+    <type fullname="Ascendant.Controllers.PlayerStatsController" preserve="all" />
+    <type fullname="Ascendant.Controllers.VisualRecoil" preserve="all" />
+    <type fullname="Ascendant.Controllers.WeaponController" preserve="all" />
+    <type fullname="Ascendant.HitboxElement" preserve="all" />
+    <type fullname="Ascendant.Models.EntityStateModel" preserve="all" />
+    <type fullname="Ascendant.Models.EntityStatsModel" preserve="all" />
+    <type fullname="Ascendant.PlayerInputController" preserve="all" />
+    <type fullname="Ascendant.PlayerTarget" preserve="all" />
+    <type fullname="Ascendant.UnitframeManager" preserve="all" />
+    <type fullname="CameraRecoil" preserve="all" />
+    <type fullname="LookAtCamera" preserve="all" />
+    <type fullname="ProjectileManager" preserve="all" />
+    <type fullname="Shield" preserve="all" />
+    <type fullname="Weapon" preserve="all" />
+    <type fullname="WeaponEffects" preserve="all" />
+    <type fullname="WeaponSway" preserve="all" />
+  </assembly>
+  <assembly fullname="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="RootMotion.FinalIK.AimIK" preserve="all" />
+    <type fullname="RootMotion.FinalIK.GrounderFBBIK" preserve="all" />
+    <type fullname="RootMotion.FinalIK.LimbIK" preserve="all" />
+    <type fullname="RootMotion.FinalIK.Grounding" preserve="nothing" serialized="true" />
+    <type fullname="RootMotion.FinalIK.Grounding/Quality" preserve="nothing" serialized="true" />
+    <type fullname="RootMotion.FinalIK.IKSolver/Bone" preserve="nothing" serialized="true" />
+    <type fullname="RootMotion.FinalIK.IKSolverAim" preserve="nothing" serialized="true" />
+    <type fullname="RootMotion.FinalIK.IKSolverLimb" preserve="nothing" serialized="true" />
+    <type fullname="RootMotion.FinalIK.IKSolverLimb/BendModifier" preserve="nothing" serialized="true" />
+    <type fullname="RootMotion.FinalIK.IKSolverTrigonometric/TrigonometricBone" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="FishNet.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="FishNet.Component.Observing.SceneCondition" preserve="all" />
+    <type fullname="FishNet.Component.Ownership.PredictedSpawn" preserve="all" />
+    <type fullname="FishNet.Component.Prediction.PredictedObject" preserve="all" />
+    <type fullname="FishNet.Component.Transforming.NetworkTransform" preserve="all" />
+    <type fullname="FishNet.Object.NetworkObject" preserve="all" />
+    <type fullname="FishNet.Observing.NetworkObserver" preserve="all" />
+    <type fullname="FishNet.Component.Prediction.PredictedObject/SmoothingData" preserve="nothing" serialized="true" />
+    <type fullname="FishNet.Component.Transforming.NetworkTransform/ComponentConfigurationType" preserve="nothing" serialized="true" />
+    <type fullname="FishNet.Component.Transforming.NetworkTransform/SnappedAxes" preserve="nothing" serialized="true" />
+    <type fullname="FishNet.Object.TransformProperties" preserve="nothing" serialized="true" />
+    <type fullname="FishNet.Serializing.TransformPackingData" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
+  </assembly>
+  <assembly fullname="Unity.InputSystem, Version=1.5.1.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.InputSystem.InputActionAsset" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.PlayerInput" preserve="all" />
+    <type fullname="UnityEngine.InputSystem.InputAction" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputActionMap" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputBinding" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputControlScheme" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.InputControlScheme/DeviceRequirement" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.PlayerInput/ActionEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.PlayerInput/ControlsChangedEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.PlayerInput/DeviceLostEvent" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.InputSystem.PlayerInput/DeviceRegainedEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.RenderPipelines.HighDefinition.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Rendering.HighDefinition.HDAdditionalLightData" preserve="all" />
+    <type fullname="UnityEngine.Rendering.HighDefinition.BoolScalableSettingValue" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Rendering.HighDefinition.IntScalableSettingValue" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="Unity.ResourceManager, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.AssetBundleProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.BundledAssetProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.InstanceProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.LegacyResourcesProvider" preserve="all" />
+    <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AnimationClip" preserve="all" />
+    <type fullname="UnityEngine.Animator" preserve="all" />
+    <type fullname="UnityEngine.Avatar" preserve="all" />
+    <type fullname="UnityEngine.RuntimeAnimatorController" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AudioClip" preserve="all" />
+    <type fullname="UnityEngine.AudioSource" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.ComputeShader" preserve="all" />
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Light" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Mesh" preserve="all" />
+    <type fullname="UnityEngine.MeshFilter" preserve="all" />
+    <type fullname="UnityEngine.MeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.RectTransform" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.TrailRenderer" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.Events.ArgumentCache" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
+    <type fullname="UnityEngine.Events.PersistentListenerMode" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.BoxCollider" preserve="all" />
+    <type fullname="UnityEngine.CapsuleCollider" preserve="all" />
+    <type fullname="UnityEngine.CharacterController" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.UI.CanvasScaler" preserve="all" />
+    <type fullname="UnityEngine.UI.GraphicRaycaster" preserve="all" />
+    <type fullname="UnityEngine.UI.Image" preserve="all" />
+    <type fullname="UnityEngine.UI.MaskableGraphic/CullStateChangedEvent" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.Canvas" preserve="all" />
+    <type fullname="UnityEngine.CanvasRenderer" preserve="all" />
+  </assembly>
+  <assembly fullname="UnityEngine.VFXModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.VFX.VFXRenderer" preserve="all" />
+    <type fullname="UnityEngine.VFX.VisualEffect" preserve="all" />
+    <type fullname="UnityEngine.VFX.VisualEffectAsset" preserve="all" />
+  </assembly>
+</linker>

@@ -14,6 +14,8 @@ namespace Ascendant
         public float fireInput;
         public float jumpInput;
         public float dashInput;
+        public float primaryWeaponInput;
+        public float secondaryWeaponInput;
     }
 
 
@@ -67,7 +69,19 @@ namespace Ascendant
             if (!IsOwner) return;
             Respawn();
         }
-        
+
+        public void OnPrimaryWeaponCallback(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+            inputData.primaryWeaponInput = context.ReadValue<float>();
+        }
+
+        public void OnSecondaryWeaponCallback(InputAction.CallbackContext context)
+        {
+            if (!IsOwner) return;
+            inputData.secondaryWeaponInput = context.ReadValue<float>();
+        }
+
         [ServerRpc]
         private void Respawn()
         {

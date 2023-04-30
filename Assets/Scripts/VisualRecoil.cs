@@ -39,11 +39,11 @@ namespace Ascendant.Controllers
             }
             if (weaponManager.isAiming)
             {
-                initialPosition = weaponManager.currentWeapon.aimingDownSightsPosition;
+                initialPosition = weaponManager.weaponData.aimingDownSightsPosition;
             }
             else
             {
-                initialPosition = weaponManager.currentWeapon.hipFirePosition;
+                initialPosition = weaponManager.weaponData.hipFirePosition;
             }
             if (weaponManager.lastFired < 0f)
             {

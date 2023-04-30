@@ -30,6 +30,9 @@ public class Weapon : ScriptableObject
     public Vector3 sprintPosition;
     public Vector3 sprintRotation;
 
+    public Vector3 position;
+    public Quaternion rotation;
+
     [Header("Audio")]
     public AudioClip fireAudio;
 

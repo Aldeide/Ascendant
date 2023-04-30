@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda0f87803e76d449b56015da230d818, type: 3}
+  m_Name: Handgun
+  m_EditorClassIdentifier: 
+  weaponModel: {fileID: 7266833815467650263, guid: d0fc192f9bcf7a147aa191c7f39b2e61,
+    type: 3}
+  projectile: {fileID: 2904513502532504295, guid: 4bd4e0949cac8d444b79a0424a09b7d2,
+    type: 3}
+  muzzleEffect: {fileID: 0}
+  weaponName: Handgun
+  clipSize: 15
+  fireRate: 300
+  aimingDownSightsPosition: {x: 0, y: 0, z: 0}
+  aimingDownSightsRotation: {x: 0, y: 0, z: 0}
+  hipFirePosition: {x: 0, y: 0, z: 0}
+  hipFireRotation: {x: 0, y: 0, z: 0}
+  adsDelay: 0
+  crouchPosition: {x: 0, y: 0, z: 0}
+  crouchRotation: {x: 0, y: 0, z: 0}
+  sprintPosition: {x: 0, y: 0, z: 0}
+  sprintRotation: {x: 0, y: 0, z: 0}
+  position: {x: 0.0311, y: 0.1916, z: 0.0054}
+  rotation: {x: -0.117275, y: -0.6539234, z: -0.061616037, w: 0.7448719}
+  fireAudio: {fileID: 8300000, guid: 104755200ced6ff4880a25abc0dc37a9, type: 3}
+  effectsPrefab: {fileID: 0}
+  aimDownSightsAnimationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  translationSwayFactor: 0
+  maxTranslationSway: 0
+  translationSwaySmoothingFactor: 0
+  rotationSwayFactor: 0
+  maxRotationSway: 0
+  rotationSwaySmoothingFactor: 0

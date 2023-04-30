@@ -40,6 +40,14 @@ namespace Ascendant.Models
         Alive,
         Dead
     }
+
+    public enum EntityWeaponTypeState
+    {
+        Unarmed = 0,
+        Handgun = 1,
+        Rifle = 2,
+    }
+
     public class EntityStateModel : NetworkBehaviour
     {
         [field: SyncVar]
@@ -61,6 +69,9 @@ namespace Ascendant.Models
         public EntityFiringState firingState { get; [ServerRpc] set; }
         [field: SyncVar]
         public EntityAliveState aliveState { get; [ServerRpc] set; }
+        [field: SyncVar]
+        public EntityWeaponTypeState weaponTypeState { get; [ServerRpc] set; }
+        [field: SyncVar]
         public float timeOfDeath { get; [ServerRpc] set; }
 
         public bool IsMoving()

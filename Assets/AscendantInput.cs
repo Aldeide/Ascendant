@@ -107,6 +107,42 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Primary Weapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab87daf7-5fd5-4383-a7fc-ef31c8f248ca"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Secondary Weapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""c034c6f8-8551-4800-9091-2a08dba97cb0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Next Weapon"",
+                    ""type"": ""Value"",
+                    ""id"": ""c58b6194-77bf-4bef-bb99-e1f682861e34"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Previous Weapon"",
+                    ""type"": ""Value"",
+                    ""id"": ""c0811fa9-0f82-4749-9b41-0b8bbf3126be"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -393,6 +429,50 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4e51d68-5946-4d76-bd4c-7c9a2c5237c5"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Primary Weapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""02f96fd8-1fd2-4f93-b30b-67fac5ecd37f"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Secondary Weapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc30af6c-52e1-49ef-82ed-dda22a42ec38"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Previous Weapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""238aa69b-d7de-44e7-8b05-ff4478244dc6"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Next Weapon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -989,6 +1069,10 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Respawn = m_Player.FindAction("Respawn", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_PrimaryWeapon = m_Player.FindAction("Primary Weapon", throwIfNotFound: true);
+        m_Player_SecondaryWeapon = m_Player.FindAction("Secondary Weapon", throwIfNotFound: true);
+        m_Player_NextWeapon = m_Player.FindAction("Next Weapon", throwIfNotFound: true);
+        m_Player_PreviousWeapon = m_Player.FindAction("Previous Weapon", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1071,6 +1155,10 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Respawn;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_PrimaryWeapon;
+    private readonly InputAction m_Player_SecondaryWeapon;
+    private readonly InputAction m_Player_NextWeapon;
+    private readonly InputAction m_Player_PreviousWeapon;
     public struct PlayerActions
     {
         private @AscendantInput m_Wrapper;
@@ -1084,6 +1172,10 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Respawn => m_Wrapper.m_Player_Respawn;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @PrimaryWeapon => m_Wrapper.m_Player_PrimaryWeapon;
+        public InputAction @SecondaryWeapon => m_Wrapper.m_Player_SecondaryWeapon;
+        public InputAction @NextWeapon => m_Wrapper.m_Player_NextWeapon;
+        public InputAction @PreviousWeapon => m_Wrapper.m_Player_PreviousWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1120,6 +1212,18 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
             @Dash.started += instance.OnDash;
             @Dash.performed += instance.OnDash;
             @Dash.canceled += instance.OnDash;
+            @PrimaryWeapon.started += instance.OnPrimaryWeapon;
+            @PrimaryWeapon.performed += instance.OnPrimaryWeapon;
+            @PrimaryWeapon.canceled += instance.OnPrimaryWeapon;
+            @SecondaryWeapon.started += instance.OnSecondaryWeapon;
+            @SecondaryWeapon.performed += instance.OnSecondaryWeapon;
+            @SecondaryWeapon.canceled += instance.OnSecondaryWeapon;
+            @NextWeapon.started += instance.OnNextWeapon;
+            @NextWeapon.performed += instance.OnNextWeapon;
+            @NextWeapon.canceled += instance.OnNextWeapon;
+            @PreviousWeapon.started += instance.OnPreviousWeapon;
+            @PreviousWeapon.performed += instance.OnPreviousWeapon;
+            @PreviousWeapon.canceled += instance.OnPreviousWeapon;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1151,6 +1255,18 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
             @Dash.started -= instance.OnDash;
             @Dash.performed -= instance.OnDash;
             @Dash.canceled -= instance.OnDash;
+            @PrimaryWeapon.started -= instance.OnPrimaryWeapon;
+            @PrimaryWeapon.performed -= instance.OnPrimaryWeapon;
+            @PrimaryWeapon.canceled -= instance.OnPrimaryWeapon;
+            @SecondaryWeapon.started -= instance.OnSecondaryWeapon;
+            @SecondaryWeapon.performed -= instance.OnSecondaryWeapon;
+            @SecondaryWeapon.canceled -= instance.OnSecondaryWeapon;
+            @NextWeapon.started -= instance.OnNextWeapon;
+            @NextWeapon.performed -= instance.OnNextWeapon;
+            @NextWeapon.canceled -= instance.OnNextWeapon;
+            @PreviousWeapon.started -= instance.OnPreviousWeapon;
+            @PreviousWeapon.performed -= instance.OnPreviousWeapon;
+            @PreviousWeapon.canceled -= instance.OnPreviousWeapon;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1342,6 +1458,10 @@ public partial class @AscendantInput: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnRespawn(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnPrimaryWeapon(InputAction.CallbackContext context);
+        void OnSecondaryWeapon(InputAction.CallbackContext context);
+        void OnNextWeapon(InputAction.CallbackContext context);
+        void OnPreviousWeapon(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
