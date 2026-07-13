@@ -60,7 +60,7 @@ Players customize their hulls at friendly **Shipyards** using modules unlocked t
 | **Logistics Transport** | Extended Cargo Holds, Engine Boosters | Designed to move massive quantities of raw materials and crated supplies between systems. |
 | **Industrial / Assembler**| Mobile Fabricator, Resource Refiner | Can process materials and manufacture basic ammunition/supplies on-the-go in deep space. |
 | **Combat Warship** | Heavy Shields, Guided Missile Racks, Point-Defense | Armed for escorting logistics convoys, patrolling jump lanes, and sieging enemy stations. |
-| **Hybrid / Support** | Tractor Beams, Repair Arrays, Mining Lasers | A balanced configuration capable of extracting resources while repairing allied structures. |
+| **Hybrid / Support** | Tractor Beams, Repair Arrays, Mining Lasers, Fuel Scoops | A balanced configuration capable of extracting resources, repairing allied structures, or scooping solar fuel. |
 
 ---
 
@@ -75,6 +75,7 @@ All structures in the galaxy are constructed by players. Construction requires r
 
 #### A. Raw Material Extraction & Logistics
 * **Asteroid Mining Rig:** Automatic or player-assisted structures anchored to rich asteroid belts to extract raw ore and gas.
+* **Gaseous Fuel Scoop:** Orbital harvesting platforms anchored near gas giant atmospheres or star coronas to siphon raw gases and compress them into starship fuel.
 * **Resource Storage Hub:** Large depots that act as inventory drop-off points for logistics pilots. They distribute resources to nearby production structures.
 
 #### B. Production & Manufacturing
