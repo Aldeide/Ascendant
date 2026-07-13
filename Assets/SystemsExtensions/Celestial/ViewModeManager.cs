@@ -50,24 +50,44 @@ namespace Ascendant.SystemsExtensions.Celestial
             ApplyZoomAndProjection();
         }
 
+        [SerializeField] private Color m_TacticalBackgroundColor = new Color(0.02f, 0.02f, 0.05f, 1f);
+        
+        private CameraClearFlags m_OriginalClearFlags = CameraClearFlags.Skybox;
+        private Color m_OriginalBackgroundColor = Color.black;
+        private bool m_HasCapturedCameraState = false;
+
         private void ApplyZoomAndProjection()
         {
             if (m_TargetCamera == null) return;
 
             if (m_CurrentMode == ViewMode.Tactical)
             {
+                if (!m_HasCapturedCameraState)
+                {
+                    m_OriginalClearFlags = m_TargetCamera.clearFlags;
+                    m_OriginalBackgroundColor = m_TargetCamera.backgroundColor;
+                    m_HasCapturedCameraState = true;
+                }
+
+                m_TargetCamera.clearFlags = CameraClearFlags.SolidColor;
+                m_TargetCamera.backgroundColor = m_TacticalBackgroundColor;
+
                 m_TargetCamera.orthographic = true;
-                // Scale orthographic size directly with zoom for smooth zooming
                 m_TargetCamera.orthographicSize = m_CurrentZoom;
                 
-                // Position overhead looking straight down
                 m_TargetCamera.transform.position = new Vector3(0f, m_CurrentZoom, 0f);
                 m_TargetCamera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             }
             else
             {
+                if (m_HasCapturedCameraState)
+                {
+                    m_TargetCamera.clearFlags = m_OriginalClearFlags;
+                    m_TargetCamera.backgroundColor = m_OriginalBackgroundColor;
+                    m_HasCapturedCameraState = false;
+                }
+
                 m_TargetCamera.orthographic = false;
-                // Position at an angle for a detailed perspective close-up
                 m_TargetCamera.transform.position = new Vector3(0f, m_CurrentZoom * 0.7f, -m_CurrentZoom * 0.7f);
                 m_TargetCamera.transform.rotation = Quaternion.Euler(45f, 0f, 0f);
             }
@@ -80,6 +100,13 @@ namespace Ascendant.SystemsExtensions.Celestial
             {
                 icon.SetViewMode(m_CurrentMode);
             }
+
+            var paths = FindObjectsByType<OrbitPath>(FindObjectsSortMode.None);
+            foreach (var path in paths)
+            {
+                path.SetViewMode(m_CurrentMode);
+            }
+
             OnViewModeChanged?.Invoke(m_CurrentMode);
         }
     }

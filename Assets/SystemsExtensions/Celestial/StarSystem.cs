@@ -50,6 +50,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             planet.Radius = 10f;
             planet.ParentBody = m_Star;
             planet.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.2f, 0.6f, 1f) : new Color(0.1f, 0.8f, 0.7f));
+            planetObj.AddComponent<OrbitPath>().InitializePath(180f);
             m_Bodies.Add(planet);
 
             // 3. Moon orbiting Terrestrial Planet (placed outside planet's 10f radius)
@@ -62,6 +63,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             moon.Radius = 3f;
             moon.ParentBody = planet;
             moon.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.7f, 0.7f, 0.7f) : new Color(0.5f, 0.5f, 0.5f));
+            moonObj.AddComponent<OrbitPath>().InitializePath(25f);
             m_Bodies.Add(moon);
 
             // 4. Gaseous Fuel Planet
@@ -74,6 +76,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             gasPlanet.Radius = 18f;
             gasPlanet.ParentBody = m_Star;
             gasPlanet.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.9f, 0.5f, 0.2f) : new Color(0.6f, 0.2f, 0.8f));
+            gasPlanetObj.AddComponent<OrbitPath>().InitializePath(300f);
             m_Bodies.Add(gasPlanet);
 
             // 5. Asteroid Belt
@@ -84,6 +87,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             beltBody.Type = CelestialType.AsteroidBelt;
             beltBody.Radius = 450f;
             beltBody.ParentBody = m_Star;
+            beltObj.AddComponent<OrbitPath>().InitializePath(450f);
             m_Bodies.Add(beltBody);
 
             var belt = beltObj.AddComponent<AsteroidBelt>();
