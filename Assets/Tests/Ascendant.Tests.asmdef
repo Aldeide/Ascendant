@@ -4,7 +4,11 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Ascendant.SystemsExtensions"
+        "Ascendant.SystemsExtensions",
+        "AbilitySystem",
+        "Unity.Netcode.Runtime",
+        "com.alelievr.NodeGraphProcessor.Runtime",
+        "Unity.Mathematics"
     ],
     "includePlatforms": [
         "Editor"
@@ -13,7 +17,8 @@
     "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Mono.Data.Sqlite.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

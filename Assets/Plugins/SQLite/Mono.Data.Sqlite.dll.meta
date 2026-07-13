@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: d5d37614d15cca44784feb3d7ee34983
+PluginImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  iconMap: {}
+  executionOrder: {}
+  defineConstraints: []
+  isPreloaded: 0
+  isRuntimeDll: 1
+  isFolderConfigurable: 0
+  isSpecialized: 0
+  systemReferences: []
+  platformBind:
+    Any:
+      enabled: 1
+      settings: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
