@@ -38,6 +38,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             m_Star.BodyName = systemName == "SystemAlpha" ? "Helios" : "Kepler";
             m_Star.Type = CelestialType.Star;
             m_Star.Radius = 500f;
+            m_Star.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(1f, 0.9f, 0.3f) : new Color(1f, 0.3f, 0.1f));
 
             // 2. Terrestrial Planet
             var planetObj = new GameObject($"{systemName}_Planet1");
@@ -48,6 +49,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             planet.Type = CelestialType.TerrestrialPlanet;
             planet.Radius = 120f;
             planet.ParentBody = m_Star;
+            planet.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.2f, 0.6f, 1f) : new Color(0.1f, 0.8f, 0.7f));
             m_Bodies.Add(planet);
 
             // 3. Moon orbiting Terrestrial Planet
@@ -59,6 +61,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             moon.Type = CelestialType.Moon;
             moon.Radius = 30f;
             moon.ParentBody = planet;
+            moon.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.7f, 0.7f, 0.7f) : new Color(0.5f, 0.5f, 0.5f));
             m_Bodies.Add(moon);
 
             // 4. Gaseous Fuel Planet
@@ -70,6 +73,7 @@ namespace Ascendant.SystemsExtensions.Celestial
             gasPlanet.Type = CelestialType.GaseousPlanet;
             gasPlanet.Radius = 250f;
             gasPlanet.ParentBody = m_Star;
+            gasPlanet.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.9f, 0.5f, 0.2f) : new Color(0.6f, 0.2f, 0.8f));
             m_Bodies.Add(gasPlanet);
 
             // 5. Asteroid Belt

@@ -54,6 +54,32 @@ namespace Ascendant.SystemsExtensions.Celestial
                 inventory.MaxCapacity = 1000;
                 inventory.AddResource(ResourceType.Ore, 500); // Prefill with mineable ore
 
+                // Add visual primitive representation for the asteroid
+                var visual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                visual.name = "Visual";
+                visual.transform.SetParent(asteroidObj.transform);
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Random.rotation;
+                
+                // Random scale to make them look organic
+                float size = Random.Range(5f, 15f);
+                visual.transform.localScale = new Vector3(size, size * Random.Range(0.8f, 1.2f), size * Random.Range(0.8f, 1.2f));
+
+                // Greyish-brown color for asteroids
+                var renderer = visual.GetComponent<MeshRenderer>();
+                if (renderer != null)
+                {
+                    var material = new Material(Shader.Find("Standard"));
+                    material.color = new Color(0.45f, 0.4f, 0.35f);
+                    renderer.sharedMaterial = material;
+                }
+
+                var collider = visual.GetComponent<Collider>();
+                if (collider != null)
+                {
+                    DestroyImmediate(collider);
+                }
+
                 m_SpawnedAsteroids.Add(asteroidObj);
             }
             Debug.Log($"[AsteroidBelt] Spawned {m_MaxAsteroids} mineable asteroids in belt.");

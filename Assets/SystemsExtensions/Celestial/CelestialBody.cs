@@ -41,5 +41,46 @@ namespace Ascendant.SystemsExtensions.Celestial
             get => m_ParentBody;
             set => m_ParentBody = value;
         }
+
+        public void CreateVisualRepresentation(Color color)
+        {
+            // Clean up existing visual child if any
+            var existing = transform.Find("Visual");
+            if (existing != null)
+            {
+                DestroyImmediate(existing.gameObject);
+            }
+
+            // Create a primitive sphere for the visual
+            var visual = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            visual.name = "Visual";
+            visual.transform.SetParent(transform);
+            visual.transform.localPosition = Vector3.zero;
+            visual.transform.localRotation = Quaternion.identity;
+            
+            // Set scale based on Radius
+            visual.transform.localScale = Vector3.one * (m_Radius * 2f);
+
+            // Give it a colored material using standard shaders
+            var renderer = visual.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                var material = new Material(Shader.Find("Standard"));
+                material.color = color;
+                if (m_Type == CelestialType.Star)
+                {
+                    material.EnableKeyword("_EMISSION");
+                    material.SetColor("_EmissionColor", color * 2f);
+                }
+                renderer.sharedMaterial = material;
+            }
+
+            // Remove the collider from the visual child to keep root clean
+            var collider = visual.GetComponent<Collider>();
+            if (collider != null)
+            {
+                DestroyImmediate(collider);
+            }
+        }
     }
 }
