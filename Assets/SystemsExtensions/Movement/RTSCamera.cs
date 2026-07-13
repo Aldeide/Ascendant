@@ -87,8 +87,37 @@ namespace Ascendant.SystemsExtensions.Movement
             }
         }
 
+        [Header("Tactical Integration")]
+        [SerializeField] private Celestial.ViewModeManager m_ViewModeManager;
+
         private void UpdatePosition()
         {
+            if (m_ViewModeManager != null)
+            {
+                m_ViewModeManager.SetZoom(m_CurrentZoom);
+
+                if (m_ViewModeManager.CurrentMode == Celestial.ViewMode.Tactical)
+                {
+                    var cam = m_ViewModeManager.TargetCamera ?? GetComponent<Camera>();
+                    if (cam != null)
+                    {
+                        cam.orthographic = true;
+                        cam.orthographicSize = m_CurrentZoom;
+                        cam.transform.position = new Vector3(m_FocalPoint.x, m_CurrentZoom, m_FocalPoint.z);
+                        cam.transform.rotation = Quaternion.Euler(90f, m_Yaw, 0f);
+                    }
+                    return;
+                }
+                else
+                {
+                    var cam = m_ViewModeManager.TargetCamera ?? GetComponent<Camera>();
+                    if (cam != null)
+                    {
+                        cam.orthographic = false;
+                    }
+                }
+            }
+
             // Position camera relative to focal point, yaw, pitch, and zoom
             Quaternion rotation = Quaternion.Euler(m_Pitch, m_Yaw, 0);
             Vector3 offset = rotation * Vector3.back * m_CurrentZoom;
