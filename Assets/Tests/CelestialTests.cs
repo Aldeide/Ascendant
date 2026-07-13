@@ -109,7 +109,7 @@ namespace Ascendant.Tests
             var harvestMethod = typeof(GaseousFuelScoop).GetMethod("HarvestGas", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
             // Position ship within scooping radius of Ares gaseous planet
-            m_ShipObj.transform.position = ares.transform.position + new Vector3(50f, 0f, 0f);
+            m_ShipObj.transform.position = ares.transform.position + new Vector3(10f, 0f, 0f);
 
             // Execute scoop harvest tick
             float distance = Vector3.Distance(m_ShipObj.transform.position, ares.transform.position);
