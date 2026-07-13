@@ -1,5 +1,5 @@
 $unityPath = "C:\Program Files\Unity\Hub\Editor\6000.4.5f1\Editor\Unity.exe"
-$projectPath = "C:\Users\Anthony\Desktop\Ascendant War"
+$projectPath = "C:\Users\Anthony\Desktop\Ascendant"
 $resultsPath = "$projectPath\Library\test-results.xml"
 
 # Remove old results
