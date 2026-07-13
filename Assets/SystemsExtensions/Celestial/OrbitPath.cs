@@ -39,14 +39,16 @@ namespace Ascendant.SystemsExtensions.Celestial
             m_LineRenderer.startColor = m_PathColor;
             m_LineRenderer.endColor = m_PathColor;
 
-            // Generate circular path vertices
+            // Generate circular path vertices centered around parent origin (-transform.localPosition)
+            Vector3 center = -transform.localPosition;
             int segments = 64;
             m_LineRenderer.positionCount = segments + 1;
             float angleStep = 360f / segments;
             for (int i = 0; i <= segments; i++)
             {
                 float rad = Mathf.Deg2Rad * (i * angleStep);
-                m_LineRenderer.SetPosition(i, new Vector3(Mathf.Cos(rad) * orbitRadius, 0f, Mathf.Sin(rad) * orbitRadius));
+                Vector3 point = center + new Vector3(Mathf.Cos(rad) * orbitRadius, 0f, Mathf.Sin(rad) * orbitRadius);
+                m_LineRenderer.SetPosition(i, point);
             }
 
             // Start in standard CloseUp state (hidden by default)
