@@ -1,119 +1,155 @@
-# Game Design Document: Ascendant War
+# Game Design Document: Ascendant
 
-**Ascendant War** is a high-performance, multiplayer 6-DOF (Six Degrees of Freedom) space combat simulator built in Unity.
+**Ascendant** is a persistent, massive multiplayer space logistics and warfare simulation. Drawing heavy inspiration from games like *Foxhole*, Ascendant places players in a persistent, system-spanning war where every ship, defense platform, automated turret, and round of ammunition is gathered, refined, manufactured, and transported by real players.
 
 ---
 
 ## 1. Executive Summary
 
-* **Genre:** Multiplayer Space Combat / Flight Simulator
-* **Camera Perspective:** 3D First-Person (Cockpit) / Third-Person (Chase)
-* **Core Loop:** High-speed dogfighting, resource management, and tactical positioning.
+* **Concept:** A persistent space warfare sandbox driven entirely by player logistics, manufacturing, and combat cooperation.
+* **Camera Perspective:** 3D RTS Point-and-Click (Homeworld-style cursor navigation with 3D altitude adjustments).
+* **Core Loop:** Extract resources $\rightarrow$ Refine and Manufacture $\rightarrow$ Transport and Supply $\rightarrow$ Fortify and Expand $\rightarrow$ Capture Star Systems.
 * **Technology Stack:**
-  - **Engine:** Unity 6000.4
+  - **Engine:** Unity 6
   - **Networking:** Unity Netcode for GameObjects (NGO)
-  - **Physics/Simulation:** C# Job System + Burst Compiler (Authoritative Server)
+  - **Physics/Simulation:** Server-Authoritative Burst Jobs (C# Job System)
 
 ---
 
-## 2. Core Gameplay Mechanics
+## 2. Core Gameplay & Persistent Space Architecture
 
-### 2.1 6-DOF Flight Model
-Players control a starship with six degrees of freedom, allowing translation and rotation along all three axes:
-* **Pitch (X-Axis Rotation):** Nose up/down (W/S keys).
-* **Yaw (Y-Axis Rotation):** Nose left/right (A/D keys).
-* **Roll (Z-Axis Rotation):** Banking left/right (Q/E keys).
-* **Forward Thrust (Z-Axis Translation):** Accelerating forward (Spacebar).
+The war is waged across a persistent, interconnected network of star systems. The map is not a single instance, but a cluster of persistent systems running concurrently.
 
-```
-          [Pitch (X)]
-               ^
-               |  / [Roll (Z)]
-               | /
-               |/
- [Yaw (Y)] <---+---> [Thrust (Forward)]
+```mermaid
+graph LR
+    subgraph System Alpha (Frontline)
+        JP1((Jump Point)) <--> S1[Defense Array]
+    end
+    subgraph System Beta (Logistics Hub)
+        JP2((Jump Point)) <--> S2[Storage Depot]
+        S2 <--> S3[Asteroid Belt]
+    end
+    JP1 <== Hyperlane ==> JP2
 ```
 
-### 2.2 Server-Authoritative Simulation
-To ensure cheat-prevention and uniform state:
-* Clients read physical keyboard inputs and transmit them to the server via ServerRpc.
-* The Server processes movement updates for all ships inside a unified `FixedUpdate` physics tick.
-* Results (Position/Rotation) are automatically synchronized back to all clients.
+### 2.1 Star Systems & Jump Points
+* **Jump Point Travel:** Systems are connected via hyperlanes demarcated by **Jump Points**. Players must navigate their ships to a Jump Point and initiate a jump sequence to transition their ship (and cargo) into adjacent systems.
+* **Persistent Conquest:** Systems are dynamically owned by factions. A system is captured by destroying the enemy's Command Hub and replacing it with a friendly equivalent.
+* **Frontline vs. Rear Systems:** Factions have secure rear systems (where raw materials are abundant) and active frontlines (where defensive structures and munitions are heavily consumed).
 
 ---
 
-## 3. Technical Architecture
+## 3. Player Ships & Customization
+
+Instead of commanding fleets, each player controls and customizes **a single ship**. This fosters personal specialization and reinforces the need for cooperation.
+
+```
++-------------------------------------------------------------+
+|                        Modular Ship                         |
++---------------------+-----------------+---------------------+
+|    Cargo Holds      |  Utility Slots  |    Weapon Mounts    |
+| (Resource Transport)| (Manufacturing) |   (Pure Warship)    |
++---------------------+-----------------+---------------------+
+```
+
+### 3.1 Ship Roles & Customization
+Players customize their hulls at friendly **Shipyards** using modules unlocked through the tech tree.
+
+| Customization Role | Primary Modules | Description |
+| :--- | :--- | :--- |
+| **Logistics Transport** | Extended Cargo Holds, Engine Boosters | Designed to move massive quantities of raw materials and crated supplies between systems. |
+| **Industrial / Assembler**| Mobile Fabricator, Resource Refiner | Can process materials and manufacture basic ammunition/supplies on-the-go in deep space. |
+| **Combat Warship** | Heavy Shields, Guided Missile Racks, Point-Defense | Armed for escorting logistics convoys, patrolling jump lanes, and sieging enemy stations. |
+| **Hybrid / Support** | Tractor Beams, Repair Arrays, Mining Lasers | A balanced configuration capable of extracting resources while repairing allied structures. |
+
+---
+
+## 4. Faction Infrastructure & Logistics
+
+All structures in the galaxy are constructed by players. Construction requires resources (refined alloys, fuel, and components) to be transported directly to the building site.
+
+### 4.1 Construction Categories
+
+> [!IMPORTANT]
+> All structures require regular maintenance supplies (Upkeep) stored in a nearby Storage Hub to prevent decay.
+
+#### A. Raw Material Extraction & Logistics
+* **Asteroid Mining Rig:** Automatic or player-assisted structures anchored to rich asteroid belts to extract raw ore and gas.
+* **Resource Storage Hub:** Large depots that act as inventory drop-off points for logistics pilots. They distribute resources to nearby production structures.
+
+#### B. Production & Manufacturing
+* **Munitions Factory:** Manufactures ammunition crates (missiles, torpedoes, kinetic rounds, and space mines) using refined materials.
+* **Component Assembler:** Produces structural sub-assemblies required to construct advanced defense networks and ship modules.
+
+#### C. Facility Support & Fleet Infrastructure
+* **Refueling / Resupply Depot:** Automates the distribution of fuel and ammo to friendly ships that dock or pass nearby.
+* **Shipyard:** Allows players to dock to repair hulls, swap modules, customize ship builds, and respawn when their ship is destroyed.
+* **Research Center:** Generates research points when supplied with Tech Parts, advancing the global faction technology.
+
+#### D. Defensive Structures
+* **Sensor Array:** Scans the star system and alerts the faction of incoming enemy warp signatures and ship movements.
+* **Automated Missile Platform:** Medium-range defensive platform that fires tracking missiles at hostile targets.
+* **Automated Point-Defense Turret:** Short-range, fast-tracking turret designed to shoot down incoming torpedoes and fighter craft.
+
+---
+
+## 5. Technology & Progression Trees
+
+Progress is split between **Faction Advancement** and **Individual Specialization**.
 
 ```mermaid
 graph TD
-    subgraph Clients (Players)
-        C1[Client 1: ShipController]
-        C2[Client 2: ShipController]
+    subgraph Faction Tech (Global)
+        F1[Advanced Alloys] --> F2[Cruiser Hulls]
+        F1 --> F3[Heavy Torpedoes]
     end
-
-    subgraph Server (Authoritative)
-        SR[NetworkManager]
-        SM[ShipSimulationManager]
-        JB[ShipMovementJob (Burst)]
+    subgraph Personal Specialization (Player)
+        P1[Logistics Focus] --> P2[Refining Speed]
+        P3[Combat Focus] --> P4[Missile Reload]
     end
-
-    C1 -- 1. Send Input RPC --> SR
-    C2 -- 1. Send Input RPC --> SR
-    SR -- 2. Collect Inputs --> SM
-    SM -- 3. Schedule Job --> JB
-    JB -- 4. Update Transforms --> SM
-    SM -- 5. Replicate Positions/Rotations --> C1 & C2
 ```
 
-### 3.1 Network Management
-* **`NetworkManager`:** Standard NGO component running `UnityTransport` as the default transport layer.
-* **`NetworkBootstrap`:** Provides an in-game HUD interface to run the application as a **Host**, **Dedicated Server**, or **Client**.
+### 5.1 Faction Tech Tree (Global)
+* **Collective Investment:** Players deposit "Tech Parts" (rare materials found during mining or salvage) into **Research Centers**.
+* **Global Unlocks:** Once a node is fully researched, it benefits the entire faction (e.g., unlocking heavier ship classes, better manufacturing blueprints, or stronger defenses).
 
-### 3.2 Simulation Pipeline
-1. **`ShipController`**
-   - Monitors player input.
-   - If owned by local client, regularly calls `UpdateInputServerRpc` to update the server with the pilot's actions.
-2. **`ShipSimulationManager`**
-   - Stores active ship registration.
-   - Allocates GC-free persistent native containers (`NativeArray<ShipInput>`, `NativeArray<ShipStats>`, `TransformAccessArray`).
-   - Runs on the server during `FixedUpdate` to execute the simulation.
-3. **`ShipMovementJob`**
-   - A Burst-compiled multithreaded job updating all ship transforms in parallel.
-   - Calculates 3D rotational Euler rotation and forward velocity translation.
+### 5.2 Individual Tech Trees (Specialization)
+* **Experience Earned:** Players earn specialization points by performing specific roles (mining, shipping, defending, researching).
+* **Role Perks:** Unlocks personal efficiency bonuses, such as faster mining speed, higher cargo capacity, reduced ship repair costs, or faster weapon lock-on speeds.
 
 ---
 
-## 4. Level & Environment Design
+## 6. Global Ranking & War Contribution
 
-* **Main Scene (`OutdoorsScene`):** The primary dogfight arena consisting of open space, floating debris, and asteroid hazards.
-* **Network Infrastructure:** Dedicated GameObjects for environment hazards, spawn points, and boundary volumes.
+To incentivize player roles that don't focus on combat (such as logistics and mining), the game features a comprehensive ranking system based on **War Contribution**.
 
----
+### 6.1 War Contribution Points (WCP)
+Players earn WCP for actions that help the faction win the war:
+* **Logistics:** Delivering supply crates to frontline bases, refining raw ore, and transporting resources.
+* **Engineering:** Constructing and repairing structures, rebuilding destroyed defenses, and fueling depots.
+* **Combat:** Destroying enemy ships, capturing jump points, and defending faction structures.
+* **Research:** Discovering tech parts and contributing to Research Center projects.
 
-## 5. Roadmap & Future Modules
+### 6.2 Rank Hierarchy and Branches
 
-```mermaid
-gantt
-    title Ascendant War Development Roadmap
-    dateFormat  YYYY-MM-DD
-    section Phase 1: Core Flight
-    6-DOF Job Movement       :done,    2026-07-01, 2026-07-13
-    section Phase 2: Combat
-    Weapon Systems (RPCs)    :active,  2026-07-14, 2026-07-28
-    Health & Damage Sync     :         2026-07-29, 2026-08-10
-    section Phase 3: Polish
-    Lag Compensation         :         2026-08-11, 2026-08-25
-    Cockpit HUD Interface   :         2026-08-26, 2026-09-10
+> [!TIP]
+> Your rank displays as a badge next to your player name in chat and on the space HUD, showing other players your primary area of expertise and veteran status.
+
+```
+            [ Grand Admiral / Faction Leader ]
+                          |
+         +----------------+----------------+
+         |                                 |
+  [ Line Branch ]                 [ Support Branch ]
+  - Fleet Commander               - Logistics Director
+  - Captain                       - Chief Engineer
+  - Lieutenant                    - Research Director
 ```
 
-### 5.1 Weapon Systems
-* Spawn projectiles on the server using RPC triggers.
-* Raycast laser hits on the server with client-side visual effects.
-
-### 5.2 Health and Damage Replication
-* Track durability via server-side variables synced to clients using `NetworkVariable<float>`.
-* Trigger death/respawn loops when durability drops below zero.
-
-### 5.3 Client-Side Prediction (CSP)
-* Implement local prediction for local player ships to eliminate input latency.
-* Correct local positions smoothly when server updates differ from predicted trajectory.
+| Rank Level | Line Officer (Combat) | Logistics Officer (Industrial) | Science & Engineering (Support) |
+| :--- | :--- | :--- | :--- |
+| **Tier 4** | Admiral | Logistics Director | Research Director |
+| **Tier 3** | Captain | Supply Superintendent | Chief Engineer |
+| **Tier 2** | Commander | Logistics Coordinator | Senior Engineer |
+| **Tier 1** | Lieutenant | Transport Officer | Field Technician |
+| **Entry**  | Ensign | Quartermaster Apprentice | Cadet |
