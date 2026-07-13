@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bf140f58e54a868c11a0a4178efec7, type: 3}
+  m_Name: GameplayTagData
+  m_EditorClassIdentifier: 
+  Tags:
+  - Ability.Active
+  - Ability.Active.Dash
+  - Ability.Active.Test
+  - Ability.Passive
+  - Ability.Passive.Shield
+  - Cooldown.Ability.Dash
+  - Cue.Animation
+  - Cue.Animation.Parameter.Grounded
+  - Cue.Animation.State.Death
+  - Cue.Animation.State.Idle
+  - Cue.Animation.State.Jump.Start
+  - Cue.Animation.State.Stunned
+  - Cue.Audio.Gun.B
+  - Cue.IK
+  - Cue.IK.Arms.Disable
+  - Cue.IK.Arms.Enable
+  - Cue.IK.Feet.Disable
+  - Cue.IK.Feet.Enable
+  - Cue.Light.Burst.Muzzle
+  - Cue.Prefab
+  - Cue.Prefab.Impact.A
+  - Cue.Prefab.Trail.A
+  - Cue.VisualEffect.Dev.Loop
+  - Cue.VisualEffect.Muzzle.A
+  - Data.Effect.Damage
+  - Effect.Cost.Ability.Dash
+  - Effect.Modifier.Damage
+  - Effect.Modifier.Damage.Kinetic
+  - EquipmentSlot.Armor
+  - EquipmentSlot.Core
+  - EquipmentSlot.Weapon
+  - Item.Equipment.Armor
+  - Item.Equipment.EnergyCore
+  - Item.Equipment.Weapon
+  - Item.Modifier.Active
+  - Item.Modifier.Passive
+  - Mod.Slot.Active.1
+  - Mod.Slot.Active.2
+  - Mod.Slot.Passive.1
+  - Mod.Slot.Passive.2
+  - Slot.Hip.Left
+  - Slot.Hip.Right
+  - Status.Aiming
+  - Status.Dead
+  - Status.Debuff.Stun
+  - Status.Immobilised
+  - Test.Test
+  - Unit.Player

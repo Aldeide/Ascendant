@@ -1,0 +1,27 @@
+{
+    "name": "Ascendant.SystemsExtensions",
+    "rootNamespace": "Ascendant.SystemsExtensions",
+    "references": [
+        "Ascendant.Systems",
+        "AbilitySystem",
+        "com.alelievr.NodeGraphProcessor.Runtime",
+        "Unity.Entities",
+        "Unity.Entities.Hybrid",
+        "Unity.Netcode.Runtime",
+        "Unity.Transforms",
+        "Unity.Mathematics",
+        "Unity.Physics",
+        "Unity.Collections",
+        "Unity.Burst",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
