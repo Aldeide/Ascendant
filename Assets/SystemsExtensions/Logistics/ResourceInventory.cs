@@ -1,3 +1,4 @@
+using AbilitySystem.Scripts;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,9 +26,28 @@ namespace Ascendant.SystemsExtensions.Logistics
     {
         [SerializeField] private int m_MaxCapacity = 1000;
         
+        private AbilitySystemComponent m_AbilitySystemComp;
+
+        private void Awake()
+        {
+            m_AbilitySystemComp = GetComponent<AbilitySystemComponent>();
+        }
+
         public int MaxCapacity
         {
-            get => m_MaxCapacity;
+            get
+            {
+                // Retrieve capacity dynamically from the Gameplay Ability System attributes if available
+                if (m_AbilitySystemComp != null && m_AbilitySystemComp.AbilitySystem != null)
+                {
+                    var attr = m_AbilitySystemComp.AbilitySystem.AttributeSetManager.GetAttribute("CargoCapacity");
+                    if (attr != null)
+                    {
+                        return (int)attr.CurrentValue;
+                    }
+                }
+                return m_MaxCapacity;
+            }
             set => m_MaxCapacity = value;
         }
 
@@ -60,7 +80,7 @@ namespace Ascendant.SystemsExtensions.Logistics
         public bool CanAdd(ResourceType type, int amount)
         {
             if (amount <= 0) return false;
-            return GetTotalAmount() + amount <= m_MaxCapacity;
+            return GetTotalAmount() + amount <= MaxCapacity;
         }
 
         public bool AddResource(ResourceType type, int amount)

@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
+using AbilitySystem.Scripts;
+using AbilitySystem.Runtime.Core;
 using Ascendant.SystemsExtensions.Logistics;
 
 namespace Ascendant.Tests
@@ -110,6 +112,51 @@ namespace Ascendant.Tests
             consumeMethod.Invoke(hub, null);
             Assert.AreEqual(1, inventory.GetAmount(ResourceType.Components));
             Assert.IsTrue(hub.IsDecaying);
+        }
+
+        [Test]
+        public void Test_GASAttributeIntegration_CargoCapacity()
+        {
+            var asc = m_TestObject.AddComponent<AbilitySystemComponent>();
+            asc.Initialise();
+
+            var attributeSet = new ShipAttributeSet(asc.AbilitySystem);
+            asc.AbilitySystem.AttributeSetManager.AddAttributeSet(typeof(ShipAttributeSet), attributeSet);
+
+            var inventory = m_TestObject.AddComponent<ResourceInventory>();
+
+            // The MaxCapacity property should read directly from the GAS AttributeSet CargoCapacity
+            Assert.AreEqual(1000, inventory.MaxCapacity);
+
+            // Modify the GAS attribute directly
+            attributeSet.CargoCapacity.SetBaseValue(500);
+            Assert.AreEqual(500, inventory.MaxCapacity);
+        }
+
+        [Test]
+        public void Test_GASAttributeIntegration_MiningSpeed()
+        {
+            var asc = m_TestObject.AddComponent<AbilitySystemComponent>();
+            asc.Initialise();
+
+            var attributeSet = new ShipAttributeSet(asc.AbilitySystem);
+            asc.AbilitySystem.AttributeSetManager.AddAttributeSet(typeof(ShipAttributeSet), attributeSet);
+
+            var inventory = m_TestObject.AddComponent<ResourceInventory>();
+            var rig = m_TestObject.AddComponent<AsteroidMiningRig>();
+            rig.ExtractionAmount = 10;
+
+            var extractMethod = typeof(AsteroidMiningRig).GetMethod("ExtractOre", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            // Standard MiningSpeed is 1.0f
+            extractMethod.Invoke(rig, null);
+            Assert.AreEqual(10, inventory.GetAmount(ResourceType.Ore));
+
+            // Increase MiningSpeed via GAS attribute to 2.5f
+            attributeSet.MiningSpeed.SetBaseValue(2.5f);
+            inventory.RemoveResource(ResourceType.Ore, 10);
+            extractMethod.Invoke(rig, null);
+            Assert.AreEqual(25, inventory.GetAmount(ResourceType.Ore));
         }
     }
 }

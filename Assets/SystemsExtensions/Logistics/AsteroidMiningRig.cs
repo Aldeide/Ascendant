@@ -1,3 +1,4 @@
+using AbilitySystem.Scripts;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Ascendant.SystemsExtensions.Logistics
         [SerializeField] private int m_ExtractionAmount = 5;
 
         private ResourceInventory m_Inventory;
+        private AbilitySystemComponent m_AbilitySystemComp;
         private float m_Timer;
 
         public float ExtractionInterval
@@ -27,6 +29,7 @@ namespace Ascendant.SystemsExtensions.Logistics
         private void Awake()
         {
             m_Inventory = GetComponent<ResourceInventory>();
+            m_AbilitySystemComp = GetComponent<AbilitySystemComponent>();
         }
 
         private void Update()
@@ -46,7 +49,18 @@ namespace Ascendant.SystemsExtensions.Logistics
         {
             if (m_Inventory != null)
             {
-                m_Inventory.AddResource(ResourceType.Ore, m_ExtractionAmount);
+                float multiplier = 1.0f;
+                // Scale extraction amount dynamically based on MiningSpeed attribute
+                if (m_AbilitySystemComp != null && m_AbilitySystemComp.AbilitySystem != null)
+                {
+                    var attr = m_AbilitySystemComp.AbilitySystem.AttributeSetManager.GetAttribute("MiningSpeed");
+                    if (attr != null)
+                    {
+                        multiplier = attr.CurrentValue;
+                    }
+                }
+                int finalAmount = Mathf.RoundToInt(m_ExtractionAmount * multiplier);
+                m_Inventory.AddResource(ResourceType.Ore, finalAmount);
             }
         }
     }
