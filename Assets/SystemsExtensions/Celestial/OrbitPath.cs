@@ -55,6 +55,21 @@ namespace Ascendant.SystemsExtensions.Celestial
             SetViewMode(ViewMode.CloseUp);
         }
 
+        private void Update()
+        {
+            if (m_LineRenderer != null && m_LineRenderer.enabled)
+            {
+                var cam = Camera.main;
+                if (cam != null)
+                {
+                    float currentZoom = cam.orthographic ? cam.orthographicSize : Vector3.Distance(transform.position, cam.transform.position);
+                    float dynamicWidth = currentZoom * 0.008f;
+                    m_LineRenderer.startWidth = dynamicWidth;
+                    m_LineRenderer.endWidth = dynamicWidth;
+                }
+            }
+        }
+
         public void SetViewMode(ViewMode mode)
         {
             if (m_LineRenderer == null) return;
