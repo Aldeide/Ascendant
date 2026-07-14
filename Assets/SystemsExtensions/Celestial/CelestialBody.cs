@@ -65,14 +65,28 @@ namespace Ascendant.SystemsExtensions.Celestial
             var renderer = visual.GetComponent<MeshRenderer>();
             if (renderer != null)
             {
-                var material = new Material(Shader.Find("Standard"));
-                material.color = color;
+                Material starMat = null;
+#if UNITY_EDITOR
                 if (m_Type == CelestialType.Star)
                 {
-                    material.EnableKeyword("_EMISSION");
-                    material.SetColor("_EmissionColor", color * 2f);
+                    starMat = UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/Star.mat");
                 }
-                renderer.sharedMaterial = material;
+#endif
+                if (starMat != null)
+                {
+                    renderer.sharedMaterial = starMat;
+                }
+                else
+                {
+                    var material = new Material(Shader.Find("Standard"));
+                    material.color = color;
+                    if (m_Type == CelestialType.Star)
+                    {
+                        material.EnableKeyword("_EMISSION");
+                        material.SetColor("_EmissionColor", color * 2f);
+                    }
+                    renderer.sharedMaterial = material;
+                }
             }
 
             // Remove the collider from the visual child to keep root clean

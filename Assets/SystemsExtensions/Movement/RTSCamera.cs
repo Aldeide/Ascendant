@@ -11,15 +11,18 @@ namespace Ascendant.SystemsExtensions.Movement
         [SerializeField] private float m_OrbitSpeed = 3f;
 
         [Header("Limits")]
-        [SerializeField] private float m_MinZoom = 5f;
-        [SerializeField] private float m_MaxZoom = 100f;
+        [SerializeField] private float m_MinZoom = 15f;
+        [SerializeField] private float m_MaxZoom = 30000f;
         [SerializeField] private float m_MinPitch = 10f;
         [SerializeField] private float m_MaxPitch = 85f;
 
-        private float m_CurrentZoom = 30f;
+        private float m_CurrentZoom = 800f;
         private float m_Yaw = 0f;
         private float m_Pitch = 45f;
         private Vector3 m_FocalPoint = Vector3.zero;
+
+        private Transform m_FollowTarget;
+        private bool m_IsFollowing = false;
 
         private void Start()
         {
@@ -30,6 +33,17 @@ namespace Ascendant.SystemsExtensions.Movement
 
         private void Update()
         {
+            HandleFollowInput();
+
+            if (m_IsFollowing && m_FollowTarget != null)
+            {
+                m_FocalPoint = m_FollowTarget.position;
+            }
+            else if (m_IsFollowing && m_FollowTarget == null)
+            {
+                m_IsFollowing = false;
+            }
+
             HandlePan();
             HandleZoom();
             HandleOrbit();
@@ -52,13 +66,58 @@ namespace Ascendant.SystemsExtensions.Movement
 
             if (x != 0 || z != 0)
             {
+                // Panning manually breaks follow mode
+                m_IsFollowing = false;
+                m_FollowTarget = null;
+
                 // Calculate move direction relative to camera yaw
                 Vector3 forward = Quaternion.AngleAxis(m_Yaw, Vector3.up) * Vector3.forward;
                 Vector3 right = Quaternion.AngleAxis(m_Yaw, Vector3.up) * Vector3.right;
 
                 Vector3 moveDir = (forward * z + right * x).normalized;
-                m_FocalPoint += moveDir * m_PanSpeed * Time.deltaTime;
+                // Scale pan speed relative to the zoom level so movement isn't sluggish when zoomed out
+                float scaledPanSpeed = m_PanSpeed * (m_CurrentZoom / 100f);
+                m_FocalPoint += moveDir * scaledPanSpeed * Time.deltaTime;
             }
+        }
+
+        private void HandleFollowInput()
+        {
+            if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+            {
+                m_IsFollowing = !m_IsFollowing;
+                if (m_IsFollowing)
+                {
+                    m_FollowTarget = FindLocalPlayerShip();
+                    if (m_FollowTarget == null)
+                    {
+                        m_IsFollowing = false;
+                        Debug.LogWarning("[RTSCamera] Follow failed: No local player owned ship found.");
+                    }
+                    else
+                    {
+                        Debug.Log($"[RTSCamera] Following local player ship: {m_FollowTarget.name}");
+                    }
+                }
+                else
+                {
+                    m_FollowTarget = null;
+                    Debug.Log("[RTSCamera] Follow disabled.");
+                }
+            }
+        }
+
+        private Transform FindLocalPlayerShip()
+        {
+            var ships = FindObjectsByType<ShipController>(FindObjectsInactive.Exclude);
+            foreach (var ship in ships)
+            {
+                if (ship.IsOwner)
+                {
+                    return ship.transform;
+                }
+            }
+            return null;
         }
 
         private void HandleZoom()
@@ -68,8 +127,13 @@ namespace Ascendant.SystemsExtensions.Movement
                 float scroll = Mouse.current.scroll.ReadValue().y;
                 if (scroll != 0)
                 {
-                    // Scroll delta is usually around 120 per notch, normalize it to match previous behavior
-                    m_CurrentZoom -= (scroll / 120f) * m_ZoomSpeed;
+                    // Scale scroll speed relative to current zoom level to feel logarithmic/exponential
+                    float zoomChange = (scroll / 120f) * m_ZoomSpeed * (m_CurrentZoom * 0.05f);
+                    if (Mathf.Abs(zoomChange) < 1f)
+                    {
+                        zoomChange = Mathf.Sign(zoomChange) * 1f;
+                    }
+                    m_CurrentZoom -= zoomChange;
                     m_CurrentZoom = Mathf.Clamp(m_CurrentZoom, m_MinZoom, m_MaxZoom);
                 }
             }

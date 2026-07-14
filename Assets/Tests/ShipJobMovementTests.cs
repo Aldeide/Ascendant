@@ -4,6 +4,7 @@ using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Jobs;
 using Ascendant.SystemsExtensions.Movement;
+using Ascendant.SystemsExtensions.Celestial;
 
 namespace Ascendant.Tests
 {
@@ -44,7 +45,7 @@ namespace Ascendant.Tests
 
             inputs[0] = new ShipInput
             {
-                TargetPosition = new Vector3(0, 0, 10f),
+                TargetCoordinate = new GridCoordinate(new Vector3(0, 0, 200f)),
                 HasTarget = true
             };
 
@@ -67,10 +68,11 @@ namespace Ascendant.Tests
 
             // Assert
             // Movespeed is 10, DeltaTime is 0.5, so it should advance by exactly 5 units towards the target along Z
-            Vector3 expectedPos = new Vector3(0, 0, 5f);
-            Assert.AreEqual(expectedPos.x, m_TestObject.transform.position.x, 0.001f);
-            Assert.AreEqual(expectedPos.y, m_TestObject.transform.position.y, 0.001f);
-            Assert.AreEqual(expectedPos.z, m_TestObject.transform.position.z, 0.001f);
+            // Accel is 10/3 = 3.333. Velocity after 0.5s = 1.666. Position step = Velocity * 0.5s = 0.833f.
+            Vector3 expectedPos = new Vector3(0, 0, 0.833f);
+            Assert.AreEqual(expectedPos.x, m_TestObject.transform.position.x, 0.01f);
+            Assert.AreEqual(expectedPos.y, m_TestObject.transform.position.y, 0.01f);
+            Assert.AreEqual(expectedPos.z, m_TestObject.transform.position.z, 0.01f);
             Assert.IsTrue(inputs[0].HasTarget);
 
             // Clean up NativeArrays
@@ -91,7 +93,7 @@ namespace Ascendant.Tests
 
             inputs[0] = new ShipInput
             {
-                TargetPosition = new Vector3(0, 0, 10f),
+                TargetCoordinate = new GridCoordinate(new Vector3(0, 0, 10f)),
                 HasTarget = true
             };
 
@@ -115,7 +117,7 @@ namespace Ascendant.Tests
             // Assert
             // It should stop moving and set HasTarget = false
             Assert.IsFalse(inputs[0].HasTarget);
-            Assert.AreEqual(9.9f, m_TestObject.transform.position.z, 0.001f);
+            Assert.AreEqual(10.0f, m_TestObject.transform.position.z, 0.001f);
 
             // Clean up NativeArrays
             inputs.Dispose();
@@ -136,7 +138,7 @@ namespace Ascendant.Tests
             // Target is to the right (X+)
             inputs[0] = new ShipInput
             {
-                TargetPosition = new Vector3(10f, 0, 0),
+                TargetCoordinate = new GridCoordinate(new Vector3(200f, 0, 0)),
                 HasTarget = true
             };
 

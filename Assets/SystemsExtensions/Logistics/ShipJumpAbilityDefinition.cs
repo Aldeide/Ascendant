@@ -1,15 +1,25 @@
+using System;
 using AbilitySystem.Runtime.Abilities;
 using AbilitySystem.Runtime.Core;
 using UnityEngine;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
-    [CreateAssetMenu(menuName = "AbilitySystem/Abilities/ShipJumpAbilityDefinition")]
+    [CreateAssetMenu(fileName = "ShipJumpAbilityDefinition", menuName = "AbilitySystem/Abilities/ShipJumpAbilityDefinition")]
     public class ShipJumpAbilityDefinition : AbilityDefinition
     {
-        public override Ability CreateAbilityInstance(IAbilitySystem owner, int level)
+        public ShipJumpAbilityDefinition() : base()
         {
-            return new ShipJumpAbility(this, owner, level);
+            NetworkPolicy = AbilityNetworkPolicy.ClientPredicted;
+            NetworkSecurityPolicy = AbilityNetworkSecurityPolicy.ClientOrServer;
+            UniqueName = "ShipJumpAbility";
+        }
+
+        public override Type AbilityType() => typeof(ShipJumpAbility);
+
+        public override Ability ToAbility(IAbilitySystem owner)
+        {
+            return new ShipJumpAbility(this, owner);
         }
     }
 }

@@ -6,8 +6,8 @@ namespace Ascendant.SystemsExtensions.Celestial
     public class ViewModeManager : MonoBehaviour
     {
         [SerializeField] private Camera m_TargetCamera;
-        [SerializeField] private float m_TacticalZoomThreshold = 80f;
-        [SerializeField] private float m_CurrentZoom = 15f;
+        [SerializeField] private float m_TacticalZoomThreshold = 1800f;
+        [SerializeField] private float m_CurrentZoom = 600f;
         
         private ViewMode m_CurrentMode = ViewMode.CloseUp;
 

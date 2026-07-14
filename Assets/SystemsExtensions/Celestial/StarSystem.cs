@@ -37,46 +37,46 @@ namespace Ascendant.SystemsExtensions.Celestial
             m_Star = starObj.AddComponent<CelestialBody>();
             m_Star.BodyName = systemName == "SystemAlpha" ? "Helios" : "Kepler";
             m_Star.Type = CelestialType.Star;
-            m_Star.Radius = 50f;
+            m_Star.Radius = 1200f;
             m_Star.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(1f, 0.9f, 0.3f) : new Color(1f, 0.3f, 0.1f));
 
             // 2. Terrestrial Planet
             var planetObj = new GameObject($"{systemName}_Planet1");
             planetObj.transform.SetParent(transform);
-            planetObj.transform.localPosition = new Vector3(180f, 0f, 0f);
+            planetObj.transform.localPosition = new Vector3(4500f, 0f, 0f);
             var planet = planetObj.AddComponent<CelestialBody>();
             planet.BodyName = systemName == "SystemAlpha" ? "Gaia" : "Kepler-b";
             planet.Type = CelestialType.TerrestrialPlanet;
-            planet.Radius = 10f;
+            planet.Radius = 250f;
             planet.ParentBody = m_Star;
             planet.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.2f, 0.6f, 1f) : new Color(0.1f, 0.8f, 0.7f));
-            planetObj.AddComponent<OrbitPath>().InitializePath(180f);
+            planetObj.AddComponent<OrbitPath>().InitializePath(4500f);
             m_Bodies.Add(planet);
 
-            // 3. Moon orbiting Terrestrial Planet (placed outside planet's 10f radius)
+            // 3. Moon orbiting Terrestrial Planet (placed outside planet's 250f radius)
             var moonObj = new GameObject($"{systemName}_Moon");
             moonObj.transform.SetParent(planetObj.transform);
-            moonObj.transform.localPosition = new Vector3(25f, 0f, 0f);
+            moonObj.transform.localPosition = new Vector3(600f, 0f, 0f);
             var moon = moonObj.AddComponent<CelestialBody>();
             moon.BodyName = systemName == "SystemAlpha" ? "Luna" : "Kepler-b-I";
             moon.Type = CelestialType.Moon;
-            moon.Radius = 3f;
+            moon.Radius = 60f;
             moon.ParentBody = planet;
             moon.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.7f, 0.7f, 0.7f) : new Color(0.5f, 0.5f, 0.5f));
-            moonObj.AddComponent<OrbitPath>().InitializePath(25f);
+            moonObj.AddComponent<OrbitPath>().InitializePath(600f);
             m_Bodies.Add(moon);
 
             // 4. Gaseous Fuel Planet
             var gasPlanetObj = new GameObject($"{systemName}_Planet2");
             gasPlanetObj.transform.SetParent(transform);
-            gasPlanetObj.transform.localPosition = new Vector3(-300f, 0f, 0f);
+            gasPlanetObj.transform.localPosition = new Vector3(-7500f, 0f, 0f);
             var gasPlanet = gasPlanetObj.AddComponent<CelestialBody>();
             gasPlanet.BodyName = systemName == "SystemAlpha" ? "Ares" : "Kepler-c";
             gasPlanet.Type = CelestialType.GaseousPlanet;
-            gasPlanet.Radius = 18f;
+            gasPlanet.Radius = 400f;
             gasPlanet.ParentBody = m_Star;
             gasPlanet.CreateVisualRepresentation(systemName == "SystemAlpha" ? new Color(0.9f, 0.5f, 0.2f) : new Color(0.6f, 0.2f, 0.8f));
-            gasPlanetObj.AddComponent<OrbitPath>().InitializePath(300f);
+            gasPlanetObj.AddComponent<OrbitPath>().InitializePath(7500f);
             m_Bodies.Add(gasPlanet);
 
             // 5. Asteroid Belt
@@ -85,15 +85,15 @@ namespace Ascendant.SystemsExtensions.Celestial
             var beltBody = beltObj.AddComponent<CelestialBody>();
             beltBody.BodyName = systemName == "SystemAlpha" ? "Prime Belt" : "Kuiper Ring";
             beltBody.Type = CelestialType.AsteroidBelt;
-            beltBody.Radius = 450f;
+            beltBody.Radius = 12000f;
             beltBody.ParentBody = m_Star;
-            beltObj.AddComponent<OrbitPath>().InitializePath(450f);
+            beltObj.AddComponent<OrbitPath>().InitializePath(12000f);
             m_Bodies.Add(beltBody);
 
             var belt = beltObj.AddComponent<AsteroidBelt>();
             belt.MaxAsteroids = 8;
-            belt.InnerRadius = 400f;
-            belt.OuterRadius = 500f;
+            belt.InnerRadius = 10500f;
+            belt.OuterRadius = 13500f;
             belt.SpawnAsteroids();
         }
     }

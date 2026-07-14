@@ -42,8 +42,8 @@ namespace Ascendant.SystemsExtensions.Logistics
                     var repo = new WorldDatabaseRepository(conn);
                     repo.CreateTables();
 
-                    // Find all active structures in the scene and persist them
-                    var storageHubs = FindObjectsByType<ResourceStorageHub>(FindObjectsSortMode.None);
+                    // Find all active storage hubs and persist them
+                    var storageHubs = FindObjectsByType<ResourceStorageHub>(FindObjectsInactive.Exclude);
                     foreach (var hub in storageHubs)
                     {
                         var inventory = hub.GetComponent<ResourceInventory>();
@@ -55,6 +55,24 @@ namespace Ascendant.SystemsExtensions.Logistics
                             "ResourceStorageHub",
                             hub.transform.position,
                             hub.transform.rotation,
+                            100.0f,
+                            invState
+                        );
+                    }
+
+                    // Find all active asteroid miners and persist them
+                    var miners = FindObjectsByType<AsteroidMiningRig>(FindObjectsInactive.Exclude);
+                    foreach (var miner in miners)
+                    {
+                        var inventory = miner.GetComponent<ResourceInventory>();
+                        var invState = inventory != null ? inventory.State.Value : default;
+                        
+                        repo.SaveStructure(
+                            miner.gameObject.name,
+                            "SystemAlpha",
+                            "AsteroidMiner",
+                            miner.transform.position,
+                            miner.transform.rotation,
                             100.0f,
                             invState
                         );

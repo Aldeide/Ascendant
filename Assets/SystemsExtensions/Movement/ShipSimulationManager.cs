@@ -5,13 +5,15 @@ using Unity.Jobs;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Jobs;
+using Ascendant.SystemsExtensions.Celestial;
 
 namespace Ascendant.SystemsExtensions.Movement
 {
     public struct ShipInput : INetworkSerializeByMemcpy
     {
-        public Vector3 TargetPosition;
+        public GridCoordinate TargetCoordinate;
         public bool HasTarget;
+        public Vector3 Velocity;
     }
 
     public struct ShipStats : INetworkSerializeByMemcpy
@@ -34,32 +36,92 @@ namespace Ascendant.SystemsExtensions.Movement
 
             var stats = Stats[index];
             Vector3 currentPos = transform.position;
-            Vector3 dir = input.TargetPosition - currentPos;
-            float dist = dir.magnitude;
+            GridCoordinate currentCoord = new GridCoordinate(currentPos);
+            Vector3 diff = GridCoordinate.GetDifference(input.TargetCoordinate, currentCoord);
+            float dist = diff.magnitude;
 
-            // Arrival tolerance
-            if (dist < 0.2f)
+            // Calculate physics acceleration rate
+            float accel = stats.MoveSpeed / 3.0f; // Reaches top speed in 3 seconds
+            if (accel < 0.1f) accel = 100f; // Fallback
+
+            float speed = input.Velocity.magnitude;
+
+            // Deceleration distance needed: d = v^2 / 2a
+            float decelDist = (speed * speed) / (2.0f * accel);
+            
+            // Add safety margin based on current speed and frame time
+            float safetyMargin = speed * DeltaTime * 1.5f;
+            decelDist += safetyMargin;
+
+            // Are we moving towards the target or away from it?
+            Vector3 targetDir = diff / dist;
+            float dotProduct = speed > 0.1f ? Vector3.Dot(input.Velocity.normalized, targetDir) : 1f;
+
+            // Dynamic arrival tolerance to prevent overshooting at high velocities
+            float arrivalThreshold = Mathf.Max(30f, speed * DeltaTime * 1.2f);
+            if (dist < arrivalThreshold)
             {
-                input.HasTarget = false;
-                Inputs[index] = input;
-                return;
+                // Stop the ship if we are in the braking zone, moving slowly, or already very close
+                if (dist <= decelDist || speed < (stats.MoveSpeed * 0.2f) || dist < 15f)
+                {
+                    input.HasTarget = false;
+                    input.Velocity = Vector3.zero;
+                    Inputs[index] = input;
+                    transform.position = input.TargetCoordinate.ToWorldPosition(); // Snap to target!
+                    return;
+                }
             }
 
-            Vector3 targetDir = dir / dist;
+            // Determine desired heading based on Expanse physics (drift correction + braking)
+            Vector3 desiredHeading;
+            if (speed > 10f)
+            {
+                if (dotProduct > 0f && dist <= decelDist)
+                {
+                    // Decelerate: moving towards target but inside stopping distance. Point opposite to velocity.
+                    desiredHeading = -input.Velocity.normalized;
+                }
+                else if (dotProduct <= 0f)
+                {
+                    // Overshot/moving away: point engines opposite to velocity to brake.
+                    desiredHeading = -input.Velocity.normalized;
+                }
+                else
+                {
+                    // Accelerate: point forward at target
+                    desiredHeading = targetDir;
+                }
+            }
+            else
+            {
+                // Speed is low: point directly at target
+                desiredHeading = targetDir;
+            }
 
-            // Calculate rotation towards the target direction
-            Quaternion targetRot = Quaternion.LookRotation(targetDir, Vector3.up);
+            // Rotate ship towards desired heading
+            Quaternion targetRot = Quaternion.LookRotation(desiredHeading, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, stats.TurnSpeed * DeltaTime);
 
-            // Move forward
+            // Apply thrust only if aligned within 30 degrees (Dot product > 0.866)
             Vector3 forward = transform.rotation * Vector3.forward;
-            float step = stats.MoveSpeed * DeltaTime;
-            if (step > dist)
+            float alignment = Vector3.Dot(forward, desiredHeading);
+
+            if (alignment > 0.866f)
             {
-                step = dist;
+                input.Velocity += forward * accel * DeltaTime;
             }
 
-            transform.position = currentPos + forward * step;
+            // Clamp velocity to top speed
+            if (input.Velocity.magnitude > stats.MoveSpeed)
+            {
+                input.Velocity = input.Velocity.normalized * stats.MoveSpeed;
+            }
+
+            // Update position
+            transform.position = currentPos + input.Velocity * DeltaTime;
+
+            // Save input state
+            Inputs[index] = input;
         }
     }
 
@@ -151,7 +213,7 @@ namespace Ascendant.SystemsExtensions.Movement
 
                 if (m_Inputs[i].HasTarget)
                 {
-                    Debug.Log($"[ShipSimulationManager] Simulating movement for ship '{m_ActiveShips[i].gameObject.name}' to target {m_Inputs[i].TargetPosition}. Current Position: {m_ActiveShips[i].transform.position}");
+                    Debug.Log($"[ShipSimulationManager] Simulating movement for ship '{m_ActiveShips[i].gameObject.name}' to target {m_Inputs[i].TargetCoordinate.ToWorldPosition()}. Current Position: {m_ActiveShips[i].transform.position}");
                 }
             }
 

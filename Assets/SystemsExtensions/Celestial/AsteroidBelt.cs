@@ -62,7 +62,7 @@ namespace Ascendant.SystemsExtensions.Celestial
                 visual.transform.localRotation = Random.rotation;
                 
                 // Random scale to make them look organic
-                float size = Random.Range(5f, 15f);
+                float size = Random.Range(8f, 25f);
                 visual.transform.localScale = new Vector3(size, size * Random.Range(0.8f, 1.2f), size * Random.Range(0.8f, 1.2f));
 
                 // Greyish-brown color for asteroids

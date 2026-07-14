@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9b71c1cc1cc409188a1303df09d649c, type: 3}
   m_Name: ShipAbilitySystemDefinition
   m_EditorClassIdentifier: AbilitySystem::AbilitySystem.Scripts.AbilitySystemDefinition
-  AttributeSets: []
+  AttributeSets:
+  - ShipAttributeSet
   InherentTags: []
   BaseAbilities:
   - {fileID: 11400000, guid: 13e64b47e0517a64585b46a7a57ea226, type: 2}
+  - {fileID: 11400000, guid: f03c3126a6fd52347bb9c74d07934857, type: 2}
