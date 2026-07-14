@@ -5,6 +5,7 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Ascendant.SystemsExtensions",
+        "Ascendant.Systems",
         "AbilitySystem",
         "Unity.Netcode.Runtime",
         "com.alelievr.NodeGraphProcessor.Runtime",

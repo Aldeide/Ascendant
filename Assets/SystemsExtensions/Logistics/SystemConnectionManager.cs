@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using Ascendant.Systems.Inventory;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
@@ -64,8 +65,16 @@ namespace Ascendant.SystemsExtensions.Logistics
                     var miners = FindObjectsByType<AsteroidMiningRig>(FindObjectsInactive.Exclude);
                     foreach (var miner in miners)
                     {
-                        var inventory = miner.GetComponent<ResourceInventory>();
-                        var invState = inventory != null ? inventory.State.Value : default;
+                        var inventory = miner.GetComponent<NetworkInventory>();
+                        ResourceInventoryState invState = default;
+                        if (inventory != null)
+                        {
+                            invState.Ore = inventory.GetAmount("Ore");
+                            invState.Gas = inventory.GetAmount("Gas");
+                            invState.Fuel = inventory.GetAmount("Fuel");
+                            invState.Munitions = inventory.GetAmount("Munitions");
+                            invState.Components = inventory.GetAmount("Components");
+                        }
                         
                         repo.SaveStructure(
                             miner.gameObject.name,

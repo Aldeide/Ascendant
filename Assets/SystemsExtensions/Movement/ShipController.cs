@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Ascendant.SystemsExtensions.Celestial;
 using Ascendant.SystemsExtensions.Logistics;
+using Ascendant.Systems.Inventory;
 
 namespace Ascendant.SystemsExtensions.Movement
 {
@@ -313,20 +314,33 @@ namespace Ascendant.SystemsExtensions.Movement
             m_ShowBuildMenu = false;
             m_IsPlacingStructure = true;
             
-            // Create local holographic placement preview (smaller cylinder)
-            m_PlacementPreview = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            m_PlacementPreview.name = "PlacementPreview";
-            m_PlacementPreview.transform.localScale = new Vector3(25f, 40f, 25f);
+            // Create local holographic placement preview
+            var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
+            if (minerPrefab != null)
+            {
+                m_PlacementPreview = Instantiate(minerPrefab);
+                m_PlacementPreview.name = "PlacementPreview";
+                m_PlacementPreview.transform.localScale = new Vector3(15f, 15f, 15f);
+            }
+            else
+            {
+                m_PlacementPreview = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                m_PlacementPreview.name = "PlacementPreview";
+                m_PlacementPreview.transform.localScale = new Vector3(25f, 40f, 25f);
+            }
             
-            var collider = m_PlacementPreview.GetComponent<Collider>();
+            var collider = m_PlacementPreview.GetComponentInChildren<Collider>();
             if (collider != null) DestroyImmediate(collider);
 
-            var renderer = m_PlacementPreview.GetComponent<MeshRenderer>();
-            if (renderer != null)
+            var renderers = m_PlacementPreview.GetComponentsInChildren<Renderer>();
+            foreach (var r in renderers)
             {
-                var material = new Material(Shader.Find("Sprites/Default"));
-                material.color = new Color(0f, 1f, 0f, 0.4f); // Transparent green
-                renderer.sharedMaterial = material;
+                if (r != null)
+                {
+                    var material = new Material(Shader.Find("Sprites/Default"));
+                    material.color = new Color(0f, 1f, 0f, 0.4f); // Transparent green
+                    r.sharedMaterial = material;
+                }
             }
         }
 
@@ -386,29 +400,54 @@ namespace Ascendant.SystemsExtensions.Movement
             
             var netObj = rigObj.AddComponent<NetworkObject>();
             
-            var inventory = rigObj.AddComponent<ResourceInventory>();
+            var inventory = rigObj.AddComponent<NetworkInventory>();
             inventory.MaxCapacity = 500;
             
             var rig = rigObj.AddComponent<AsteroidMiningRig>();
             rig.ExtractionAmount = 10;
             rig.ExtractionInterval = 1.0f; // Fast mining for quick testing!
             
-            var visual = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            visual.name = "Visual";
-            visual.transform.SetParent(rigObj.transform);
-            visual.transform.localPosition = Vector3.zero;
-            visual.transform.localScale = new Vector3(25f, 40f, 25f);
-            
-            var renderer = visual.GetComponent<MeshRenderer>();
-            if (renderer != null)
+            GameObject visual = null;
+            var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
+            if (minerPrefab != null)
             {
-                var material = new Material(Shader.Find("Standard"));
-                material.color = new Color(0.9f, 0.6f, 0.1f); // Mining orange
-                renderer.sharedMaterial = material;
+                visual = Instantiate(minerPrefab);
+                visual.name = "Visual";
+                visual.transform.SetParent(rigObj.transform);
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Quaternion.identity;
+                visual.transform.localScale = new Vector3(15f, 15f, 15f);
+            }
+            else
+            {
+                visual = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                visual.name = "Visual";
+                visual.transform.SetParent(rigObj.transform);
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localScale = new Vector3(25f, 40f, 25f);
             }
             
-            var collider = visual.GetComponent<Collider>();
-            if (collider != null) DestroyImmediate(collider);
+            var renderers = visual.GetComponentsInChildren<Renderer>();
+            foreach (var r in renderers)
+            {
+                if (r != null)
+                {
+                    var material = new Material(Shader.Find("Standard"));
+                    material.color = new Color(0.9f, 0.6f, 0.1f); // Mining orange
+                    r.sharedMaterial = material;
+                }
+            }
+            
+            var collider = visual.GetComponentInChildren<Collider>();
+            if (collider == null)
+            {
+                var capCollider = visual.AddComponent<CapsuleCollider>();
+                capCollider.radius = 1.5f;
+                capCollider.height = 4.0f;
+                capCollider.direction = 1; // Y-axis
+                collider = capCollider;
+            }
+            collider.isTrigger = true;
 
             netObj.Spawn();
             Debug.Log($"[ShipController] Server successfully spawned Asteroid Miner at {position}");

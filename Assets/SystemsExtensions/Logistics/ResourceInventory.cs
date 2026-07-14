@@ -85,7 +85,7 @@ namespace Ascendant.SystemsExtensions.Logistics
 
         public bool AddResource(ResourceType type, int amount)
         {
-            if (NetworkManager.Singleton != null && !IsServer) return false;
+            if (NetworkManager.Singleton != null && IsSpawned && !IsServer) return false;
             if (!CanAdd(type, amount)) return false;
 
             var s = State.Value;
@@ -103,7 +103,7 @@ namespace Ascendant.SystemsExtensions.Logistics
 
         public bool RemoveResource(ResourceType type, int amount)
         {
-            if (NetworkManager.Singleton != null && !IsServer) return false;
+            if (NetworkManager.Singleton != null && IsSpawned && !IsServer) return false;
             if (amount <= 0 || GetAmount(type) < amount) return false;
 
             var s = State.Value;

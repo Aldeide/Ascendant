@@ -1,19 +1,18 @@
 using AbilitySystem.Scripts;
+using Ascendant.Systems.Inventory;
+using Ascendant.Systems.Structures;
 using Unity.Netcode;
 using UnityEngine;
 using Ascendant.SystemsExtensions.Movement;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
-    [RequireComponent(typeof(ResourceInventory))]
-    public class AsteroidMiningRig : NetworkBehaviour
+    public class AsteroidMiningRig : StructureBase
     {
         [SerializeField] private float m_ExtractionInterval = 2.0f;
         [SerializeField] private int m_ExtractionAmount = 5;
         [SerializeField] private float m_MiningRange = 1000f;
 
-        private ResourceInventory m_Inventory;
-        private AbilitySystemComponent m_AbilitySystemComp;
         private float m_Timer;
         private ResourceInventory m_TargetAsteroidInventory;
 
@@ -29,22 +28,25 @@ namespace Ascendant.SystemsExtensions.Logistics
             set => m_ExtractionAmount = value;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            m_Inventory = GetComponent<ResourceInventory>();
-            m_AbilitySystemComp = GetComponent<AbilitySystemComponent>();
+            base.Awake();
         }
 
-        private void Start()
+        public override void OnNetworkSpawn()
         {
+            base.OnNetworkSpawn();
             if (NetworkManager.Singleton != null && !IsServer) return;
             FindNearestAsteroid();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update(); // Updates construction or upkeep/decay on the server
+
             // Only simulate extraction on the server
             if (NetworkManager.Singleton != null && !IsServer) return;
+            if (IsUnderConstruction.Value || IsDisabled.Value) return;
 
             m_Timer += Time.deltaTime;
             if (m_Timer >= m_ExtractionInterval)
@@ -77,6 +79,14 @@ namespace Ascendant.SystemsExtensions.Logistics
                 }
             }
             m_TargetAsteroidInventory = nearest;
+            if (nearest != null)
+            {
+                Debug.Log($"[AsteroidMiningRig] Found nearest asteroid target: {nearest.gameObject.name} at distance {nearestDist:F1}m (Range: {m_MiningRange}m). Ore remaining: {nearest.GetAmount(ResourceType.Ore)}");
+            }
+            else
+            {
+                Debug.LogWarning($"[AsteroidMiningRig] No mineable asteroids found within range ({m_MiningRange}m)!");
+            }
         }
 
         private void ExtractOre()
@@ -89,7 +99,7 @@ namespace Ascendant.SystemsExtensions.Logistics
             if (m_Inventory != null && m_TargetAsteroidInventory != null)
             {
                 float multiplier = 1.0f;
-                // Scale extraction amount dynamically based on MiningSpeed attribute
+                // Scale extraction amount dynamically based on MiningSpeed attribute if available
                 if (m_AbilitySystemComp != null && m_AbilitySystemComp.AbilitySystem != null)
                 {
                     var attr = m_AbilitySystemComp.AbilitySystem.AttributeSetManager.GetAttribute("MiningSpeed");
@@ -105,11 +115,11 @@ namespace Ascendant.SystemsExtensions.Logistics
 
                 if (toExtract > 0)
                 {
-                    if (m_Inventory.CanAdd(ResourceType.Ore, toExtract))
+                    if (m_Inventory.CanAdd("Ore", toExtract))
                     {
                         m_TargetAsteroidInventory.RemoveResource(ResourceType.Ore, toExtract);
-                        m_Inventory.AddResource(ResourceType.Ore, toExtract);
-                        Debug.Log($"[AsteroidMiningRig] Extracted {toExtract} ore from {m_TargetAsteroidInventory.gameObject.name}. Rig inventory: {m_Inventory.GetAmount(ResourceType.Ore)}");
+                        m_Inventory.AddResource("Ore", toExtract);
+                        Debug.Log($"[AsteroidMiningRig] Extracted {toExtract} ore from {m_TargetAsteroidInventory.gameObject.name}. Rig inventory: {m_Inventory.GetAmount("Ore")}");
                     }
                 }
             }

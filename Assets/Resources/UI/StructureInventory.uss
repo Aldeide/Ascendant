@@ -1,0 +1,307 @@
+.hud-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: flex-end;
+    justify-content: center;
+    padding-right: 50px;
+    pointer-events: none;
+}
+
+.window-panel {
+    width: 380px;
+    height: 520px;
+    background-color: rgba(10, 16, 26, 0.92);
+    border-color: rgba(0, 229, 255, 0.35);
+    border-width: 1px;
+    border-radius: 12px;
+    padding: 15px;
+    pointer-events: auto;
+    
+    /* Box shadow effect */
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+    
+    /* Animation transition */
+    transition-property: all;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+}
+
+.window-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(0, 229, 255, 0.15);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+.header-title-container {
+    flex-direction: row;
+    align-items: center;
+}
+
+.accent-dot {
+    width: 8px;
+    height: 8px;
+    background-color: rgb(0, 229, 255);
+    border-radius: 4px;
+    margin-right: 8px;
+    
+    /* Glow effect */
+    transition-property: background-color;
+    transition-duration: 0.3s;
+}
+
+.structure-name-lbl {
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.close-btn {
+    background-color: transparent;
+    border-color: transparent;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    transition-property: background-color, color;
+    transition-duration: 0.15s;
+}
+
+.close-btn:hover {
+    background-color: rgba(255, 23, 68, 0.2);
+    color: rgb(255, 23, 68);
+}
+
+.window-body {
+    flex-grow: 1;
+}
+
+/* Status Card */
+.status-card {
+    background-color: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+    border-width: 1px;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.card-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.status-val {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.status-active {
+    background-color: rgba(0, 230, 118, 0.15);
+    color: rgb(0, 230, 118);
+    border-color: rgba(0, 230, 118, 0.3);
+    border-width: 1px;
+}
+
+.status-under-construction {
+    background-color: rgba(255, 215, 0, 0.15);
+    color: rgb(255, 215, 0);
+    border-color: rgba(255, 215, 0, 0.3);
+    border-width: 1px;
+}
+
+.status-disabled {
+    background-color: rgba(255, 23, 68, 0.15);
+    color: rgb(255, 23, 68);
+    border-color: rgba(255, 23, 68, 0.3);
+    border-width: 1px;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 10px;
+}
+
+.progress-lbl {
+    font-size: 11px;
+    color: rgb(255, 215, 0);
+    margin-bottom: 4px;
+}
+
+.progress-bar-bg {
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: rgb(255, 215, 0);
+}
+
+/* Attributes */
+.attributes-container {
+    margin-top: 4px;
+}
+
+.attr-row {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.attr-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.attr-value {
+    font-size: 12px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
+
+/* Cargo Card */
+.cargo-card {
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
+    border-width: 1px;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 5px;
+}
+
+.card-title-header {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+    padding-bottom: 4px;
+}
+
+.inventory-scroll {
+    flex-grow: 1;
+    margin-bottom: 10px;
+}
+
+.inventory-list {
+    flex-grow: 1;
+}
+
+.inventory-item-placeholder {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+.placeholder-text {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.25);
+    font-style: italic;
+}
+
+/* Dynamic Item Row */
+.item-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 6px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.04);
+    transition-property: background-color;
+    transition-duration: 0.1s;
+}
+
+.item-row:hover {
+    background-color: rgba(0, 229, 255, 0.05);
+}
+
+.item-name-container {
+    flex-direction: row;
+    align-items: center;
+}
+
+.item-icon-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+
+.icon-ore { background-color: #ffa726; }
+.icon-gas { background-color: #26a69a; }
+.icon-fuel { background-color: #66bb6a; }
+.icon-munitions { background-color: #ef5350; }
+.icon-components { background-color: #29b6f6; }
+.icon-default { background-color: #bdbdbd; }
+
+.item-name {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.item-qty {
+    font-size: 13px;
+    color: rgb(0, 229, 255);
+    font-weight: bold;
+}
+
+/* Cargo Footer */
+.cargo-footer {
+    border-top-width: 1px;
+    border-top-color: rgba(255, 255, 255, 0.05);
+    padding-top: 8px;
+}
+
+.cargo-capacity-lbl {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 4px;
+}
+
+.capacity-bar-bg {
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.capacity-bar-fill {
+    height: 100%;
+    background-color: rgb(0, 229, 255);
+    transition-property: width;
+    transition-duration: 0.2s;
+}
+
+/* Helper Utilities */
+.hidden {
+    display: none;
+}

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="hud-container" class="hud-container">
+        <ui:VisualElement name="window-panel" class="window-panel">
+            <!-- Window Header -->
+            <ui:VisualElement name="window-header" class="window-header">
+                <ui:VisualElement class="header-title-container">
+                    <ui:VisualElement class="accent-dot" />
+                    <ui:Label name="structure-name-lbl" class="structure-name-lbl" text="ASTEROID MINER" />
+                </ui:VisualElement>
+                <ui:Button name="close-btn" class="close-btn" text="×" />
+            </ui:VisualElement>
+
+            <!-- Window Body -->
+            <ui:VisualElement name="window-body" class="window-body">
+                
+                <!-- Status Section -->
+                <ui:VisualElement name="status-card" class="status-card">
+                    <ui:VisualElement class="card-header">
+                        <ui:Label text="STRUCTURE STATE" class="card-title" />
+                        <ui:Label name="status-val" class="status-val" text="ACTIVE" />
+                    </ui:VisualElement>
+                    
+                    <ui:VisualElement name="construction-progress-container" class="progress-container hidden">
+                        <ui:Label name="progress-lbl" class="progress-lbl" text="Construction: 45%" />
+                        <ui:VisualElement class="progress-bar-bg">
+                            <ui:VisualElement name="progress-bar-fill" class="progress-bar-fill" style="width: 45%;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+
+                    <!-- Attributes -->
+                    <ui:VisualElement class="attributes-container">
+                        <ui:VisualElement class="attr-row">
+                            <ui:Label text="Hull Integrity" class="attr-label" />
+                            <ui:Label name="health-val" class="attr-value" text="100 / 100 HP" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="attr-row">
+                            <ui:Label text="Upkeep Fuel" class="attr-label" />
+                            <ui:Label name="fuel-val" class="attr-value" text="32.4 / 500.0" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Inventory Cargo Section -->
+                <ui:VisualElement name="cargo-card" class="cargo-card">
+                    <ui:Label text="CARGO BAY CONTENTS" class="card-title-header" />
+                    
+                    <ui:ScrollView name="inventory-scroll" class="inventory-scroll">
+                        <ui:VisualElement name="inventory-list" class="inventory-list">
+                            <!-- Items will be populated dynamically -->
+                            <ui:VisualElement class="inventory-item-placeholder">
+                                <ui:Label text="No cargo detected" class="placeholder-text" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+
+                    <ui:VisualElement class="cargo-footer">
+                        <ui:Label name="cargo-capacity-lbl" class="cargo-capacity-lbl" text="Capacity: 0 / 1000 t" />
+                        <ui:VisualElement class="capacity-bar-bg">
+                            <ui:VisualElement name="capacity-bar-fill" class="capacity-bar-fill" style="width: 0%;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
