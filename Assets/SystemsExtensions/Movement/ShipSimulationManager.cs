@@ -9,11 +9,22 @@ using Ascendant.SystemsExtensions.Celestial;
 
 namespace Ascendant.SystemsExtensions.Movement
 {
+    public enum MovementPhase : int
+    {
+        Idle = 0,
+        Orient = 1,
+        Burn = 2,
+        ReverseBurn = 3
+    }
+
     public struct ShipInput : INetworkSerializeByMemcpy
     {
         public GridCoordinate TargetCoordinate;
         public bool HasTarget;
         public Vector3 Velocity;
+        public MovementPhase Phase;
+        public Vector3 StartPosition;
+        public float HalfWayDistance;
     }
 
     public struct ShipStats : INetworkSerializeByMemcpy
@@ -46,69 +57,125 @@ namespace Ascendant.SystemsExtensions.Movement
 
             float speed = input.Velocity.magnitude;
 
-            // Deceleration distance needed: d = v^2 / 2a
-            float decelDist = (speed * speed) / (2.0f * accel);
-            
-            // Add safety margin based on current speed and frame time
-            float safetyMargin = speed * DeltaTime * 1.5f;
-            decelDist += safetyMargin;
-
-            // Are we moving towards the target or away from it?
-            Vector3 targetDir = diff / dist;
-            float dotProduct = speed > 0.1f ? Vector3.Dot(input.Velocity.normalized, targetDir) : 1f;
-
-            // Dynamic arrival tolerance to prevent overshooting at high velocities
-            float arrivalThreshold = Mathf.Max(30f, speed * DeltaTime * 1.2f);
-            if (dist < arrivalThreshold)
+            // Arrival snap condition: if extremely close or within 1 frame of movement
+            float snapThreshold = Mathf.Max(15f, speed * DeltaTime * 1.5f);
+            if (dist < snapThreshold)
             {
-                // Stop the ship if we are in the braking zone, moving slowly, or already very close
-                if (dist <= decelDist || speed < (stats.MoveSpeed * 0.2f) || dist < 15f)
+                input.HasTarget = false;
+                input.Velocity = Vector3.zero;
+                input.Phase = MovementPhase.Idle;
+                Inputs[index] = input;
+                transform.position = input.TargetCoordinate.ToWorldPosition(); // Snap to target!
+                return;
+            }
+
+            // Auto-initialize movement parameters if starting from default/Idle state
+            if (input.Phase == MovementPhase.Idle)
+            {
+                input.Phase = MovementPhase.Orient;
+                input.StartPosition = currentPos;
+                input.HalfWayDistance = dist * 0.5f;
+            }
+
+            Vector3 targetDir = diff / dist;
+            Vector3 desiredHeading = targetDir;
+
+            // Execute Orient Phase
+            if (input.Phase == MovementPhase.Orient)
+            {
+                desiredHeading = targetDir;
+
+                // Rotate towards the target direction
+                Quaternion targetRot;
+                if (Mathf.Abs(Vector3.Dot(desiredHeading, Vector3.up)) > 0.99f)
+                {
+                    targetRot = Quaternion.LookRotation(desiredHeading, Vector3.forward);
+                }
+                else
+                {
+                    targetRot = Quaternion.LookRotation(desiredHeading, Vector3.up);
+                }
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, stats.TurnSpeed * DeltaTime);
+
+                // No thrust during orient phase
+                input.Velocity = Vector3.zero;
+
+                // Transition to Burn phase when nearly aligned (dot product > 0.99f or < ~8 degrees angle)
+                Vector3 forward = transform.rotation * Vector3.forward;
+                float alignment = Vector3.Dot(forward, desiredHeading);
+                if (alignment > 0.99f)
+                {
+                    input.Phase = MovementPhase.Burn;
+                }
+            }
+
+            // Execute Burn Phase
+            if (input.Phase == MovementPhase.Burn)
+            {
+                desiredHeading = targetDir;
+
+                // Rotate to match target direction if drifting
+                Quaternion targetRot;
+                if (Mathf.Abs(Vector3.Dot(desiredHeading, Vector3.up)) > 0.99f)
+                {
+                    targetRot = Quaternion.LookRotation(desiredHeading, Vector3.forward);
+                }
+                else
+                {
+                    targetRot = Quaternion.LookRotation(desiredHeading, Vector3.up);
+                }
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, stats.TurnSpeed * DeltaTime);
+
+                // Apply forward thrust if aligned within 30 degrees
+                Vector3 forward = transform.rotation * Vector3.forward;
+                float alignment = Vector3.Dot(forward, desiredHeading);
+                if (alignment > 0.866f)
+                {
+                    input.Velocity += forward * accel * DeltaTime;
+                }
+
+                // Transition to Reverse Burn phase once we pass the halfway distance threshold
+                if (dist <= input.HalfWayDistance)
+                {
+                    input.Phase = MovementPhase.ReverseBurn;
+                }
+            }
+
+            // Execute Reverse Burn Phase
+            if (input.Phase == MovementPhase.ReverseBurn)
+            {
+                desiredHeading = -targetDir; // Turn engine exhausts towards target
+
+                // Rotate to face 180 degrees away
+                Quaternion targetRot;
+                if (Mathf.Abs(Vector3.Dot(desiredHeading, Vector3.up)) > 0.99f)
+                {
+                    targetRot = Quaternion.LookRotation(desiredHeading, Vector3.forward);
+                }
+                else
+                {
+                    targetRot = Quaternion.LookRotation(desiredHeading, Vector3.up);
+                }
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, stats.TurnSpeed * DeltaTime);
+
+                // Apply deceleration thrust once we are reasonably aligned to the reverse heading
+                Vector3 forward = transform.rotation * Vector3.forward;
+                float alignment = Vector3.Dot(forward, desiredHeading);
+                if (alignment > 0.95f)
+                {
+                    input.Velocity += forward * accel * DeltaTime;
+                }
+
+                // If velocity reverses direction relative to the target (the ship has fully stopped/braked), complete movement
+                if (Vector3.Dot(input.Velocity, targetDir) < 0f)
                 {
                     input.HasTarget = false;
                     input.Velocity = Vector3.zero;
+                    input.Phase = MovementPhase.Idle;
                     Inputs[index] = input;
                     transform.position = input.TargetCoordinate.ToWorldPosition(); // Snap to target!
                     return;
                 }
-            }
-
-            // Determine desired heading based on Expanse physics (drift correction + braking)
-            Vector3 desiredHeading;
-            if (speed > 10f)
-            {
-                if (dotProduct > 0f && dist <= decelDist)
-                {
-                    // Decelerate: moving towards target but inside stopping distance. Point opposite to velocity.
-                    desiredHeading = -input.Velocity.normalized;
-                }
-                else if (dotProduct <= 0f)
-                {
-                    // Overshot/moving away: point engines opposite to velocity to brake.
-                    desiredHeading = -input.Velocity.normalized;
-                }
-                else
-                {
-                    // Accelerate: point forward at target
-                    desiredHeading = targetDir;
-                }
-            }
-            else
-            {
-                // Speed is low: point directly at target
-                desiredHeading = targetDir;
-            }
-
-            // Rotate ship towards desired heading
-            Quaternion targetRot = Quaternion.LookRotation(desiredHeading, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, stats.TurnSpeed * DeltaTime);
-
-            // Apply thrust only if aligned within 30 degrees (Dot product > 0.866)
-            Vector3 forward = transform.rotation * Vector3.forward;
-            float alignment = Vector3.Dot(forward, desiredHeading);
-
-            if (alignment > 0.866f)
-            {
-                input.Velocity += forward * accel * DeltaTime;
             }
 
             // Clamp velocity to top speed

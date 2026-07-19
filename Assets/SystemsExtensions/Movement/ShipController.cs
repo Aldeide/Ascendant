@@ -276,7 +276,10 @@ namespace Ascendant.SystemsExtensions.Movement
             {
                 TargetCoordinate = new GridCoordinate(targetPosition),
                 HasTarget = true,
-                Velocity = m_CurrentInput.Velocity
+                Velocity = m_CurrentInput.Velocity,
+                Phase = MovementPhase.Orient,
+                StartPosition = transform.position,
+                HalfWayDistance = Vector3.Distance(transform.position, targetPosition) * 0.5f
             };
         }
 
@@ -451,6 +454,12 @@ namespace Ascendant.SystemsExtensions.Movement
 
             netObj.Spawn();
             Debug.Log($"[ShipController] Server successfully spawned Asteroid Miner at {position}");
+
+            // Persist the structure to the database
+            if (SystemConnectionManager.Instance != null)
+            {
+                SystemConnectionManager.Instance.SaveCurrentSystemState();
+            }
         }
 
         private void OnGUI()
