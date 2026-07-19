@@ -1,10 +1,10 @@
 using Unity.Netcode;
 using UnityEngine;
+using Ascendant.Systems.Structures;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
-    [RequireComponent(typeof(ResourceInventory))]
-    public class Refinery : NetworkBehaviour
+    public class Refinery : StructureBase
     {
         [SerializeField] private float m_ProcessInterval = 3.0f;
         [SerializeField] private int m_OreCost = 5;
@@ -12,7 +12,6 @@ namespace Ascendant.SystemsExtensions.Logistics
         [SerializeField] private int m_ComponentsYield = 1;
         [SerializeField] private int m_FuelYield = 3;
 
-        private ResourceInventory m_Inventory;
         private float m_Timer;
 
         public float ProcessInterval
@@ -26,14 +25,17 @@ namespace Ascendant.SystemsExtensions.Logistics
         public int ComponentsYield { get => m_ComponentsYield; set => m_ComponentsYield = value; }
         public int FuelYield { get => m_FuelYield; set => m_FuelYield = value; }
 
-        private void Awake()
+        protected override void Awake()
         {
-            m_Inventory = GetComponent<ResourceInventory>();
+            base.Awake();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             if (NetworkManager.Singleton != null && !IsServer) return;
+            if (IsUnderConstruction.Value || IsDisabled.Value) return;
 
             m_Timer += Time.deltaTime;
             if (m_Timer >= m_ProcessInterval)
@@ -47,17 +49,16 @@ namespace Ascendant.SystemsExtensions.Logistics
         {
             if (m_Inventory == null) return;
 
-            // Check if we have input ingredients and space for outputs
-            if (m_Inventory.GetAmount(ResourceType.Ore) >= m_OreCost &&
-                m_Inventory.GetAmount(ResourceType.Gas) >= m_GasCost &&
-                m_Inventory.CanAdd(ResourceType.Components, m_ComponentsYield) &&
-                m_Inventory.CanAdd(ResourceType.Fuel, m_FuelYield))
+            if (m_Inventory.GetAmount("Ore") >= m_OreCost &&
+                m_Inventory.GetAmount("Gas") >= m_GasCost &&
+                m_Inventory.CanAdd("Components", m_ComponentsYield) &&
+                m_Inventory.CanAdd("Fuel", m_FuelYield))
             {
-                m_Inventory.RemoveResource(ResourceType.Ore, m_OreCost);
-                m_Inventory.RemoveResource(ResourceType.Gas, m_GasCost);
-                m_Inventory.AddResource(ResourceType.Components, m_ComponentsYield);
-                m_Inventory.AddResource(ResourceType.Fuel, m_FuelYield);
-                Debug.Log($"[Refinery] Refined: Spent {m_OreCost} Ore, {m_GasCost} Gas $\\rightarrow$ Gained {m_ComponentsYield} Components, {m_FuelYield} Fuel.");
+                m_Inventory.RemoveResource("Ore", m_OreCost);
+                m_Inventory.RemoveResource("Gas", m_GasCost);
+                m_Inventory.AddResource("Components", m_ComponentsYield);
+                m_Inventory.AddResource("Fuel", m_FuelYield);
+                Debug.Log($"[Refinery] Refined: Spent {m_OreCost} Ore, {m_GasCost} Gas -> Gained {m_ComponentsYield} Components, {m_FuelYield} Fuel.");
             }
         }
     }

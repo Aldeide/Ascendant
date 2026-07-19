@@ -1,17 +1,16 @@
 using Unity.Netcode;
 using UnityEngine;
+using Ascendant.Systems.Structures;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
-    [RequireComponent(typeof(ResourceInventory))]
-    public class MunitionsFactory : NetworkBehaviour
+    public class MunitionsFactory : StructureBase
     {
         [SerializeField] private float m_ProcessInterval = 5.0f;
         [SerializeField] private int m_OreCost = 10;
         [SerializeField] private int m_ComponentsCost = 3;
         [SerializeField] private int m_MunitionsYield = 1;
 
-        private ResourceInventory m_Inventory;
         private float m_Timer;
 
         public float ProcessInterval
@@ -24,14 +23,17 @@ namespace Ascendant.SystemsExtensions.Logistics
         public int ComponentsCost { get => m_ComponentsCost; set => m_ComponentsCost = value; }
         public int MunitionsYield { get => m_MunitionsYield; set => m_MunitionsYield = value; }
 
-        private void Awake()
+        protected override void Awake()
         {
-            m_Inventory = GetComponent<ResourceInventory>();
+            base.Awake();
         }
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
+
             if (NetworkManager.Singleton != null && !IsServer) return;
+            if (IsUnderConstruction.Value || IsDisabled.Value) return;
 
             m_Timer += Time.deltaTime;
             if (m_Timer >= m_ProcessInterval)
@@ -45,13 +47,13 @@ namespace Ascendant.SystemsExtensions.Logistics
         {
             if (m_Inventory == null) return;
 
-            if (m_Inventory.GetAmount(ResourceType.Ore) >= m_OreCost &&
-                m_Inventory.GetAmount(ResourceType.Components) >= m_ComponentsCost &&
-                m_Inventory.CanAdd(ResourceType.Munitions, m_MunitionsYield))
+            if (m_Inventory.GetAmount("Ore") >= m_OreCost &&
+                m_Inventory.GetAmount("Components") >= m_ComponentsCost &&
+                m_Inventory.CanAdd("Munitions", m_MunitionsYield))
             {
-                m_Inventory.RemoveResource(ResourceType.Ore, m_OreCost);
-                m_Inventory.RemoveResource(ResourceType.Components, m_ComponentsCost);
-                m_Inventory.AddResource(ResourceType.Munitions, m_MunitionsYield);
+                m_Inventory.RemoveResource("Ore", m_OreCost);
+                m_Inventory.RemoveResource("Components", m_ComponentsCost);
+                m_Inventory.AddResource("Munitions", m_MunitionsYield);
                 Debug.Log($"[MunitionsFactory] Manufactured Munitions. Spent: {m_OreCost} Ore, {m_ComponentsCost} Components.");
             }
         }

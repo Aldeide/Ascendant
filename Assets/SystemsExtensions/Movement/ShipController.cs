@@ -32,8 +32,17 @@ namespace Ascendant.SystemsExtensions.Movement
         private AbilitySystemComponent m_AbilitySystemComp;
 
         // Build System
+        public enum StructureType
+        {
+            AsteroidMiner,
+            GaseousFuelScoop,
+            Refinery,
+            MunitionsFactory
+        }
+
         private bool m_ShowBuildMenu = false;
         private bool m_IsPlacingStructure = false;
+        private StructureType m_StructureTypeToPlace;
         private Vector3 m_PlacementPosition;
         private GameObject m_PlacementPreview;
         private float m_BuildRange = 1000f; // Max distance from player ship to build
@@ -179,12 +188,24 @@ namespace Ascendant.SystemsExtensions.Movement
                     }
 
                     float distToShip = Vector3.Distance(transform.position, m_PlacementPosition);
-                    bool isValid = (distToShip <= m_BuildRange) && (distToAsteroid <= 1000f);
-
-                    var renderer = m_PlacementPreview.GetComponent<MeshRenderer>();
-                    if (renderer != null && renderer.material != null)
+                    
+                    // Asteroid miner and gas scoops need proximity to asteroid/planet resource.
+                    // Factories can be placed anywhere within range of the ship.
+                    bool isProximityValid = true;
+                    if (m_StructureTypeToPlace == StructureType.AsteroidMiner || m_StructureTypeToPlace == StructureType.GaseousFuelScoop)
                     {
-                        renderer.material.color = isValid ? new Color(0f, 1f, 0f, 0.4f) : new Color(1f, 0f, 0f, 0.4f);
+                        isProximityValid = (distToAsteroid <= 1000f);
+                    }
+                    
+                    bool isValid = (distToShip <= m_BuildRange) && isProximityValid;
+
+                    var renderers = m_PlacementPreview.GetComponentsInChildren<Renderer>();
+                    foreach (var r in renderers)
+                    {
+                        if (r != null && r.material != null)
+                        {
+                            r.material.color = isValid ? new Color(0f, 1f, 0f, 0.4f) : new Color(1f, 0f, 0f, 0.4f);
+                        }
                     }
                 }
 
@@ -312,20 +333,25 @@ namespace Ascendant.SystemsExtensions.Movement
             };
         }
 
-        private void StartPlacement()
+        private void StartPlacement(StructureType type)
         {
             m_ShowBuildMenu = false;
             m_IsPlacingStructure = true;
+            m_StructureTypeToPlace = type;
             
             // Create local holographic placement preview
-            var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
-            if (minerPrefab != null)
+            if (type == StructureType.AsteroidMiner)
             {
-                m_PlacementPreview = Instantiate(minerPrefab);
-                m_PlacementPreview.name = "PlacementPreview";
-                m_PlacementPreview.transform.localScale = new Vector3(15f, 15f, 15f);
+                var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
+                if (minerPrefab != null)
+                {
+                    m_PlacementPreview = Instantiate(minerPrefab);
+                    m_PlacementPreview.name = "PlacementPreview";
+                    m_PlacementPreview.transform.localScale = new Vector3(15f, 15f, 15f);
+                }
             }
-            else
+            
+            if (m_PlacementPreview == null)
             {
                 m_PlacementPreview = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                 m_PlacementPreview.name = "PlacementPreview";
@@ -379,49 +405,98 @@ namespace Ascendant.SystemsExtensions.Movement
             }
 
             float distToShip = Vector3.Distance(transform.position, m_PlacementPosition);
+            bool isProximityValid = true;
+
+            if (m_StructureTypeToPlace == StructureType.AsteroidMiner || m_StructureTypeToPlace == StructureType.GaseousFuelScoop)
+            {
+                isProximityValid = (nearestAsteroid != null && distToAsteroid <= 1000f);
+            }
             
             if (distToShip > m_BuildRange)
             {
                 Debug.LogWarning("[ShipController] Cannot build: Too far from player ship!");
             }
-            else if (nearestAsteroid == null || distToAsteroid > 1000f)
+            else if (!isProximityValid)
             {
-                Debug.LogWarning("[ShipController] Cannot build: Must place near an asteroid (within 1km)!");
+                Debug.LogWarning("[ShipController] Cannot build: Resource collector must place near an Asteroid/Planet (within 1km)!");
             }
             else
             {
-                PlaceStructureServerRpc(m_PlacementPosition);
+                PlaceStructureServerRpc(m_PlacementPosition, m_StructureTypeToPlace);
                 CancelPlacement();
             }
         }
 
         [ServerRpc]
-        private void PlaceStructureServerRpc(Vector3 position)
+        private void PlaceStructureServerRpc(Vector3 position, StructureType type)
         {
-            var rigObj = new GameObject("AsteroidMiner");
+            var typeStr = "AsteroidMiner";
+            Color primaryColor = new Color(0.9f, 0.6f, 0.1f); // Orange
+
+            if (type == StructureType.GaseousFuelScoop)
+            {
+                typeStr = "GaseousFuelScoop";
+                primaryColor = new Color(0.9f, 0.9f, 0.1f); // Yellow
+            }
+            else if (type == StructureType.Refinery)
+            {
+                typeStr = "Refinery";
+                primaryColor = new Color(0.1f, 0.6f, 0.9f); // Cyan/Blue
+            }
+            else if (type == StructureType.MunitionsFactory)
+            {
+                typeStr = "MunitionsFactory";
+                primaryColor = new Color(0.9f, 0.1f, 0.1f); // Red
+            }
+
+            var rigObj = new GameObject(typeStr);
             rigObj.transform.position = position;
             
             var netObj = rigObj.AddComponent<NetworkObject>();
-            
             var inventory = rigObj.AddComponent<NetworkInventory>();
             inventory.MaxCapacity = 500;
             
-            var rig = rigObj.AddComponent<AsteroidMiningRig>();
-            rig.ExtractionAmount = 10;
-            rig.ExtractionInterval = 1.0f; // Fast mining for quick testing!
-            
-            GameObject visual = null;
-            var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
-            if (minerPrefab != null)
+            // Add specific logic depending on type
+            if (type == StructureType.AsteroidMiner)
             {
-                visual = Instantiate(minerPrefab);
-                visual.name = "Visual";
-                visual.transform.SetParent(rigObj.transform);
-                visual.transform.localPosition = Vector3.zero;
-                visual.transform.localRotation = Quaternion.identity;
-                visual.transform.localScale = new Vector3(15f, 15f, 15f);
+                var rig = rigObj.AddComponent<AsteroidMiningRig>();
+                rig.ExtractionAmount = 10;
+                rig.ExtractionInterval = 1.0f;
             }
-            else
+            else if (type == StructureType.GaseousFuelScoop)
+            {
+                var scoop = rigObj.AddComponent<GaseousFuelScoop>();
+                scoop.HarvestAmount = 5;
+                scoop.HarvestInterval = 2.0f;
+            }
+            else if (type == StructureType.Refinery)
+            {
+                var refinery = rigObj.AddComponent<Refinery>();
+                refinery.ProcessInterval = 3.0f;
+            }
+            else if (type == StructureType.MunitionsFactory)
+            {
+                var factory = rigObj.AddComponent<MunitionsFactory>();
+                factory.ProcessInterval = 5.0f;
+            }
+
+            // Visual setup
+            GameObject visual = null;
+            if (type == StructureType.AsteroidMiner)
+            {
+                var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
+                if (minerPrefab != null)
+                {
+                    visual = Instantiate(minerPrefab);
+                    visual.name = "Visual";
+                    visual.transform.SetParent(rigObj.transform);
+                    visual.transform.localPosition = Vector3.zero;
+                    visual.transform.localRotation = Quaternion.identity;
+                    visual.transform.localScale = new Vector3(15f, 15f, 15f);
+                }
+            }
+
+            if (visual == null)
             {
                 visual = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                 visual.name = "Visual";
@@ -436,7 +511,7 @@ namespace Ascendant.SystemsExtensions.Movement
                 if (r != null)
                 {
                     var material = new Material(Shader.Find("Standard"));
-                    material.color = new Color(0.9f, 0.6f, 0.1f); // Mining orange
+                    material.color = primaryColor;
                     r.sharedMaterial = material;
                 }
             }
@@ -453,7 +528,7 @@ namespace Ascendant.SystemsExtensions.Movement
             collider.isTrigger = true;
 
             netObj.Spawn();
-            Debug.Log($"[ShipController] Server successfully spawned Asteroid Miner at {position}");
+            Debug.Log($"[ShipController] Server successfully spawned {typeStr} at {position}");
 
             // Persist the structure to the database
             if (SystemConnectionManager.Instance != null)
@@ -469,10 +544,10 @@ namespace Ascendant.SystemsExtensions.Movement
             // Draw build instructions during placement
             if (m_IsPlacingStructure)
             {
-                GUI.Box(new Rect(10, 10, 320, 75), "");
-                GUILayout.BeginArea(new Rect(20, 15, 300, 60));
-                GUILayout.Label("<color=yellow><b>BUILD MODE: PLACING ASTEROID MINER</b></color>", new GUIStyle { richText = true, fontSize = 14 });
-                GUILayout.Label("Left Click near an Asteroid to place structure.");
+                GUI.Box(new Rect(10, 10, 325, 75), "");
+                GUILayout.BeginArea(new Rect(20, 15, 305, 60));
+                GUILayout.Label($"<color=yellow><b>BUILD MODE: PLACING {m_StructureTypeToPlace.ToString().ToUpper()}</b></color>", new GUIStyle { richText = true, fontSize = 14 });
+                GUILayout.Label("Left Click in space to place structure.");
                 GUILayout.Label("Press <b>ESC</b> to cancel.", new GUIStyle { richText = true });
                 GUILayout.EndArea();
             }
@@ -480,20 +555,31 @@ namespace Ascendant.SystemsExtensions.Movement
             // Draw build menu
             if (m_ShowBuildMenu)
             {
-                GUI.Box(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 100, 300, 200), "SPACE CONSTRUCTION BUILD MENU");
+                GUI.Box(new Rect(Screen.width / 2 - 175, Screen.height / 2 - 175, 350, 350), "SPACE CONSTRUCTION BUILD MENU");
                 
-                GUILayout.BeginArea(new Rect(Screen.width / 2 - 130, Screen.height / 2 - 60, 260, 150));
+                GUILayout.BeginArea(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 135, 300, 300));
                 
-                GUILayout.Space(10);
                 GUILayout.Label("Select a structure to construct:", new GUIStyle { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } });
                 GUILayout.Space(10);
 
-                if (GUILayout.Button("Asteroid Miner (Cylinder Rig)\nExtracts Ore over time", GUILayout.Height(50)))
+                if (GUILayout.Button("Asteroid Miner (Orange)\nExtracts Ore from Asteroids", GUILayout.Height(45)))
                 {
-                    StartPlacement();
+                    StartPlacement(StructureType.AsteroidMiner);
+                }
+                if (GUILayout.Button("Gaseous Fuel Scoop (Yellow)\nSiphons Gas from Nebulae/Planets", GUILayout.Height(45)))
+                {
+                    StartPlacement(StructureType.GaseousFuelScoop);
+                }
+                if (GUILayout.Button("Industrial Refinery (Cyan)\nRefines Ore/Gas into Fuel/Components", GUILayout.Height(45)))
+                {
+                    StartPlacement(StructureType.Refinery);
+                }
+                if (GUILayout.Button("Munitions Factory (Red)\nManufactures Munitions from Ore/Components", GUILayout.Height(45)))
+                {
+                    StartPlacement(StructureType.MunitionsFactory);
                 }
 
-                GUILayout.Space(10);
+                GUILayout.Space(15);
                 if (GUILayout.Button("Close Menu", GUILayout.Height(30)))
                 {
                     m_ShowBuildMenu = false;

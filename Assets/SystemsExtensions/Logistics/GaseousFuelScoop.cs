@@ -1,17 +1,14 @@
-using AbilitySystem.Scripts;
 using Unity.Netcode;
 using UnityEngine;
+using Ascendant.Systems.Structures;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
-    [RequireComponent(typeof(ResourceInventory))]
-    public class GaseousFuelScoop : NetworkBehaviour
+    public class GaseousFuelScoop : StructureBase
     {
         [SerializeField] private float m_HarvestInterval = 2.0f;
         [SerializeField] private int m_HarvestAmount = 5;
 
-        private ResourceInventory m_Inventory;
-        private AbilitySystemComponent m_AbilitySystemComp;
         private float m_Timer;
 
         public float HarvestInterval
@@ -26,16 +23,17 @@ namespace Ascendant.SystemsExtensions.Logistics
             set => m_HarvestAmount = value;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            m_Inventory = GetComponent<ResourceInventory>();
-            m_AbilitySystemComp = GetComponent<AbilitySystemComponent>();
+            base.Awake();
         }
 
-        private void Update()
+        protected override void Update()
         {
-            // Only simulate harvesting on the server
+            base.Update();
+
             if (NetworkManager.Singleton != null && !IsServer) return;
+            if (IsUnderConstruction.Value || IsDisabled.Value) return;
 
             m_Timer += Time.deltaTime;
             if (m_Timer >= m_HarvestInterval)
@@ -50,7 +48,6 @@ namespace Ascendant.SystemsExtensions.Logistics
             if (m_Inventory != null)
             {
                 float multiplier = 1.0f;
-                // Scale gas harvest yield dynamically based on MiningSpeed attribute
                 if (m_AbilitySystemComp != null && m_AbilitySystemComp.AbilitySystem != null)
                 {
                     var attr = m_AbilitySystemComp.AbilitySystem.AttributeSetManager.GetAttribute("MiningSpeed");
@@ -60,7 +57,7 @@ namespace Ascendant.SystemsExtensions.Logistics
                     }
                 }
                 int finalAmount = Mathf.RoundToInt(m_HarvestAmount * multiplier);
-                m_Inventory.AddResource(ResourceType.Gas, finalAmount);
+                m_Inventory.AddResource("Gas", finalAmount);
             }
         }
     }

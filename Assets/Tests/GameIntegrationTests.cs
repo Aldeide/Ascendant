@@ -152,5 +152,127 @@ namespace Ascendant.Tests
             Object.DestroyImmediate(shipObj);
             Object.DestroyImmediate(rigObj);
         }
+
+        [Test]
+        public void Test_FactoryAndRefinery_Integration()
+        {
+            // 1. Setup Refinery
+            var refineryObj = new GameObject("Refinery_Test");
+            var refineryInv = refineryObj.AddComponent<NetworkInventory>();
+            refineryInv.MaxCapacity = 500;
+
+            var refinery = refineryObj.AddComponent<Refinery>();
+            refinery.OreCost = 5;
+            refinery.GasCost = 2;
+            refinery.ComponentsYield = 1;
+            refinery.FuelYield = 3;
+
+            // Trigger Awake & finish construction
+            var awakeMethod = typeof(StructureBase).GetMethod("Awake", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (awakeMethod != null) awakeMethod.Invoke(refinery, null);
+            refinery.IsUnderConstruction.Value = false;
+            refinery.IsDisabled.Value = false;
+
+            // Add input materials
+            refineryInv.AddResource("Ore", 10);
+            refineryInv.AddResource("Gas", 5);
+
+            // Execute processing recipe
+            var processRefineryMethod = typeof(Refinery).GetMethod("ProcessRecipe", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(processRefineryMethod);
+            processRefineryMethod.Invoke(refinery, null);
+
+            // Verify refinery consumption and yields
+            Assert.AreEqual(5, refineryInv.GetAmount("Ore"));
+            Assert.AreEqual(3, refineryInv.GetAmount("Gas"));
+            Assert.AreEqual(1, refineryInv.GetAmount("Components"));
+            Assert.AreEqual(3, refineryInv.GetAmount("Fuel"));
+
+            // 2. Setup Munitions Factory
+            var factoryObj = new GameObject("Factory_Test");
+            var factoryInv = factoryObj.AddComponent<NetworkInventory>();
+            factoryInv.MaxCapacity = 500;
+
+            var factory = factoryObj.AddComponent<MunitionsFactory>();
+            factory.OreCost = 5;
+            factory.ComponentsCost = 1;
+            factory.MunitionsYield = 2;
+
+            if (awakeMethod != null) awakeMethod.Invoke(factory, null);
+            factory.IsUnderConstruction.Value = false;
+            factory.IsDisabled.Value = false;
+
+            // Add inputs
+            factoryInv.AddResource("Ore", 5);
+            factoryInv.AddResource("Components", 1);
+
+            // Process factory recipe
+            var processFactoryMethod = typeof(MunitionsFactory).GetMethod("ProcessRecipe", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(processFactoryMethod);
+            processFactoryMethod.Invoke(factory, null);
+
+            // Verify factory output
+            Assert.AreEqual(0, factoryInv.GetAmount("Ore"));
+            Assert.AreEqual(0, factoryInv.GetAmount("Components"));
+            Assert.AreEqual(2, factoryInv.GetAmount("Munitions"));
+
+            // 3. Test SQLite Persistence for multi-structures
+            ResourceInventoryState refineryState = new ResourceInventoryState
+            {
+                Ore = refineryInv.GetAmount("Ore"),
+                Gas = refineryInv.GetAmount("Gas"),
+                Fuel = refineryInv.GetAmount("Fuel"),
+                Munitions = refineryInv.GetAmount("Munitions"),
+                Components = refineryInv.GetAmount("Components")
+            };
+
+            m_DbRepo.SaveStructure(
+                refineryObj.name,
+                "SystemAlpha",
+                "Refinery",
+                refineryObj.transform.position,
+                refineryObj.transform.rotation,
+                100.0f,
+                refineryState
+            );
+
+            ResourceInventoryState factoryState = new ResourceInventoryState
+            {
+                Ore = factoryInv.GetAmount("Ore"),
+                Gas = factoryInv.GetAmount("Gas"),
+                Fuel = factoryInv.GetAmount("Fuel"),
+                Munitions = factoryInv.GetAmount("Munitions"),
+                Components = factoryInv.GetAmount("Components")
+            };
+
+            m_DbRepo.SaveStructure(
+                factoryObj.name,
+                "SystemAlpha",
+                "MunitionsFactory",
+                factoryObj.transform.position,
+                factoryObj.transform.rotation,
+                100.0f,
+                factoryState
+            );
+
+            // 4. Test loading back
+            var loadedList = m_DbRepo.LoadStructures("SystemAlpha");
+            Assert.AreEqual(2, loadedList.Count);
+
+            var loadedRefinery = loadedList.Find(x => x.StructureId == "Refinery_Test");
+            Assert.IsNotNull(loadedRefinery);
+            Assert.AreEqual("Refinery", loadedRefinery.Type);
+            Assert.AreEqual(5, loadedRefinery.Inventory.Ore);
+            Assert.AreEqual(3, loadedRefinery.Inventory.Fuel);
+
+            var loadedFactory = loadedList.Find(x => x.StructureId == "Factory_Test");
+            Assert.IsNotNull(loadedFactory);
+            Assert.AreEqual("MunitionsFactory", loadedFactory.Type);
+            Assert.AreEqual(2, loadedFactory.Inventory.Munitions);
+
+            // Cleanup
+            Object.DestroyImmediate(refineryObj);
+            Object.DestroyImmediate(factoryObj);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using Ascendant.Systems.Inventory;
+using Ascendant.Systems.Structures;
 
 namespace Ascendant.SystemsExtensions.Logistics
 {
@@ -104,11 +105,11 @@ namespace Ascendant.SystemsExtensions.Logistics
                         );
                     }
 
-                    // Find all active asteroid miners and persist them
-                    var miners = FindObjectsByType<AsteroidMiningRig>(FindObjectsInactive.Exclude);
-                    foreach (var miner in miners)
+                    // Find all active StructureBase structures and persist them
+                    var structures = FindObjectsByType<StructureBase>(FindObjectsInactive.Exclude);
+                    foreach (var s in structures)
                     {
-                        var inventory = miner.GetComponent<NetworkInventory>();
+                        var inventory = s.GetComponent<NetworkInventory>();
                         ResourceInventoryState invState = default;
                         if (inventory != null)
                         {
@@ -119,12 +120,17 @@ namespace Ascendant.SystemsExtensions.Logistics
                             invState.Components = inventory.GetAmount("Components");
                         }
                         
+                        string typeStr = "AsteroidMiner";
+                        if (s is GaseousFuelScoop) typeStr = "GaseousFuelScoop";
+                        else if (s is Refinery) typeStr = "Refinery";
+                        else if (s is MunitionsFactory) typeStr = "MunitionsFactory";
+
                         repo.SaveStructure(
-                            miner.gameObject.name,
+                            s.gameObject.name,
                             "SystemAlpha",
-                            "AsteroidMiner",
-                            miner.transform.position,
-                            miner.transform.rotation,
+                            typeStr,
+                            s.transform.position,
+                            s.transform.rotation,
                             100.0f,
                             invState
                         );
@@ -154,21 +160,18 @@ namespace Ascendant.SystemsExtensions.Logistics
                     var savedStructures = repo.LoadStructures("SystemAlpha");
                     Debug.Log($"[SystemConnectionManager] Found {savedStructures.Count} saved structures in database.");
 
-                    // Clean up existing miners to avoid duplication
-                    var existingMiners = FindObjectsByType<AsteroidMiningRig>(FindObjectsInactive.Exclude);
-                    foreach (var miner in existingMiners)
+                    // Clean up existing StructureBase structures to avoid duplication
+                    var existingStructures = FindObjectsByType<StructureBase>(FindObjectsInactive.Exclude);
+                    foreach (var s in existingStructures)
                     {
-                        var netObj = miner.GetComponent<NetworkObject>();
+                        var netObj = s.GetComponent<NetworkObject>();
                         if (netObj != null && netObj.IsSpawned) netObj.Despawn(true);
-                        else Destroy(miner.gameObject);
+                        else Destroy(s.gameObject);
                     }
 
                     foreach (var data in savedStructures)
                     {
-                        if (data.Type == "AsteroidMiner")
-                        {
-                            SpawnAsteroidMiner(data);
-                        }
+                        SpawnStructureFromDatabase(data);
                     }
                 }
             }
@@ -178,7 +181,7 @@ namespace Ascendant.SystemsExtensions.Logistics
             }
         }
 
-        private void SpawnAsteroidMiner(SavedStructureData data)
+        private void SpawnStructureFromDatabase(SavedStructureData data)
         {
             var rigObj = new GameObject(data.StructureId);
             rigObj.transform.position = data.Position;
@@ -188,23 +191,53 @@ namespace Ascendant.SystemsExtensions.Logistics
             var inventory = rigObj.AddComponent<NetworkInventory>();
             inventory.MaxCapacity = 500;
 
-            var rig = rigObj.AddComponent<AsteroidMiningRig>();
-            rig.ExtractionAmount = 10;
-            rig.ExtractionInterval = 1.0f;
-
-            // Load visual model
+            StructureBase structure = null;
             GameObject visual = null;
-            var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
-            if (minerPrefab != null)
+            Color primaryColor = Color.gray;
+
+            if (data.Type == "AsteroidMiner")
             {
-                visual = Instantiate(minerPrefab);
-                visual.name = "Visual";
-                visual.transform.SetParent(rigObj.transform);
-                visual.transform.localPosition = Vector3.zero;
-                visual.transform.localRotation = Quaternion.identity;
-                visual.transform.localScale = new Vector3(15f, 15f, 15f);
+                var rig = rigObj.AddComponent<AsteroidMiningRig>();
+                rig.ExtractionAmount = 10;
+                rig.ExtractionInterval = 1.0f;
+                structure = rig;
+                primaryColor = new Color(0.9f, 0.6f, 0.1f); // Orange
+
+                // Load custom visual FBX
+                var minerPrefab = Resources.Load<GameObject>("Models/alpha_asteroid_miner");
+                if (minerPrefab != null)
+                {
+                    visual = Instantiate(minerPrefab);
+                    visual.name = "Visual";
+                    visual.transform.SetParent(rigObj.transform);
+                    visual.transform.localPosition = Vector3.zero;
+                    visual.transform.localRotation = Quaternion.identity;
+                    visual.transform.localScale = new Vector3(15f, 15f, 15f);
+                }
             }
-            else
+            else if (data.Type == "GaseousFuelScoop")
+            {
+                var scoop = rigObj.AddComponent<GaseousFuelScoop>();
+                scoop.HarvestAmount = 5;
+                scoop.HarvestInterval = 2.0f;
+                structure = scoop;
+                primaryColor = new Color(0.9f, 0.9f, 0.1f); // Yellow
+            }
+            else if (data.Type == "Refinery")
+            {
+                var refinery = rigObj.AddComponent<Refinery>();
+                structure = refinery;
+                primaryColor = new Color(0.1f, 0.6f, 0.9f); // Cyan/Blue
+            }
+            else if (data.Type == "MunitionsFactory")
+            {
+                var factory = rigObj.AddComponent<MunitionsFactory>();
+                structure = factory;
+                primaryColor = new Color(0.9f, 0.1f, 0.1f); // Red
+            }
+
+            // Fallback visual cylinder
+            if (visual == null)
             {
                 visual = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                 visual.name = "Visual";
@@ -219,7 +252,7 @@ namespace Ascendant.SystemsExtensions.Logistics
                 if (r != null)
                 {
                     var material = new Material(Shader.Find("Standard"));
-                    material.color = new Color(0.9f, 0.6f, 0.1f);
+                    material.color = primaryColor;
                     r.sharedMaterial = material;
                 }
             }
@@ -236,9 +269,12 @@ namespace Ascendant.SystemsExtensions.Logistics
             collider.isTrigger = true;
 
             // Loaded structures start fully constructed (100% progress) and active
-            rig.IsUnderConstruction.Value = false;
-            rig.ConstructionProgress.Value = 1.0f;
-            rig.IsDisabled.Value = false;
+            if (structure != null)
+            {
+                structure.IsUnderConstruction.Value = false;
+                structure.ConstructionProgress.Value = 1.0f;
+                structure.IsDisabled.Value = false;
+            }
 
             // Set resources in inventory
             inventory.AddResource("Ore", data.Inventory.Ore);
@@ -248,7 +284,7 @@ namespace Ascendant.SystemsExtensions.Logistics
             inventory.AddResource("Components", data.Inventory.Components);
 
             netObj.Spawn();
-            Debug.Log($"[SystemConnectionManager] Spawned saved Asteroid Miner '{data.StructureId}' at {data.Position}");
+            Debug.Log($"[SystemConnectionManager] Spawned saved structure '{data.StructureId}' of type '{data.Type}' at {data.Position}");
         }
     }
 }
